@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: const TestPage(),
-      home: const AuthPhonePage(),
+      home: const TestPage(),
+      //home: const AuthPhonePage(),
     );
   }
 }
@@ -45,10 +45,18 @@ class TestPage extends StatefulWidget {
   State<TestPage> createState() => _TestPageState();
 }
 
-class _TestPageState extends State<TestPage> {
+class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
+
+  void update(String status) async{
+    final docUser = FirebaseFirestore.instance.collection('users').doc('test');
+    final json = {
+      'status': status,
+    };
+    await docUser.update(json);
+  }
 
   void work() async{
-    final docUser = FirebaseFirestore.instance.collection('users').doc(DateTime.now().millisecondsSinceEpoch.toString());
+    final docUser = FirebaseFirestore.instance.collection('users').doc('test');
     final json = {
       'name': 'Android',
       'age': 21,
@@ -57,9 +65,21 @@ class _TestPageState extends State<TestPage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed){
+      update('Online');
+    }
+    else{
+      update('Offline');
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void initState() {
-    //work();
     super.initState();
+    update('Online');
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
