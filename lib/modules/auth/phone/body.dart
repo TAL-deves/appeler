@@ -70,9 +70,9 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
           ),
           PhoneField(
             margin: const EdgeInsets.symmetric(vertical: 24),
-            controller: phone,
+            //controller: phone,
             textCode: "+880",
-            //textNumber: "1313670655",
+            textNumber: "1313670655",
             hintCode: "+880",
             hintNumber: "Enter the last 10 digits",
           ),

@@ -17,8 +17,9 @@ class AuthPhonePage extends StatelessWidget {
     return Scaffold(
       body: AuthPhoneBody(
         onLogin: (phone, pass) async{
-          Navigator.of(context).pushReplacementNamed(homeScreenRoute);
-          //return AuthManagementUseCase.login(phoneNumber: phone.digits, password: pass);
+          //Navigator.of(context).pushReplacementNamed(homeScreenRoute);
+          print('on login: ${phone.digits}   $pass');
+          AuthManagementUseCase.login(phoneNumber: phone.digits, password: pass);
         },
       ),
     );
