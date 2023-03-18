@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>926347959879-l99gssdphimr17tnk6j054istotvicd4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.926347959879-l99gssdphimr17tnk6j054istotvicd4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>926347959879-lt3ksh4ffj8gsvlrkfcdp1idl0743ki7.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCh5998wmBcDkyD76bCa2ksLL7pNmlSoeo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>926347959879</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>bd.tal.calling.appeler</string>
+	<key>PROJECT_ID</key>
+	<string>appeler-7dbb2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>appeler-7dbb2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:926347959879:ios:5242554408e52275b6db62</string>
+</dict>
+</plist>
