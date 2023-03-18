@@ -36,30 +36,51 @@ class PhoneField extends StatefulWidget {
 }
 
 class _PhoneFieldState extends State<PhoneField> {
+  late TextEditingController _codeController, _numberController;
+  late FocusNode _focusCode, _focusNumber;
   late PhoneEditingController _controller;
   bool isChangedState = false;
 
   @override
   void initState() {
+    _codeController = TextEditingController();
+    _numberController = TextEditingController();
+    _focusCode = FocusNode();
+    _focusNumber = FocusNode();
     _controller = widget.controller ?? PhoneEditingController();
     _controller.setCallback(setState);
-    _controller.setCode(widget.textCode ?? _controller.codeController.text);
-    _controller
-        .setNumber(widget.textNumber ?? _controller.numberController.text);
+    _controller.setControllers(
+      codeController: _codeController,
+      numberController: _numberController,
+    );
+    _controller.setFocuses(
+      focusCode: _focusCode,
+      focusNumber: _focusNumber,
+    );
+    _controller.setCode(
+      widget.textCode ?? _controller.codeController.text,
+    );
+    _controller.setNumber(
+      widget.textNumber ?? _controller.numberController.text,
+    );
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant PhoneField oldWidget) {
     _controller.setCode(widget.textCode ?? _controller.codeController.text);
-    _controller
-        .setNumber(widget.textNumber ?? _controller.numberController.text);
+    _controller.setNumber(
+      widget.textNumber ?? _controller.numberController.text,
+    );
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    _controller._dispose();
+    _codeController.dispose();
+    _numberController.dispose();
+    _focusCode.dispose();
+    _focusNumber.dispose();
     super.dispose();
   }
 
@@ -164,11 +185,20 @@ class PhoneEditingController {
     this.setState = setState;
   }
 
-  PhoneEditingController() {
-    codeController = TextEditingController();
-    numberController = TextEditingController();
-    focusCode = FocusNode();
-    focusNumber = FocusNode();
+  void setControllers({
+    required TextEditingController codeController,
+    required TextEditingController numberController,
+  }) {
+    this.codeController = codeController;
+    this.numberController = numberController;
+  }
+
+  void setFocuses({
+    required FocusNode focusCode,
+    required FocusNode focusNumber,
+  }) {
+    this.focusCode = focusCode;
+    this.focusNumber = focusNumber;
     focusCode.addListener(_handleCodeFocusChange);
     focusNumber.addListener(_handleNumberFocusChange);
   }
@@ -215,15 +245,6 @@ class PhoneEditingController {
   }
 
   bool get hasFocus => focusCode.hasFocus || focusNumber.hasFocus;
-
-  @protected
-  @mustCallSuper
-  void _dispose() {
-    codeController.dispose();
-    numberController.dispose();
-    focusCode.dispose();
-    focusNumber.dispose();
-  }
 }
 
 class Number {

@@ -6,7 +6,7 @@ import '../../../widgets/phone_field.dart';
 import '../../../widgets/text_view.dart';
 
 class AuthPhoneBody extends StatefulWidget {
-  final  Function(Number number, String password)? onLogin;
+  final Function(Number number, String password)? onLogin;
 
   const AuthPhoneBody({
     Key? key,
@@ -30,7 +30,6 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
 
   @override
   void dispose() {
-    phone.dispose();
     password.dispose();
     super.dispose();
   }
@@ -70,21 +69,22 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
           ),
           PhoneField(
             margin: const EdgeInsets.symmetric(vertical: 24),
-            //controller: phone,
+            controller: phone,
             textCode: "+880",
-            textNumber: "1313670655",
+            textNumber: "123",
             hintCode: "+880",
             hintNumber: "Enter the last 10 digits",
           ),
           PasswordField(
             hint: "Enter your password",
             controller: password,
+            text: "123",
           ),
           Button(
             width: 200,
             text: "Login",
             borderRadius: 12,
-            onPressed: (){
+            onPressed: () {
               widget.onLogin?.call(phone.number, password.text);
             },
             // onExecute: (){
@@ -97,5 +97,3 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
     );
   }
 }
-
-
