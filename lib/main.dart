@@ -1,3 +1,4 @@
+import 'package:appeler/modules/auth/phone/page.dart';
 import 'package:appeler/modules/login/screen/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: const TestPage(),
-      home: const LoginScreen(),
+      home: const AuthPhonePage(),
     );
   }
 }
