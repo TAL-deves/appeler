@@ -7,10 +7,9 @@ import 'package:flutter/cupertino.dart';
 class AuthManagementUseCase{
   static final _users = FirebaseFirestore.instance.collection('users');
 
-  static Future<bool> login({required String phoneNumber, required String password}) async{
+  static Future<void> login({required String phoneNumber, required String password}) async{
     if(phoneNumber.isEmpty || password.isEmpty){
       AppSnackBar.showFailureSnackBar(message: 'Phone number or password can not be empty!');
-      return Future.value(false);
     }
     else{
       try{
@@ -19,23 +18,17 @@ class AuthManagementUseCase{
           final curData = docUser.data()!;
           if(curData['password'] != password){
             AppSnackBar.showFailureSnackBar(message: 'Password does not match!');
-            return Future.value(false);
           }
           else{
             AppSnackBar.showSuccessSnackBar(message: 'Login Success!');
             Navigator.of(AppUtilities.curNavigationContext!).pushReplacementNamed(homeScreenRoute);
-            return Future.value(true);
           }
         }
-        else{
-          AppSnackBar.showFailureSnackBar(message: 'User not found!');
-          return Future.value(false);
-        }
+        else{ AppSnackBar.showFailureSnackBar(message: 'User not found!'); }
       }
       catch(e){
         final errorMessage = e.toString();
         AppSnackBar.showFailureSnackBar(message: errorMessage);
-        return Future.value(false);
       }
     }
   }

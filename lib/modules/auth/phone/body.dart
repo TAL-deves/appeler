@@ -70,15 +70,15 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
           PhoneField(
             margin: const EdgeInsets.symmetric(vertical: 24),
             controller: phone,
-            textCode: "+880",
-            textNumber: "123",
+            //textCode: "+880",
+            //textNumber: "",
             hintCode: "+880",
-            hintNumber: "Enter the last 10 digits",
+            hintNumber: "Enter phone number",
           ),
           PasswordField(
             hint: "Enter your password",
             controller: password,
-            text: "123",
+            //text: "123",
           ),
           Button(
             width: 200,
