@@ -6,7 +6,7 @@ import '../../../widgets/phone_field.dart';
 import '../../../widgets/text_view.dart';
 
 class AuthPhoneBody extends StatefulWidget {
-  final Function(Number number, String password)? onLogin;
+  final  Function(Number number, String password)? onLogin;
 
   const AuthPhoneBody({
     Key? key,
@@ -38,11 +38,13 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
         vertical: 12,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const TextView(
             padding: EdgeInsets.symmetric(
@@ -70,7 +72,7 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
             margin: const EdgeInsets.symmetric(vertical: 24),
             controller: phone,
             textCode: "+880",
-            textNumber: "1313670655",
+            //textNumber: "1313670655",
             hintCode: "+880",
             hintNumber: "Enter the last 10 digits",
           ),
@@ -82,10 +84,18 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
             width: 200,
             text: "Login",
             borderRadius: 12,
-            onPressed: () => widget.onLogin?.call(phone.number, password.text),
+            onPressed: (){
+              widget.onLogin?.call(phone.number, password.text);
+            },
+            // onExecute: (){
+            //   return widget.onLogin?.call(phone.number, password.text);
+            // },
+            //onExecute: widget.onLogin?.call(phone.number, password.text),
           ),
         ],
       ),
     );
   }
 }
+
+

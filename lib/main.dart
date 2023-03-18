@@ -1,5 +1,6 @@
+import 'package:appeler/core/app_router/app_router.dart';
+import 'package:appeler/core/app_utilities/app_utilities.dart';
 import 'package:appeler/modules/auth/phone/page.dart';
-import 'package:appeler/modules/login/screen/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -28,11 +29,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      navigatorKey: AppUtilities.appNavigatorKey,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const TestPage(),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      onGenerateRoute: appRouter.onGenerateRoute,
+      //home: const TestPage(),
       //home: const AuthPhonePage(),
     );
   }
@@ -56,7 +57,7 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
   }
 
   void work() async{
-    final docUser = FirebaseFirestore.instance.collection('users').doc('test');
+    final docUser = FirebaseFirestore.instance.collection('users').doc('123');
     final json = {
       'name': 'Android',
       'age': 21,
