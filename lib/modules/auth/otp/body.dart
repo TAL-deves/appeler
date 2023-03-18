@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../../widgets/button.dart';
-import '../../../widgets/text_view.dart';
 import '../../../widgets/otp_field.dart';
+import '../../../widgets/text_view.dart';
 
 class AuthOtpBody extends StatefulWidget {
-  const AuthOtpBody({Key? key}) : super(key: key);
+  final Function(String otp)? onOtpCallback;
+
+  const AuthOtpBody({
+    Key? key,
+    this.onOtpCallback,
+  }) : super(key: key);
 
   @override
   State<AuthOtpBody> createState() => _AuthOtpBodyState();
@@ -47,12 +52,7 @@ class _AuthOtpBodyState extends State<AuthOtpBody> {
             textSize: 24,
           ),
           const TextView(
-            padding: EdgeInsets.only(
-              left: 24,
-              right: 24,
-              top: 12,
-              bottom: 32
-            ),
+            padding: EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 32),
             text: "Enter your OTP code here",
             textAlign: TextAlign.center,
             textColor: Colors.grey,
@@ -66,7 +66,7 @@ class _AuthOtpBodyState extends State<AuthOtpBody> {
             text: "Submit",
             width: 200,
             borderRadius: 12,
-            onPressed: () {},
+            onPressed: () => widget.onOtpCallback?.call(otp.text),
           ),
         ],
       ),
