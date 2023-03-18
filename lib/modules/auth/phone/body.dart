@@ -4,10 +4,14 @@ import '../../../widgets/button.dart';
 import '../../../widgets/password_field.dart';
 import '../../../widgets/phone_field.dart';
 import '../../../widgets/text_view.dart';
-import '../otp/page.dart';
 
 class AuthPhoneBody extends StatefulWidget {
-  const AuthPhoneBody({Key? key}) : super(key: key);
+  final Function(Number number, String password)? onLogin;
+
+  const AuthPhoneBody({
+    Key? key,
+    this.onLogin,
+  }) : super(key: key);
 
   @override
   State<AuthPhoneBody> createState() => _AuthPhoneBodyState();
@@ -78,9 +82,7 @@ class _AuthPhoneBodyState extends State<AuthPhoneBody> {
             width: 200,
             text: "Login",
             borderRadius: 12,
-            onPressed: () {
-              Navigator.pushNamed(context, AuthOtpPage.route);
-            },
+            onPressed: () => widget.onLogin?.call(phone.number, password.text),
           ),
         ],
       ),

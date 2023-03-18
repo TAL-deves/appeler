@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PhoneField extends StatefulWidget {
   final PhoneEditingController? controller;
@@ -6,6 +7,12 @@ class PhoneField extends StatefulWidget {
   final double borderRadius;
   final String hintCode, hintNumber;
   final String? textCode, textNumber;
+  final String recommendedCode;
+  final String recommendedDigits;
+  final String? error;
+  final int maxCodes;
+  final int maxDigits;
+  final bool Function(Number value)? validator;
 
   const PhoneField({
     Key? key,
@@ -16,6 +23,12 @@ class PhoneField extends StatefulWidget {
     this.hintNumber = "Number",
     this.textCode,
     this.textNumber,
+    this.recommendedCode = "+1234567890",
+    this.recommendedDigits = "1234567890",
+    this.maxCodes = 4,
+    this.maxDigits = 10,
+    this.error,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -24,13 +37,15 @@ class PhoneField extends StatefulWidget {
 
 class _PhoneFieldState extends State<PhoneField> {
   late PhoneEditingController _controller;
+  bool isChangedState = false;
 
   @override
   void initState() {
     _controller = widget.controller ?? PhoneEditingController();
     _controller.setCallback(setState);
-    _controller.setCode(widget.textCode ?? _controller.code.text);
-    _controller.setNumber(widget.textNumber ?? _controller.number.text);
+    _controller.setCode(widget.textCode ?? _controller.codeController.text);
+    _controller
+        .setNumber(widget.textNumber ?? _controller.numberController.text);
     super.initState();
   }
 
@@ -60,8 +75,19 @@ class _PhoneFieldState extends State<PhoneField> {
             flex: 10,
             child: TextFormField(
               focusNode: _controller.focusCode,
-              controller: _controller.code,
+              controller: _controller.codeController,
               textAlign: TextAlign.end,
+              inputFormatters: _controller.formatter(widget.recommendedCode),
+              maxLength: widget.maxCodes,
+              onChanged: (value) {
+                isChangedState = true;
+              },
+              buildCounter: counter,
+              validator: (value) {
+                bool valid =
+                    widget.validator?.call(_controller.number) ?? false;
+                return !valid && isChangedState ? widget.error : null;
+              },
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hintCode,
@@ -85,7 +111,18 @@ class _PhoneFieldState extends State<PhoneField> {
             flex: 50,
             child: TextFormField(
               focusNode: _controller.focusNumber,
-              controller: _controller.number,
+              controller: _controller.numberController,
+              inputFormatters: _controller.formatter(widget.recommendedDigits),
+              maxLength: widget.maxDigits,
+              buildCounter: counter,
+              onChanged: (value) {
+                isChangedState = true;
+              },
+              validator: (value) {
+                bool valid =
+                    widget.validator?.call(_controller.number) ?? false;
+                return !valid && isChangedState ? widget.error : null;
+              },
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hintNumber,
@@ -96,12 +133,21 @@ class _PhoneFieldState extends State<PhoneField> {
       ),
     );
   }
+
+  Widget? counter(
+    BuildContext context, {
+    required int currentLength,
+    required bool isFocused,
+    required int? maxLength,
+  }) {
+    return null;
+  }
 }
 
 class PhoneEditingController {
   late Function(VoidCallback fn) setState;
-  late TextEditingController code;
-  late TextEditingController number;
+  late TextEditingController codeController;
+  late TextEditingController numberController;
   late FocusNode focusCode;
   late FocusNode focusNumber;
   bool isFocused = false;
@@ -111,8 +157,8 @@ class PhoneEditingController {
   }
 
   PhoneEditingController() {
-    code = TextEditingController();
-    number = TextEditingController();
+    codeController = TextEditingController();
+    numberController = TextEditingController();
     focusCode = FocusNode();
     focusNumber = FocusNode();
     focusCode.addListener(_handleCodeFocusChange);
@@ -135,30 +181,54 @@ class PhoneEditingController {
     }
   }
 
-  void setCode(String? code) {
-    this.code.text = code ?? "";
+  List<TextInputFormatter>? formatter(String? formatters) {
+    final digit = formatters ?? "";
+    if (digit.isNotEmpty) {
+      return [
+        FilteringTextInputFormatter.allow(RegExp("[$digit]")),
+      ];
+    }
+    return null;
   }
 
-  void setNumber(String? number) {
-    this.number.text = number ?? "";
+  void setCode(String? value) {
+    codeController.text = value ?? "";
+  }
+
+  void setNumber(String? value) {
+    numberController.text = value ?? "";
+  }
+
+  Number get number {
+    return Number(
+      codeController.text,
+      numberController.text,
+    );
   }
 
   bool get hasFocus => focusCode.hasFocus || focusNumber.hasFocus;
 
   void dispose() {
-    code.dispose();
-    number.dispose();
+    codeController.dispose();
+    numberController.dispose();
     focusCode.dispose();
     focusNumber.dispose();
   }
 }
 
 class Number {
-  final String code;
-  final String number;
+  late String? _code;
+  late String? _number;
 
-  const Number({
-    this.code = "",
-    this.number = "",
-  });
+  Number(this._code, this._number);
+
+  set code(String value) => _code = value;
+
+  String get code => _code ?? "";
+
+  set digits(String value) => _number = value;
+
+  String get digits => _number ?? "";
+
+  String get numberWithCode => "$code$digits";
 }
