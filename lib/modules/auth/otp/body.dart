@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../../widgets/button.dart';
-import '../../../widgets/otp_field.dart';
-import '../../../widgets/text_view.dart';
+import '../../../core/widgets/button.dart';
+import '../../../core/widgets/otp_field.dart';
+import '../../../core/widgets/text_view.dart';
 
 class AuthOtpBody extends StatefulWidget {
   final Function(String otp)? onOtpCallback;

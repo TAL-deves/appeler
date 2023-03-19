@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../widgets/button.dart';
-import '../../../widgets/password_field.dart';
-import '../../../widgets/phone_field.dart';
-import '../../../widgets/text_view.dart';
+import '../../../core/widgets/button.dart';
+import '../../../core/widgets/password_field.dart';
+import '../../../core/widgets/phone_field.dart';
+import '../../../core/widgets/text_view.dart';
 
 class AuthPhoneBody extends StatefulWidget {
   final Function(Number number, String password)? onLogin;

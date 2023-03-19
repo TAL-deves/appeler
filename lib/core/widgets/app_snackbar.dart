@@ -1,6 +1,6 @@
 import 'package:appeler/core/app_utilities/app_utilities.dart';
 import 'package:flutter/material.dart';
-import '../core/app_constants/app_color.dart';
+import '../app_constants/app_color.dart';
 
 class AppSnackBar{
   static void showSuccessSnackBar({required String? message}){

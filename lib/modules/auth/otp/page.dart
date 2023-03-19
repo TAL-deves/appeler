@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../../widgets/action_button.dart';
+import '../../../core/widgets/action_button.dart';
 import 'body.dart';
 
 class AuthOtpPage extends StatelessWidget {

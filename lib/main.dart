@@ -1,10 +1,12 @@
-import 'package:appeler/core/app_router/app_router.dart';
 import 'package:appeler/core/app_utilities/app_utilities.dart';
-import 'package:appeler/modules/auth/phone/page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'core/app_router/app_router.dart';
+
+late final SharedPreferences sharedPref;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,7 @@ void main() async{
       appId: "1:926347959879:web:8f71cce0c2f22919b6db62",
     ) : null,
   );
+  sharedPref = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -48,19 +51,45 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
 
-  void update(String status) async{
-    final docUser = FirebaseFirestore.instance.collection('users').doc('test');
+  void update(bool status) async{
+    final docUser = FirebaseFirestore.instance.collection('users').doc('123');
     final json = {
-      'status': status,
+      'isOnline': status,
     };
     await docUser.update(json);
   }
 
+  void listenTest(){
+    final docUser = FirebaseFirestore.instance.collection('users').doc('123').collection('test');
+    final stream = docUser.snapshots().listen((snapshot) {
+      final list = snapshot.docChanges;
+      for(var i = 0; i < list.length; ++i){
+        final curItem = list[i];
+        final dataIs = curItem.doc.data();
+        final type = curItem.type;
+        print('data: ${dataIs}    type: $type');
+      }
+    });
+  }
+
+  void work2() async{
+    final timeValue = DateTime.now().millisecondsSinceEpoch.toString();
+    final docUser = FirebaseFirestore.instance.collection('users').doc('123').collection('test').doc(timeValue);
+    final json = {
+      'name': 'Shimul',
+      'age': 21,
+      'value': 'testing'
+    };
+    await docUser.set(json);
+  }
+
   void work() async{
-    final docUser = FirebaseFirestore.instance.collection('users').doc('123');
+    final docUser = FirebaseFirestore.instance.collection('users').doc('789');
     final json = {
       'name': 'Android',
       'age': 21,
+      'isOnline': true,
+      'inAnotherCall': false,
     };
     await docUser.set(json);
   }
@@ -68,10 +97,10 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if(state == AppLifecycleState.resumed){
-      update('Online');
+      update(true);
     }
     else{
-      update('Offline');
+      update(false);
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -79,8 +108,9 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
   @override
   void initState() {
     super.initState();
-    update('Online');
+    //update('Online');
     WidgetsBinding.instance.addObserver(this);
+    //listenTest();
   }
 
   @override
