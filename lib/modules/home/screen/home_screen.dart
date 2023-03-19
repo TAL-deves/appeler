@@ -1,12 +1,39 @@
-import 'package:appeler/core/app_constants/app_color.dart';
 import 'package:appeler/core/widgets/app_alert_dialog.dart';
 import 'package:appeler/core/widgets/app_tab_controller.dart';
+import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:flutter/material.dart';
+import 'inner_widget/contact_list/contact_outer_item.dart';
 
 const homeScreenRoute = 'kHomeScreen';
 
-class AppHomeScreen extends StatelessWidget {
+class AppHomeScreen extends StatefulWidget {
   const AppHomeScreen({super.key});
+
+  @override
+  State<AppHomeScreen> createState() => _AppHomeScreenState();
+}
+
+class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserver{
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed){ AuthManagementUseCase.updateOnlineStatus(true); }
+    else{ AuthManagementUseCase.updateOnlineStatus(false); }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    AuthManagementUseCase.updateOnlineStatus(true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    AuthManagementUseCase.updateOnlineStatus(false);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,66 +57,6 @@ class AppHomeScreen extends StatelessWidget {
           Text(2.toString()),
           Text(3.toString())
         ],
-      ),
-    );
-  }
-}
-
-class ContactListOuterItem extends StatelessWidget {
-  const ContactListOuterItem({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (context, index){
-        return ContactListItem(
-          name: 'Shimul',
-          id: '1111',
-          status: index % 2 == 0,
-          anotherCall: index % 3 == 0,
-        );
-      },
-    );
-  }
-}
-
-class ContactListItem extends StatelessWidget {
-  const ContactListItem({
-    super.key,
-    required this.name,
-    required this.id,
-    required this.status,
-    required this.anotherCall,
-  });
-
-  final String id, name;
-  final bool status, anotherCall;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('ID: $id', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                Text('Status: ${status ? 'Online' : 'Offline'}', style: TextStyle(color: status ? kGreenColor : kRedColor, fontWeight: FontWeight.bold))
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Name: $name'),
-                Text('Call status: ${anotherCall ? 'Busy' : 'Available'}', style: TextStyle(color: anotherCall ? kOrangeColor : kPrimaryColor, fontWeight: FontWeight.bold))
-              ],
-            )
-          ],
-        ),
       ),
     );
   }

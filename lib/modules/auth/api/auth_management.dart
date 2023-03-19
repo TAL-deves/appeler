@@ -7,6 +7,8 @@ import '../../../core/widgets/app_snackbar.dart';
 import '../phone/page.dart';
 
 class AuthManagementUseCase{
+  AuthManagementUseCase._();
+
   static final _users = FirebaseFirestore.instance.collection('users');
   static const _userKey = 'user';
 
@@ -21,6 +23,7 @@ class AuthManagementUseCase{
   }
 
   static Future<void> logout() async{
+    updateOnlineStatus(false);
     if(await _removeUser()){
       Navigator.of(AppUtilities.curNavigationContext!)
           .pushNamedAndRemoveUntil(authScreenRoute, (route) => false);
@@ -29,6 +32,14 @@ class AuthManagementUseCase{
 
   static bool isUserLoggedIn(){
     return curUser != null;
+  }
+
+  static Future<void> updateOnlineStatus(bool status) async{
+    final docUser = FirebaseFirestore.instance.collection('users').doc(curUser);
+    final json = {
+      'isOnline': status,
+    };
+    return await docUser.update(json);
   }
 
   static Future<void> login({required String phoneNumber, required String password}) async{

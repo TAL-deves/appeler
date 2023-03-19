@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:appeler/core/app_utilities/app_utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -5,11 +7,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/app_router/app_router.dart';
+//import 'dart:html' as html;
+
+import 'modules/auth/api/auth_management.dart';
 
 late final SharedPreferences sharedPref;
 
+
+
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  // html.window.onUnload.listen((event) async{
+  //   AuthManagementUseCase.updateOnlineStatus(false);
+  // });
   await Firebase.initializeApp(
     options: kIsWeb ? const FirebaseOptions(
       apiKey: "AIzaSyBmB2nrR8fHhMlWWCMtDJfYsHPY-s0HOa8",
@@ -31,7 +42,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Appeler',
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+        },
+      ),
       navigatorKey: AppUtilities.appNavigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
@@ -96,6 +113,7 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
     if(state == AppLifecycleState.resumed){
       update(true);
     }
