@@ -1,5 +1,6 @@
 import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:appeler/modules/auth/phone/page.dart';
+import 'package:appeler/modules/calling/screen/calling_screen.dart';
 import 'package:flutter/material.dart';
 import '../../modules/home/screen/home_screen.dart';
 import '';
@@ -31,6 +32,11 @@ class AppRouter{
       case homeScreenRoute:
         return MaterialPageRoute(
           builder: (context) => const AppHomeScreen(),
+        );
+      case callingScreenRoute:
+        final curId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => CallingScreen(id: curId),
         );
       default:
         return null;

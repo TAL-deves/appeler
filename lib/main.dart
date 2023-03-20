@@ -13,9 +13,6 @@ import 'modules/auth/api/auth_management.dart';
 
 late final SharedPreferences sharedPref;
 
-
-
-
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // html.window.onUnload.listen((event) async{

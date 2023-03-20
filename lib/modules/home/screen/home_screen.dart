@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:appeler/core/widgets/app_alert_dialog.dart';
 import 'package:appeler/core/widgets/app_tab_controller.dart';
 import 'package:appeler/modules/auth/api/auth_management.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'inner_widget/contact_list/contact_outer_item.dart';
 
@@ -14,6 +17,34 @@ class AppHomeScreen extends StatefulWidget {
 }
 
 class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserver{
+  StreamSubscription? subscription;
+  var c = 1;
+
+  void _listenForIncomingCall(){
+    final users = FirebaseFirestore.instance.collection('users');
+    final chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
+    final curUser = users.doc(AuthManagementUseCase.curUser);
+    subscription = curUser.snapshots().listen((event) async {
+      print('calling from listen ${c++} times');
+      final data = event.data();
+      if(data != null){
+        final inComingCallFrom = data['incomingCallFrom'];
+        if(inComingCallFrom != null){
+          final result = await AppAlertDialog.callingDialog(context: context, callerId: inComingCallFrom);
+          final curRoom = chatRooms.doc('$inComingCallFrom+${AuthManagementUseCase.curUser}');
+          curRoom.set({
+            'accepted': result
+          });
+          if(!result){
+            curUser.update({
+              'incomingCallFrom': null,
+              'inAnotherCall': false,
+            });
+          }
+        }
+      }
+    });
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -26,12 +57,14 @@ class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserv
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     AuthManagementUseCase.updateOnlineStatus(true);
+    _listenForIncomingCall();
     super.initState();
   }
 
   @override
   void dispose() {
     AuthManagementUseCase.updateOnlineStatus(false);
+    subscription?.cancel();
     super.dispose();
   }
 
@@ -41,10 +74,11 @@ class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserv
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
+          Text('User ID: ${AuthManagementUseCase.curUser}'),
           GestureDetector(
             onTap: (){ AppAlertDialog.logoutAlertDialog(context: context); },
             child: const Padding(
-              padding: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.only(right: 10, left: 10),
               child: Icon(Icons.logout),
             ),
           )
