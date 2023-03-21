@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^2.6.1
   firebase_core_platform_interface: ^4.5.3
   shared_preferences: ^2.0.18
+  flutter_webrtc: ^0.9.24
 
 dev_dependencies:
   flutter_test:
