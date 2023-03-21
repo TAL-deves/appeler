@@ -34,9 +34,11 @@ class AppRouter{
           builder: (context) => const AppHomeScreen(),
         );
       case callingScreenRoute:
-        final curId = settings.arguments as String;
+        final curList = settings.arguments as List<dynamic>;
+        final curId = curList[0];
+        final callEnum = curList[1];
         return MaterialPageRoute(
-          builder: (context) => CallingScreen(id: curId),
+          builder: (context) => CallingScreen(id: curId, callEnum: callEnum),
         );
       default:
         return null;

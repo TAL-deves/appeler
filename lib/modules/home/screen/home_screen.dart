@@ -29,17 +29,25 @@ class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserv
       final data = event.data();
       if(data != null){
         final inComingCallFrom = data['incomingCallFrom'];
-        if(inComingCallFrom != null){
-          final result = await AppAlertDialog.callingDialog(context: context, callerId: inComingCallFrom);
-          final curRoom = chatRooms.doc('$inComingCallFrom+${AuthManagementUseCase.curUser}');
-          curRoom.set({
-            'accepted': result
-          });
-          if(!result){
-            curUser.update({
-              'incomingCallFrom': null,
-              'inAnotherCall': false,
+        if(inComingCallFrom == null){
+          if(AppAlertDialog.inCallDialogIsOpen){
+            Navigator.pop(context);
+            AppAlertDialog.inCallDialogIsOpen = false;
+          }
+        }
+        else{
+          final result = await AppAlertDialog.incomingCallDialog(context: context, callerId: inComingCallFrom);
+          if(result != null){
+            final curRoom = chatRooms.doc('$inComingCallFrom+${AuthManagementUseCase.curUser}');
+            curRoom.set({
+              'accepted': result
             });
+            if(!result){
+              curUser.update({
+                'incomingCallFrom': null,
+                'inAnotherCall': false,
+              });
+            }
           }
         }
       }

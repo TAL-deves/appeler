@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:appeler/core/widgets/app_alert_dialog.dart';
 import 'package:appeler/core/widgets/app_snackbar.dart';
+import 'package:appeler/modules/calling/screen/call_enum/call_enum.dart';
 import 'package:appeler/modules/calling/screen/calling_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,13 @@ class _ContactListOuterItemState extends State<ContactListOuterItem> {
     super.dispose();
   }
 
+  void _closeOutgoingDialog(){
+    if(AppAlertDialog.outgoingDialogIsOpen){
+      Navigator.pop(context);
+      AppAlertDialog.outgoingDialogIsOpen = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -46,9 +55,20 @@ class _ContactListOuterItemState extends State<ContactListOuterItem> {
                   if(!isOnline) { AppSnackBar.showFailureSnackBar(message: 'User is not online!'); }
                   else if(inAnotherCall) { AppSnackBar.showFailureSnackBar(message: 'User in another call'); }
                   else{
-                    AppSnackBar.showSuccessSnackBar(message: 'Calling....Please wait!');
+                    //AppSnackBar.showSuccessSnackBar(message: 'Calling....Please wait!');
                     final remoteUser = users.doc(id);
                     final curUser = users.doc(AuthManagementUseCase.curUser);
+                    AppAlertDialog.outGoingCallDialog(context: context, callerId: id).then((value){
+                      if(value != null && value){
+                        remoteUser.update({
+                          'incomingCallFrom': null,
+                          'inAnotherCall': false
+                        });
+                        curUser.update({
+                          'inAnotherCall': false,
+                        });
+                      }
+                    });
                     curUser.update({
                       'inAnotherCall': true,
                     });
@@ -64,7 +84,8 @@ class _ContactListOuterItemState extends State<ContactListOuterItem> {
                       if(curData != null){
                         final isAccepted = curData['accepted'];
                         if(isAccepted){
-                          Navigator.of(context).pushNamed(callingScreenRoute, arguments: id);
+                          _closeOutgoingDialog();
+                          Navigator.of(context).pushNamed(callingScreenRoute, arguments: [id, CallEnum.outgoing]);
                         }
                         else{
                           curRoom.delete();
@@ -72,6 +93,7 @@ class _ContactListOuterItemState extends State<ContactListOuterItem> {
                             'inAnotherCall': false,
                           });
                           AppSnackBar.showFailureSnackBar(message: 'Call rejected');
+                          _closeOutgoingDialog();
                         }
                       }
                     });

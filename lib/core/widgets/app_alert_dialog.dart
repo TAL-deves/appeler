@@ -1,12 +1,16 @@
 import 'dart:ui';
 import 'package:appeler/core/app_constants/app_color.dart';
 import 'package:appeler/modules/auth/api/auth_management.dart';
+import 'package:appeler/modules/calling/screen/call_enum/call_enum.dart';
 import 'package:appeler/modules/calling/screen/calling_screen.dart';
 import 'package:flutter/material.dart';
 import 'app_button.dart';
 
 class AppAlertDialog {
   AppAlertDialog._();
+
+  static var inCallDialogIsOpen = false;
+  static var outgoingDialogIsOpen = false;
 
   static Future logoutAlertDialog({required BuildContext context}) {
     return showDialog(
@@ -22,7 +26,8 @@ class AppAlertDialog {
     );
   }
 
-  static Future callingDialog({required BuildContext context, String? callerId}) {
+  static Future incomingCallDialog({required BuildContext context, String? callerId}) {
+    inCallDialogIsOpen = true;
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -30,9 +35,58 @@ class AppAlertDialog {
         return _CommonDialogBody(
           title: 'Calling from $callerId',
           bodyMessage: 'Press ok for accept and cancel for reject',
-          onPressOk: (){ Navigator.of(context).pushNamed(callingScreenRoute, arguments: callerId); },
+          onPressOk: () {
+            Navigator.of(context).pushNamed(callingScreenRoute, arguments: [callerId, CallEnum.incoming]);
+          },
         );
       },
+    );
+  }
+
+  static Future outGoingCallDialog({required BuildContext context, String? callerId}) {
+    outgoingDialogIsOpen = true;
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (innerContext) {
+        return _OutgoingDialogBody(
+          title: 'Calling to $callerId',
+          bodyMessage: 'Press ok for accept and cancel for reject',
+          //onPressOk: (){ Navigator.of(context).pushNamed(callingScreenRoute, arguments: callerId); },
+        );
+      },
+    );
+  }
+}
+
+class _OutgoingDialogBody extends StatelessWidget {
+  const _OutgoingDialogBody({
+    Key? key,
+    required this.title,
+    required this.bodyMessage,
+  }) : super(key: key);
+
+  final String title;
+  final String bodyMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return _DialogCommonFilter(
+      child: AlertDialog(
+        title: Text(title),
+        content: Text(bodyMessage),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          FloatingActionButton(
+            backgroundColor: kRedColor,
+            child: const Icon(Icons.phone_disabled),
+            onPressed: () {
+              AppAlertDialog.outgoingDialogIsOpen = false;
+              Navigator.pop(context, true);
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -74,7 +128,8 @@ class _CommonDialogBody extends StatelessWidget {
         actions: [
           AppCommonButton(
             title: 'Ok',
-            onPressed: (){
+            onPressed: () {
+              AppAlertDialog.inCallDialogIsOpen = false;
               Navigator.pop(context, true);
               onPressOk.call();
             },
@@ -82,7 +137,10 @@ class _CommonDialogBody extends StatelessWidget {
           ),
           AppCommonButton(
             title: 'Cancel',
-            onPressed: () { Navigator.pop(context, false); },
+            onPressed: () {
+              AppAlertDialog.inCallDialogIsOpen = false;
+              Navigator.pop(context, false);
+            },
             color: kRedColor,
           )
         ],
