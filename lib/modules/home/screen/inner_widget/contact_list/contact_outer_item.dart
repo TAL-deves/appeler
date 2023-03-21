@@ -83,17 +83,19 @@ class _ContactListOuterItemState extends State<ContactListOuterItem> {
                       print('outer listener is called: ${x++} times and data is :$curData');
                       if(curData != null){
                         final isAccepted = curData['accepted'];
-                        if(isAccepted){
-                          _closeOutgoingDialog();
-                          Navigator.of(context).pushNamed(callingScreenRoute, arguments: [id, CallEnum.outgoing]);
-                        }
-                        else{
-                          curRoom.delete();
-                          curUser.update({
-                            'inAnotherCall': false,
-                          });
-                          AppSnackBar.showFailureSnackBar(message: 'Call rejected');
-                          _closeOutgoingDialog();
+                        if(isAccepted != null){
+                          if(isAccepted){
+                            _closeOutgoingDialog();
+                            Navigator.of(context).pushNamed(callingScreenRoute, arguments: [id, CallEnum.outgoing]);
+                          }
+                          else{
+                            curRoom.delete();
+                            curUser.update({
+                              'inAnotherCall': false,
+                            });
+                            AppSnackBar.showFailureSnackBar(message: 'Call rejected');
+                            _closeOutgoingDialog();
+                          }
                         }
                       }
                     });

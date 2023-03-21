@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock/wakelock.dart';
 import 'core/app_router/app_router.dart';
 //import 'dart:html' as html;
 
@@ -18,6 +19,7 @@ void main() async{
   // html.window.onUnload.listen((event) async{
   //   AuthManagementUseCase.updateOnlineStatus(false);
   // });
+  Wakelock.enable();
   await Firebase.initializeApp(
     options: kIsWeb ? const FirebaseOptions(
       apiKey: "AIzaSyBmB2nrR8fHhMlWWCMtDJfYsHPY-s0HOa8",
