@@ -28,16 +28,26 @@ class _CallingScreenState extends State<CallingScreen> {
         : '${widget.id}+${AuthManagementUseCase.curUser}'
   );
 
-  CollectionReference<Map<String, dynamic>>? _roomInnerCollection;
+  late final _curRoomSelfCandidates = _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'callerCandidate': 'callieCandidate');
+  late final _curRoomRemoteCandidates = _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'callieCandidate' : 'callerCandidate');
 
   StreamSubscription? _roomSubs;
 
   final _localRenderer = RTCVideoRenderer();
-  //final _remoteRenderer = RTCVideoRenderer();
-  late MediaStream _localStream;
+  final _remoteRenderer = RTCVideoRenderer();
+
+  MediaStream? _localStream, _remoteStream;
   late RTCPeerConnection _peerConnection;
 
-  StreamSubscription? _curRoomSubs;
+  StreamSubscription? _curRoomSubs, _candidateSubs;
+
+  void _refreshWithDelay(){
+    Future.delayed(const Duration(seconds: 1)).then((value){
+      setState(() {
+
+      });
+    });
+  }
 
   Future<MediaStream> get _getUserMediaStream async{
     final mp = <String, dynamic>{
@@ -48,11 +58,7 @@ class _CallingScreenState extends State<CallingScreen> {
     };
     final stream = await navigator.mediaDevices.getUserMedia(mp);
     _localRenderer.srcObject = stream;
-    Future.delayed(const Duration(seconds: 1)).then((value){
-      setState(() {
-
-      });
-    });
+    _refreshWithDelay();
     return stream;
   }
 
@@ -70,17 +76,18 @@ class _CallingScreenState extends State<CallingScreen> {
     };
 
     final pc = await createPeerConnection(config);
-    await pc.addStream(_localStream);
+    await pc.addStream(_localStream!);
 
     pc.onIceCandidate = (e){
       if(e.candidate != null){
-        print(e.toMap());
+        _curRoomSelfCandidates.add(e.toMap());
       }
     };
+
     pc.onAddStream = (stream){
-      print('addStream: ${stream.id}');
-      ///_remoteRenderer.srcObject = stream;
-      ///setState(() {});
+      _remoteRenderer.srcObject = stream;
+      _remoteStream = stream;
+      _refreshWithDelay();
     };
     return pc;
   }
@@ -93,7 +100,7 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   Future<void> _deleteInnerCollection() async{
-    final innerCollection = await _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'offer' : 'answer').get();
+    final innerCollection = await _curRoomSelfCandidates.get();
     for(var item in innerCollection.docs){
       await item.reference.delete();
     }
@@ -106,7 +113,6 @@ class _CallingScreenState extends State<CallingScreen> {
       'inAnotherCall': false,
       'incomingCallFrom': null
     });
-    _roomSubs?.cancel();
   }
 
   Future<void> _initPeerConnection() async{
@@ -118,53 +124,27 @@ class _CallingScreenState extends State<CallingScreen> {
     return await _peerConnection.setRemoteDescription(description);
   }
 
-  var y = 0;
-
-  var offerOrAnswerIsAlreadyAdded = false;
-
   void _createOffer() async{
     //final description = await _peerConnection?.createOffer(_cons);
     final offer = await _peerConnection.createOffer();
     await _peerConnection.setLocalDescription(offer);
-    _roomInnerCollection = _curRoom.collection('offer');
-    _roomInnerCollection?.add(offer.toMap());
-    _curRoomSubs = _curRoom.collection('answer').snapshots().listen((snapshot) async{
-      if(!offerOrAnswerIsAlreadyAdded){
-        print('create offer is called: ${++y} times');
-        final data = snapshot.docChanges;
-        for(var item in data){
-          if(item.type == DocumentChangeType.added){
-            final sdpMap = item.doc.data();
-            if(sdpMap != null){
-              offerOrAnswerIsAlreadyAdded = true;
-              await _setRemoteDescription(sdpMap: sdpMap);
-            }
-          }
-        }
+    _curRoom.set({'offer': offer.toMap()});
+    _curRoomSubs = _curRoom.snapshots().listen((snapshot) async{
+      final sdpMap = snapshot.data()?['answer'];
+      if(await _peerConnection.getRemoteDescription() == null && sdpMap != null){
+        await _setRemoteDescription(sdpMap: sdpMap);
       }
     });
   }
 
-  var x = 0;
-
   void _createAnswer() async{
-    _curRoomSubs = _curRoom.collection('offer').snapshots().listen((snapshot) async {
-      if(!offerOrAnswerIsAlreadyAdded){
-        print('answer offer is called: ${++x} times');
-        final data = snapshot.docChanges;
-        for(var item in data){
-          if(item.type == DocumentChangeType.added){
-            final sdpMap = item.doc.data();
-            if(sdpMap != null){
-              offerOrAnswerIsAlreadyAdded = true;
-              await _setRemoteDescription(sdpMap: sdpMap);
-              final answer = await _peerConnection.createAnswer();
-              await _peerConnection.setLocalDescription(answer);
-              _roomInnerCollection = _curRoom.collection('answer');
-              _roomInnerCollection?.add(answer.toMap());
-            }
-          }
-        }
+    _curRoomSubs = _curRoom.snapshots().listen((snapshot) async {
+      final sdpMap = snapshot.data()?['offer'];
+      if(await _peerConnection.getRemoteDescription() == null && sdpMap != null){
+        await _setRemoteDescription(sdpMap: sdpMap);
+        final answer = await _peerConnection.createAnswer();
+        await _peerConnection.setLocalDescription(answer);
+        _curRoom.update({'answer': answer.toMap()});
       }
     });
   }
@@ -177,34 +157,49 @@ class _CallingScreenState extends State<CallingScreen> {
 
   Future<void> _disposeLocalRenderer() async{
     _localRenderer.dispose();
-    _localStream.dispose();
+    _localStream?.dispose();
   }
 
   Future<void> _initRemoteRenderer() async{
-
+    await _remoteRenderer.initialize();
+    _setRemoteCandidate();
   }
 
-  // void _setCandidate() async{
-  //   final jsonString = _sdpController.text;
-  //   final session = await jsonDecode(jsonString);
-  //   print(session['candidate']);
-  //   final candidate = RTCIceCandidate(
-  //       session['candidate'], session['sdpMid'], session['sdpMLineIndex']);
-  //   await _peerConnection?.addCandidate(candidate);
-  // }
+  Future<void> _disposeRemoteRenderer() async{
+    _remoteRenderer.dispose();
+    _remoteStream?.dispose();
+  }
+
+  void _setRemoteCandidate() {
+    _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) async{
+      for(var item in event.docChanges){
+        if(item.type == DocumentChangeType.added){
+          final curData = item.doc.data();
+          if(curData != null){
+            final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
+            await _peerConnection.addCandidate(candidate);
+          }
+        }
+      }
+    });
+  }
 
   void _initRenderers() async{
     await _initLocalRendererAndPeer();
+    await _initRemoteRenderer();
     if(widget.callEnum == CallEnum.outgoing){ _createOffer(); }
     else{ _createAnswer(); }
   }
 
   void _disposeRenderers(){
     _disposeLocalRenderer();
+    _disposeRemoteRenderer();
   }
 
   void _cancelSubscriptions(){
     _curRoomSubs?.cancel();
+    _candidateSubs?.cancel();
+    _roomSubs?.cancel();
   }
 
   @override
@@ -235,6 +230,14 @@ class _CallingScreenState extends State<CallingScreen> {
               margin: const EdgeInsets.all(16),
               decoration: const BoxDecoration(color: Colors.black),
               child: RTCVideoView(_localRenderer, mirror: true),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              key: const Key('remote'),
+              margin: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(color: Colors.black),
+              child: RTCVideoView(_remoteRenderer, mirror: true),
             ),
           ),
         ],
