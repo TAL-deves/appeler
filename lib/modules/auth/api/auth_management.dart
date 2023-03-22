@@ -35,11 +35,13 @@ class AuthManagementUseCase{
   }
 
   static Future<void> updateOnlineStatus(bool status) async{
-    final docUser = FirebaseFirestore.instance.collection('users').doc(curUser);
-    final json = {
-      'isOnline': status,
-    };
-    return await docUser.update(json);
+    if(curUser != null){
+      final docUser = FirebaseFirestore.instance.collection('users').doc(curUser);
+      final json = {
+        'isOnline': status,
+      };
+      return await docUser.update(json);
+    }
   }
 
   static Future<void> login({required String phoneNumber, required String password}) async{

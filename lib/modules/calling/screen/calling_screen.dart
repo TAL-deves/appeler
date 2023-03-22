@@ -84,7 +84,10 @@ class _CallingScreenState extends State<CallingScreen> {
       }
     };
 
+    var x = 0;
+
     pc.onAddStream = (stream){
+      print('on add stream called ${++x} times');
       _remoteRenderer.srcObject = stream;
       _remoteStream = stream;
       _refreshWithDelay();
@@ -156,7 +159,9 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   Future<void> _disposeLocalRenderer() async{
+    _removeRendererTracks(_localRenderer);
     _localRenderer.dispose();
+    _removeStreamTracks(_localStream);
     _localStream?.dispose();
   }
 
@@ -166,7 +171,9 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   Future<void> _disposeRemoteRenderer() async{
+    _removeRendererTracks(_remoteRenderer);
     _remoteRenderer.dispose();
+    _removeStreamTracks(_remoteStream);
     _remoteStream?.dispose();
   }
 
@@ -200,6 +207,17 @@ class _CallingScreenState extends State<CallingScreen> {
     _curRoomSubs?.cancel();
     _candidateSubs?.cancel();
     _roomSubs?.cancel();
+  }
+
+  void _removeRendererTracks(RTCVideoRenderer renderer){
+    final tracks = renderer.srcObject!.getTracks();
+    for(var item in tracks){
+      item.stop();
+    }
+  }
+
+  void _removeStreamTracks(MediaStream? mediaStream){
+    mediaStream?.getTracks().forEach((track) => track.stop());
   }
 
   @override
