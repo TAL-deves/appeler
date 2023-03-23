@@ -19,7 +19,6 @@ class ContactListOuterItem extends StatefulWidget {
 class _ContactListOuterItemState extends State<ContactListOuterItem> {
   final users = FirebaseFirestore.instance.collection('users');
   final chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
-  var x = 1;
   StreamSubscription? subscription;
 
   @override
@@ -80,7 +79,6 @@ class _ContactListOuterItemState extends State<ContactListOuterItem> {
                     subscription?.cancel();
                     subscription = curRoom.snapshots().listen((event) {
                       final curData = event.data();
-                      print('outer listener is called: ${x++} times and data is :$curData');
                       if(curData != null){
                         final isAccepted = curData['accepted'];
                         if(isAccepted != null){

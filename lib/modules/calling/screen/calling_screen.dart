@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:appeler/core/app_constants/app_color.dart';
-import 'package:appeler/core/widgets/app_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import '../../auth/api/auth_management.dart';
@@ -52,8 +51,14 @@ class _CallingScreenState extends State<CallingScreen> {
   Future<MediaStream> get _getUserMediaStream async{
     final mp = <String, dynamic>{
       'audio': false,
-      'video': {
+      'video': kIsWeb ? {
         'facingMode': 'user'
+      } : {
+        'width': '640',
+        'height': '480',
+        'frameRate': '30',
+        'facingMode': 'user',
+        'optional': [],
       }
     };
     final stream = await navigator.mediaDevices.getUserMedia(mp);
@@ -84,10 +89,7 @@ class _CallingScreenState extends State<CallingScreen> {
       }
     };
 
-    var x = 0;
-
     pc.onAddStream = (stream){
-      print('on add stream called ${++x} times');
       _remoteRenderer.srcObject = stream;
       _remoteStream = stream;
       _refreshWithDelay();
@@ -128,7 +130,6 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   void _createOffer() async{
-    //final description = await _peerConnection?.createOffer(_cons);
     final offer = await _peerConnection.createOffer();
     await _peerConnection.setLocalDescription(offer);
     _curRoom.set({'offer': offer.toMap()});
@@ -159,7 +160,6 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   Future<void> _disposeLocalRenderer() async{
-    _removeRendererTracks(_localRenderer);
     _localRenderer.dispose();
     _removeStreamTracks(_localStream);
     _localStream?.dispose();
@@ -171,7 +171,6 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   Future<void> _disposeRemoteRenderer() async{
-    _removeRendererTracks(_remoteRenderer);
     _remoteRenderer.dispose();
     _removeStreamTracks(_remoteStream);
     _remoteStream?.dispose();
@@ -209,13 +208,6 @@ class _CallingScreenState extends State<CallingScreen> {
     _roomSubs?.cancel();
   }
 
-  void _removeRendererTracks(RTCVideoRenderer renderer){
-    final tracks = renderer.srcObject!.getTracks();
-    for(var item in tracks){
-      item.stop();
-    }
-  }
-
   void _removeStreamTracks(MediaStream? mediaStream){
     mediaStream?.getTracks().forEach((track) => track.stop());
   }
@@ -237,7 +229,6 @@ class _CallingScreenState extends State<CallingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('enum is: ${widget.callEnum}');
     return Scaffold(
       appBar: AppBar(title: const Text('Calling Screen')),
       body: Column(
