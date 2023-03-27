@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:appeler/core/widgets/app_alert_dialog.dart';
 import 'package:appeler/core/widgets/app_tab_controller.dart';
 import 'package:appeler/modules/auth/api/auth_management.dart';
-import 'package:appeler/modules/home/screen/inner_widget/group_calling/screen/group_calling_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'inner_widget/contact_list/contact_outer_item.dart';
+import 'inner_widget/group_contact_list/screen/group_contact_list_screen.dart';
 
 const homeScreenRoute = 'kHomeScreen';
 
@@ -98,7 +98,7 @@ class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserv
         tabChildren: [
           const ContactListOuterItem(),
           Text(2.toString()),
-          const GroupCallingScreen(),
+          const GroupContactListScreen(),
         ],
       ),
     );

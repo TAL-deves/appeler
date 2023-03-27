@@ -1,9 +1,11 @@
 import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:appeler/modules/auth/phone/page.dart';
 import 'package:appeler/modules/calling/screen/calling_screen.dart';
+import 'package:appeler/modules/group_calling/screen/group_calling_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../modules/home/screen/home_screen.dart';
-import '';
+
 
 const kDefaultRoute = '/';
 
@@ -39,6 +41,11 @@ class AppRouter{
         final callEnum = curList[1];
         return MaterialPageRoute(
           builder: (context) => CallingScreen(id: curId, callEnum: callEnum),
+        );
+      case groupCallingScreenRoute:
+        final curList = settings.arguments as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
+        return MaterialPageRoute(
+          builder: (context) => GroupCallingScreen(curList: curList),
         );
       default:
         return null;
