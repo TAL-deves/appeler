@@ -25,6 +25,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
   final _chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
   final _subsMap = <String, StreamSubscription>{};
   late final _curUser = _users.doc(AuthManagementUseCase.curUser);
+  final _userSet = <String>{};
 
   @override
   void initState() {
@@ -86,7 +87,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
           final roomId = '${AuthManagementUseCase.curUser}+$id';
           final curRoom = _chatRooms.doc(roomId);
           _subsMap[roomId]?.cancel();
-          _subsMap[roomId] = curRoom.snapshots().listen((event) {
+          _subsMap[roomId] = curRoom.snapshots().listen((event) async{
             final curData = event.data();
             if(curData != null){
               final isAccepted = curData['accepted'];
@@ -105,7 +106,9 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
               }
             }
             else{
-              AppSnackBar.showFailureSnackBar(message: 'Call ended by $id');
+              print('user set is: $_userSet');
+              if(_userSet.contains(id)) { AppSnackBar.showFailureSnackBar(message: 'Call ended by $id'); }
+              else { _userSet.add(id); }
             }
           });
         }
