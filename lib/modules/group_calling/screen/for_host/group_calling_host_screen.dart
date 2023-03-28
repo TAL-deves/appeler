@@ -38,7 +38,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
       'inGroupCall': false,
     });
     _subsMap.forEach((key, value) {
-      _chatRooms.doc('${AuthManagementUseCase.curUser}+$key').delete();
+      _chatRooms.doc(key).delete();
       value.cancel();
     });
   }
@@ -83,9 +83,10 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
             'inAnotherCall': true,
             'inGroupCall': true,
           });
-          final curRoom = _chatRooms.doc('${AuthManagementUseCase.curUser}+$id');
-          _subsMap[id]?.cancel();
-          _subsMap[id] = curRoom.snapshots().listen((event) {
+          final roomId = '${AuthManagementUseCase.curUser}+$id';
+          final curRoom = _chatRooms.doc(roomId);
+          _subsMap[roomId]?.cancel();
+          _subsMap[roomId] = curRoom.snapshots().listen((event) {
             final curData = event.data();
             if(curData != null){
               final isAccepted = curData['accepted'];

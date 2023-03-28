@@ -50,68 +50,11 @@ class _GroupContactListScreenState extends State<GroupContactListScreen> {
                     final id = curItem['id'];
                     final isOnline = curItem['isOnline'] as bool;
                     final inAnotherCall = curItem['inAnotherCall'] as bool;
-                    return GestureDetector(
-                      onTap: (){
-                        if(!isOnline) { AppSnackBar.showFailureSnackBar(message: 'User is not online!'); }
-                        else if(inAnotherCall) { AppSnackBar.showFailureSnackBar(message: 'User in another call'); }
-                        else{
-                          AppSnackBar.showSuccessSnackBar(message: 'Starting group call....Please wait!');
-                          final curUser = users.doc(AuthManagementUseCase.curUser);
-                          final remoteUser = users.doc(id);
-
-                          AppAlertDialog.outGoingCallDialog(context: context, callerId: id).then((value){
-                            if(value != null && value){
-                              remoteUser.update({
-                                'incomingCallFrom': null,
-                                'inAnotherCall': false,
-                                'inGroupCall': false,
-                              });
-                              curUser.update({
-                                'inAnotherCall': false,
-                                'inGroupCall': false,
-                              });
-                            }
-                          });
-                          curUser.update({
-                            'inAnotherCall': true,
-                            'inGroupCall': true,
-                          });
-                          remoteUser.update({
-                            'incomingCallFrom': AuthManagementUseCase.curUser,
-                            'inAnotherCall': true,
-                            'inGroupCall': true,
-                          });
-                          final curRoom = chatRooms.doc('${AuthManagementUseCase.curUser}+$id');
-                          subscription?.cancel();
-                          subscription = curRoom.snapshots().listen((event) {
-                            final curData = event.data();
-                            if(curData != null){
-                              final isAccepted = curData['accepted'];
-                              if(isAccepted != null){
-                                if(isAccepted){
-                                  _closeOutgoingDialog();
-                                  Navigator.of(context).pushNamed(callingScreenRoute, arguments: [id, CallEnum.outgoing]);
-                                }
-                                else{
-                                  curRoom.delete();
-                                  curUser.update({
-                                    'inAnotherCall': false,
-                                    'inGroupCall': false,
-                                  });
-                                  AppSnackBar.showFailureSnackBar(message: 'Call rejected');
-                                  _closeOutgoingDialog();
-                                }
-                              }
-                            }
-                          });
-                        }
-                      },
-                      child: ContactListItem(
-                        name: name,
-                        id: id,
-                        isOnline: isOnline,
-                        inAnotherCall: inAnotherCall,
-                      ),
+                    return ContactListItem(
+                      name: name,
+                      id: id,
+                      isOnline: isOnline,
+                      inAnotherCall: inAnotherCall,
                     );
                   }
                   else{ return Container(); }
