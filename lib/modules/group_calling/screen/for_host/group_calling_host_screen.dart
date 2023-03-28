@@ -6,24 +6,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../../core/widgets/app_snackbar.dart';
-import '../../auth/api/auth_management.dart';
+import '../../../../core/widgets/app_snackbar.dart';
+import '../../../auth/api/auth_management.dart';
 
-const groupCallingScreenRoute = 'groupCallingScreenRoute';
+const groupCallingHostScreenRoute = 'groupCallingHostScreenRoute';
 
-class GroupCallingScreen extends StatefulWidget {
-  const GroupCallingScreen({Key? key, required this.curList}) : super(key: key);
+class GroupCallingHostScreen extends StatefulWidget {
+  const GroupCallingHostScreen({Key? key, required this.curList}) : super(key: key);
 
   final List<QueryDocumentSnapshot<Map<String, dynamic>>> curList;
 
   @override
-  State<GroupCallingScreen> createState() => _GroupCallingScreenState();
+  State<GroupCallingHostScreen> createState() => _GroupCallingHostScreenState();
 }
 
-class _GroupCallingScreenState extends State<GroupCallingScreen> {
-  final users = FirebaseFirestore.instance.collection('users');
-  final chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
-  final subsMap = <String, StreamSubscription>{};
+class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
+  final _users = FirebaseFirestore.instance.collection('users');
+  final _chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
+  final _subsMap = <String, StreamSubscription>{};
+  late final _curUser = _users.doc(AuthManagementUseCase.curUser);
 
   @override
   void initState() {
@@ -31,9 +32,20 @@ class _GroupCallingScreenState extends State<GroupCallingScreen> {
     super.initState();
   }
 
+  void _commonDisposeWork(){
+    _curUser.update({
+      'inAnotherCall': false,
+      'inGroupCall': false,
+    });
+    _subsMap.forEach((key, value) {
+      _chatRooms.doc('${AuthManagementUseCase.curUser}+$key').delete();
+      value.cancel();
+    });
+  }
+
   @override
   void dispose() {
-    subsMap.forEach((key, value) { value.cancel(); });
+    _commonDisposeWork();
     super.dispose();
   }
 
@@ -42,7 +54,7 @@ class _GroupCallingScreenState extends State<GroupCallingScreen> {
       AppSnackBar.showSuccessSnackBar(message: 'Starting group call, please wait!!');
     });
 
-    final curUser = users.doc(AuthManagementUseCase.curUser);
+    final curUser = _users.doc(AuthManagementUseCase.curUser);
     curUser.update({
       'inAnotherCall': true,
       'inGroupCall': true,
@@ -65,15 +77,15 @@ class _GroupCallingScreenState extends State<GroupCallingScreen> {
           });
         }
         else{
-          final remoteUser = users.doc(id);
+          final remoteUser = _users.doc(id);
           remoteUser.update({
             'incomingCallFrom': AuthManagementUseCase.curUser,
             'inAnotherCall': true,
             'inGroupCall': true,
           });
-          final curRoom = chatRooms.doc('${AuthManagementUseCase.curUser}+$id');
-          subsMap[id]?.cancel();
-          subsMap[id] = curRoom.snapshots().listen((event) {
+          final curRoom = _chatRooms.doc('${AuthManagementUseCase.curUser}+$id');
+          _subsMap[id]?.cancel();
+          _subsMap[id] = curRoom.snapshots().listen((event) {
             final curData = event.data();
             if(curData != null){
               final isAccepted = curData['accepted'];
@@ -91,6 +103,9 @@ class _GroupCallingScreenState extends State<GroupCallingScreen> {
                 }
               }
             }
+            else{
+              AppSnackBar.showFailureSnackBar(message: 'Call ended by $id');
+            }
           });
         }
       }
@@ -100,7 +115,7 @@ class _GroupCallingScreenState extends State<GroupCallingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Group Calling'),),
+      appBar: AppBar(title: const Text('Group Calling Host Screen'),),
       body: Center(
         child: AppCommonButton(
           color: kRedColor,

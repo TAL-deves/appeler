@@ -1,7 +1,8 @@
 import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:appeler/modules/auth/phone/page.dart';
 import 'package:appeler/modules/calling/screen/calling_screen.dart';
-import 'package:appeler/modules/group_calling/screen/group_calling_screen.dart';
+import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
+import 'package:appeler/modules/group_calling/screen/for_host/group_calling_host_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../modules/home/screen/home_screen.dart';
@@ -42,10 +43,15 @@ class AppRouter{
         return MaterialPageRoute(
           builder: (context) => CallingScreen(id: curId, callEnum: callEnum),
         );
-      case groupCallingScreenRoute:
+      case groupCallingHostScreenRoute:
         final curList = settings.arguments as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
         return MaterialPageRoute(
-          builder: (context) => GroupCallingScreen(curList: curList),
+          builder: (context) => GroupCallingHostScreen(curList: curList),
+        );
+      case groupCallingClientScreenRoute:
+        final callerHostId = settings.arguments as String?;
+        return MaterialPageRoute(
+          builder: (context) => GroupCallingClientScreen(callerHostId: callerHostId),
         );
       default:
         return null;

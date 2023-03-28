@@ -3,6 +3,7 @@ import 'package:appeler/core/app_constants/app_color.dart';
 import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:appeler/modules/calling/screen/call_enum/call_enum.dart';
 import 'package:appeler/modules/calling/screen/calling_screen.dart';
+import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
 import 'package:flutter/material.dart';
 import 'app_button.dart';
 
@@ -37,6 +38,23 @@ class AppAlertDialog {
           bodyMessage: 'Press ok for accept and cancel for reject',
           onPressOk: () {
             Navigator.of(context).pushNamed(callingScreenRoute, arguments: [callerId, CallEnum.incoming]);
+          },
+        );
+      },
+    );
+  }
+
+  static Future incomingGroupCallDialog({required BuildContext context, String? callerHostId}) {
+    inCallDialogIsOpen = true;
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (innerContext) {
+        return _CommonDialogBody(
+          title: 'Group Calling from $callerHostId',
+          bodyMessage: 'Press ok for accept and cancel for reject',
+          onPressOk: () {
+            Navigator.of(context).pushNamed(groupCallingClientScreenRoute, arguments: callerHostId);
           },
         );
       },

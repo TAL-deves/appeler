@@ -37,7 +37,14 @@ class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserv
           }
         }
         else{
-          final result = await AppAlertDialog.incomingCallDialog(context: context, callerId: inComingCallFrom);
+          final inGroupCall = data['inGroupCall'];
+          bool? result;
+          if(inGroupCall == null || !inGroupCall){
+            result = await AppAlertDialog.incomingCallDialog(context: context, callerId: inComingCallFrom);
+          }
+          else{
+            result = await AppAlertDialog.incomingGroupCallDialog(context: context, callerHostId: inComingCallFrom);
+          }
           if(result != null){
             final curRoom = chatRooms.doc('$inComingCallFrom+${AuthManagementUseCase.curUser}');
             curRoom.set({
@@ -47,6 +54,7 @@ class _AppHomeScreenState extends State<AppHomeScreen> with WidgetsBindingObserv
               curUser.update({
                 'incomingCallFrom': null,
                 'inAnotherCall': false,
+                'inGroupCall': false,
               });
             }
           }

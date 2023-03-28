@@ -8,7 +8,7 @@ import '../../../../../../core/widgets/app_snackbar.dart';
 import '../../../../../auth/api/auth_management.dart';
 import '../../../../../calling/screen/call_enum/call_enum.dart';
 import '../../../../../calling/screen/calling_screen.dart';
-import '../../../../../group_calling/screen/group_calling_screen.dart';
+import '../../../../../group_calling/screen/for_host/group_calling_host_screen.dart';
 import '../../contact_list/inner_widget/contact_list_item.dart';
 
 class GroupContactListScreen extends StatefulWidget {
@@ -30,8 +30,6 @@ class _GroupContactListScreenState extends State<GroupContactListScreen> {
       AppAlertDialog.outgoingDialogIsOpen = false;
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +124,7 @@ class _GroupContactListScreenState extends State<GroupContactListScreen> {
               color: kPrimaryColor,
               onPressed: (){
                 //_makeGroupCall(curList);
-                Navigator.of(context).pushNamed(groupCallingScreenRoute, arguments: curList);
+                Navigator.of(context).pushNamed(groupCallingHostScreenRoute, arguments: curList);
               },
             ),
           ],
