@@ -36,7 +36,7 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
 
   Future<MediaStream> get _getUserMediaStream async {
     final mp = <String, dynamic>{
-      'audio': true,
+      'audio': false,
       'video': kIsWeb
           ? {'facingMode': 'user'}
           : {

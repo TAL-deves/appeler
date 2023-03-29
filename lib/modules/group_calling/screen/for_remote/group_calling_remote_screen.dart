@@ -174,6 +174,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     _deleteRoomAndRecoverState();
     _disposeRemoteRenderer();
     _cancelSubscriptions();
+    _peerConnection.dispose();
     super.dispose();
   }
 

@@ -217,6 +217,7 @@ class Signal{
     _deleteRoomAndRecoverState();
     _disposeRenderers();
     _cancelSubscriptions();
+    _peerConnection.dispose();
   }
 
   void init(){
