@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:appeler/core/app_utilities/app_utilities.dart';
+import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
+import 'package:appeler/modules/group_calling/screen/for_host/group_calling_host_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -52,6 +54,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       onGenerateRoute: appRouter.onGenerateRoute,
+      //home: const GroupCallingHostScreen(curList: [])
+      //home: const GroupCallingClientScreen()
       //home: const TestPage(),
       //home: const AuthPhonePage(),
     );
