@@ -24,16 +24,19 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
   final _chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
   late final _curUser = _users.doc(AuthManagementUseCase.curUser);
   late final _curRoom = _chatRooms.doc('${widget.callerHostId}+${AuthManagementUseCase.curUser}');
+  late final _hostUser = _users.doc(widget.callerHostId);
+  late final _curUserConnectedWithHost = _hostUser.collection('connected').doc('list');
 
-  late StreamSubscription _roomSubs;
+  late StreamSubscription _roomSubs, _hostSubs;
 
   final _localRenderer = RTCVideoRenderer();
   MediaStream? _localStream;
   final _widgetMap = <String, Widget>{};
+  final _addedUser = <String>{};
 
   Future<MediaStream> get _getUserMediaStream async {
     final mp = <String, dynamic>{
-      'audio': false,
+      'audio': true,
       'video': kIsWeb
           ? {'facingMode': 'user'}
           : {
@@ -87,6 +90,7 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
     });
     _curRoom.delete();
     _roomSubs.cancel();
+    _hostSubs.cancel();
   }
 
   void _initRoom() {
@@ -96,10 +100,39 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
     });
   }
 
+  void _offerAnswerHostUser(){
+    _hostSubs = _curUserConnectedWithHost.snapshots().listen((event) {
+      final mp = event.data();
+      if(mp != null){
+        final curList = mp['curList'] as List<dynamic>?;
+        if(curList != null){
+          for(final item in curList){
+            final curItem = item as String;
+            if(curItem != AuthManagementUseCase.curUser && !_addedUser.contains(curItem)){
+              setState(() {
+                _addedUser.add(curItem);
+                _widgetMap[curItem] = Flexible(
+                  child: GroupCallingRemoteScreen(
+                    callEnum: curItem.compareTo(AuthManagementUseCase.curUser!) < 0
+                        ? CallEnum.incoming
+                        : CallEnum.outgoing,
+                    id: curItem,
+                    localStream: _localStream!,
+                  ),
+                );
+              });
+            }
+          }
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
     _initLocalRenderer();
     _initRoom();
+    _offerAnswerHostUser();
     super.initState();
   }
 

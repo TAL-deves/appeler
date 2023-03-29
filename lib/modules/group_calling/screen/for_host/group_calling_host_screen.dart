@@ -26,6 +26,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
   final _chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
   final _subsMap = <String, StreamSubscription>{};
   late final _curUser = _users.doc(AuthManagementUseCase.curUser);
+  late final _curUserConnected = _curUser.collection('connected').doc('list');
   final _userSet = <String>{};
 
   final _localRenderer = RTCVideoRenderer();
@@ -89,6 +90,9 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
   void initState() {
     _initLocalRenderer();
     _makeGroupCall();
+    _curUserConnected.set({
+      'curList' : []
+    });
     super.initState();
   }
 
@@ -96,6 +100,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
   void dispose() {
     _firebaseDisposeWork();
     _disposeLocalRenderer();
+    _curUserConnected.set({'curList': []});
     super.dispose();
   }
 
@@ -142,6 +147,19 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
               if (isAccepted != null) {
                 if (isAccepted) {
                   AppSnackBar.showSuccessSnackBar(message: 'Call Accepted by $id');
+                  print('accepted');
+                  _curUserConnected.get().then((value){
+                    final curMap = value.data();
+                    print('map is: $curMap');
+                    if(curMap != null){
+                      var curList = curMap['curList'] as List<dynamic>?;
+                      curList ??= [];
+                      curList.add(id);
+                      _curUserConnected.set({
+                        'curList' : curList
+                      });
+                    }
+                  });
                   setState(() {
                     _widgetMap[id] = Flexible(
                       child: GroupCallingRemoteScreen(
@@ -151,6 +169,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
                       ),
                     );
                   });
+
                 }
                 else {
                   curRoom.delete();
