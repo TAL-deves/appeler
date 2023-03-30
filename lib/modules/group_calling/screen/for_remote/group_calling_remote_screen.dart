@@ -64,6 +64,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     _remoteRenderer.dispose();
     _remoteStream?.getTracks().forEach((track) {track.stop();});
     _remoteStream?.dispose();
+    //_peerConnection.dispose();
   }
 
   Future<RTCPeerConnection> _createPeerConnection() async{
@@ -174,7 +175,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     _deleteRoomAndRecoverState();
     _disposeRemoteRenderer();
     _cancelSubscriptions();
-    _peerConnection.dispose();
+    //_peerConnection.dispose();
     super.dispose();
   }
 

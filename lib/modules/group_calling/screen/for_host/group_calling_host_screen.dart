@@ -65,6 +65,7 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
         ),
       );
     });
+    _makeGroupCall();
   }
 
   void _disposeLocalRenderer() {
@@ -89,7 +90,6 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
   @override
   void initState() {
     _initLocalRenderer();
-    _makeGroupCall();
     _curUserConnected.set({
       'curList' : []
     });

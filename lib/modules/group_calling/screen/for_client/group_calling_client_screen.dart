@@ -72,6 +72,7 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
         ),
       );
     });
+    _offerAnswerHostUser();
   }
 
   void _disposeLocalRenderer() {
@@ -100,11 +101,14 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
     });
   }
 
+  var offerCalled = 0;
+
   void _offerAnswerHostUser(){
     _hostSubs = _curUserConnectedWithHost.snapshots().listen((event) {
       final mp = event.data();
       if(mp != null){
         final curList = mp['curList'] as List<dynamic>?;
+        print('offer called: $curList    ${++offerCalled}  ${AuthManagementUseCase.curUser}');
         if(curList != null){
           for(final item in curList){
             final curItem = item as String;
@@ -113,9 +117,9 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
                 _addedUser.add(curItem);
                 _widgetMap[curItem] = Flexible(
                   child: GroupCallingRemoteScreen(
-                    callEnum: curItem.compareTo(AuthManagementUseCase.curUser!) < 0
-                        ? CallEnum.incoming
-                        : CallEnum.outgoing,
+                    callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
+                        ? CallEnum.outgoing
+                        : CallEnum.incoming,
                     id: curItem,
                     localStream: _localStream!,
                   ),
@@ -132,7 +136,6 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
   void initState() {
     _initLocalRenderer();
     _initRoom();
-    _offerAnswerHostUser();
     super.initState();
   }
 
