@@ -154,22 +154,23 @@ class _GroupCallingHostScreenState extends State<GroupCallingHostScreen> {
                     if(curMap != null){
                       var curList = curMap['curList'] as List<dynamic>?;
                       curList ??= [];
-                      curList.add(id);
-                      _curUserConnected.set({
-                        'curList' : curList
-                      });
+                      if(!curList.contains(id)){
+                        curList.add(id);
+                        _curUserConnected.set({
+                          'curList' : curList
+                        });
+                        setState(() {
+                          _widgetMap[id] = Flexible(
+                            child: GroupCallingRemoteScreen(
+                              callEnum: CallEnum.outgoing,
+                              id: id,
+                              localStream: _localStream!,
+                            ),
+                          );
+                        });
+                      }
                     }
                   });
-                  setState(() {
-                    _widgetMap[id] = Flexible(
-                      child: GroupCallingRemoteScreen(
-                        callEnum: CallEnum.outgoing,
-                        id: id,
-                        localStream: _localStream!,
-                      ),
-                    );
-                  });
-
                 }
                 else {
                   curRoom.delete();
