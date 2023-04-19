@@ -99,9 +99,12 @@ class Signal{
   }
 
   void _initRoom(){
-    _roomSubs = _curRoom.snapshots().listen((event) {
-      final data = event.data();
-      if(data == null) onPop.call();
+    print('init room called');
+    Future.delayed(const Duration(seconds: 2)).then((value){
+      _roomSubs = _curRoom.snapshots().listen((event) {
+        final data = event.data();
+        if(data == null) onPop.call();
+      });
     });
   }
 
