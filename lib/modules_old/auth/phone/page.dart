@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import '../api/auth_management.dart';
+import 'body.dart';
 
-import '../../../index.dart';
+const authScreenRoute = 'authScreenRoute';
 
 class AuthPhonePage extends StatelessWidget {
-
-  static const route = 'auth_phone';
 
   const AuthPhonePage({Key? key}) : super(key: key);
 

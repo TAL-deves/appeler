@@ -1,36 +1,37 @@
 import 'dart:ui';
 
-import 'package:appeler/core/app_utilities/app_utilities.dart';
-import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
-import 'package:appeler/modules/group_calling/screen/for_host/group_calling_host_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
-import 'core/app_router/app_router.dart';
-//import 'dart:html' as html;
 
-import 'modules/auth/api/auth_management.dart';
+import 'index.dart';
 
 late final SharedPreferences sharedPref;
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
+late final WidgetsBinding engine;
+
+void main() async {
+  engine = WidgetsFlutterBinding.ensureInitialized();
   // html.window.onUnload.listen((event) async{
   //   AuthManagementUseCase.updateOnlineStatus(false);
   // });
+  await registerAllDependency();
   Wakelock.enable();
   await Firebase.initializeApp(
-    options: kIsWeb ? const FirebaseOptions(
-      apiKey: "AIzaSyBmB2nrR8fHhMlWWCMtDJfYsHPY-s0HOa8",
-      authDomain: "appeler-7dbb2.firebaseapp.com",
-      projectId: "appeler-7dbb2",
-      storageBucket: "appeler-7dbb2.appspot.com",
-      messagingSenderId: "926347959879",
-      appId: "1:926347959879:web:8f71cce0c2f22919b6db62",
-    ) : null,
+    options: kIsWeb
+        ? const FirebaseOptions(
+            apiKey: "AIzaSyBmB2nrR8fHhMlWWCMtDJfYsHPY-s0HOa8",
+            authDomain: "appeler-7dbb2.firebaseapp.com",
+            projectId: "appeler-7dbb2",
+            storageBucket: "appeler-7dbb2.appspot.com",
+            messagingSenderId: "926347959879",
+            appId: "1:926347959879:web:8f71cce0c2f22919b6db62",
+          )
+        : null,
   );
   sharedPref = await SharedPreferences.getInstance();
   runApp(const MyApp());
@@ -39,7 +40,6 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,12 +52,17 @@ class MyApp extends StatelessWidget {
       ),
       navigatorKey: AppUtilities.appNavigatorKey,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      onGenerateRoute: appRouter.onGenerateRoute,
-      //home: const GroupCallingHostScreen(curList: [])
-      //home: const GroupCallingClientScreen()
-      //home: const TestPage(),
-      //home: const AuthPhonePage(),
+      theme: ThemeData(
+        primarySwatch: KColors.primary,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          )
+        )
+      ),
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
@@ -69,9 +74,8 @@ class TestPage extends StatefulWidget {
   State<TestPage> createState() => _TestPageState();
 }
 
-class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
-
-  void update(bool status) async{
+class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
+  void update(bool status) async {
     final docUser = FirebaseFirestore.instance.collection('users').doc('123');
     final json = {
       'isOnline': status,
@@ -79,11 +83,14 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
     await docUser.update(json);
   }
 
-  void listenTest(){
-    final docUser = FirebaseFirestore.instance.collection('users').doc('123').collection('test');
+  void listenTest() {
+    final docUser = FirebaseFirestore.instance
+        .collection('users')
+        .doc('123')
+        .collection('test');
     final stream = docUser.snapshots().listen((snapshot) {
       final list = snapshot.docChanges;
-      for(var i = 0; i < list.length; ++i){
+      for (var i = 0; i < list.length; ++i) {
         final curItem = list[i];
         final dataIs = curItem.doc.data();
         final type = curItem.type;
@@ -92,18 +99,18 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
     });
   }
 
-  void work2() async{
+  void work2() async {
     final timeValue = DateTime.now().millisecondsSinceEpoch.toString();
-    final docUser = FirebaseFirestore.instance.collection('users').doc('123').collection('test').doc(timeValue);
-    final json = {
-      'name': 'Shimul',
-      'age': 21,
-      'value': 'testing'
-    };
+    final docUser = FirebaseFirestore.instance
+        .collection('users')
+        .doc('123')
+        .collection('test')
+        .doc(timeValue);
+    final json = {'name': 'Shimul', 'age': 21, 'value': 'testing'};
     await docUser.set(json);
   }
 
-  void work() async{
+  void work() async {
     final docUser = FirebaseFirestore.instance.collection('users').doc('789');
     final json = {
       'name': 'Android',
@@ -117,10 +124,9 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print(state);
-    if(state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       update(true);
-    }
-    else{
+    } else {
       update(false);
     }
     super.didChangeAppLifecycleState(state);
@@ -147,4 +153,3 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
     );
   }
 }
-

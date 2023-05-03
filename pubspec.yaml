@@ -44,6 +44,15 @@ dependencies:
       url: https://github.com/flutter-webrtc/flutter-webrtc.git
       ref: main
   wakelock: ^0.6.2
+  encrypt: ^5.0.1
+  dio: ^5.1.1
+  easy_localization: ^3.0.1
+  firebase_messaging: ^14.4.1
+  flutter_bloc: ^8.1.2
+  equatable: ^2.0.5
+  upgrader: ^6.3.0
+  flutter_svg: ^2.0.5
+  get_it: ^7.3.0
 
 dev_dependencies:
   flutter_test:

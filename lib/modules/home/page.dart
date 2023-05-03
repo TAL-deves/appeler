@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../widgets/action_button.dart';
-import 'body.dart';
 
-class AuthOtpPage extends StatelessWidget {
-  static const String route = "auth_otp";
-  static const String title = "Verification";
+import '../../index.dart';
 
-  const AuthOtpPage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  static const String route = "home";
+  static const String title = "Home";
+
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class AuthOtpPage extends StatelessWidget {
           statusBarIconBrightness: Brightness.dark,
         ),
       ),
-      body: const AuthOtpBody(),
+      body: const HomeBody(),
     );
   }
 }
