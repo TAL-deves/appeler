@@ -95,9 +95,11 @@ class _GroupCallingClientScreenState extends State<GroupCallingClientScreen> {
   }
 
   void _initRoom() {
-    _roomSubs = _curRoom.snapshots().listen((event) {
-      final data = event.data();
-      if (data == null) Navigator.pop(context);
+    Future.delayed(const Duration(seconds: 2)).then((value){
+      _roomSubs = _curRoom.snapshots().listen((event) {
+        final data = event.data();
+        if (data == null) Navigator.pop(context);
+      });
     });
   }
 
