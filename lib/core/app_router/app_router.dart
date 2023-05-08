@@ -3,10 +3,11 @@ import 'package:appeler/modules/auth/phone/page.dart';
 import 'package:appeler/modules/calling/screen/calling_screen.dart';
 import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
 import 'package:appeler/modules/group_calling/screen/for_host/group_calling_host_screen.dart';
+import 'package:appeler/new_modules/new_home/group_chat/group_chat_screen.dart';
+import 'package:appeler/new_modules/new_home/new_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../modules/home/screen/home_screen.dart';
-
 
 const kDefaultRoute = '/';
 
@@ -20,7 +21,8 @@ class AppRouter{
       case kDefaultRoute:
         if(AuthManagementUseCase.isUserLoggedIn()){
           return MaterialPageRoute(
-            builder: (context) => const AppHomeScreen(),
+            //builder: (context) => const AppHomeScreen(),
+            builder: (context) => const NewHomeScreen(),
           );
         }
         else{
@@ -34,7 +36,8 @@ class AppRouter{
         );
       case homeScreenRoute:
         return MaterialPageRoute(
-          builder: (context) => const AppHomeScreen(),
+          //builder: (context) => const AppHomeScreen(),
+          builder: (context) => const NewHomeScreen(),
         );
       case callingScreenRoute:
         final curList = settings.arguments as List<dynamic>;
@@ -52,6 +55,11 @@ class AppRouter{
         final callerHostId = settings.arguments as String?;
         return MaterialPageRoute(
           builder: (context) => GroupCallingClientScreen(callerHostId: callerHostId),
+        );
+      case kGroupChatScreenRoute:
+        final groupId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => GroupChatScreen(groupId: groupId),
         );
       default:
         return null;
