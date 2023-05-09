@@ -31,6 +31,8 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
           : '${widget.id}+${AuthManagementUseCase.curUser}'
   );
 
+  //late final _curRoom = _chatRooms.doc();
+
   late final _curRoomSelfCandidates = _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'callerCandidate': 'callieCandidate');
   late final _curRoomRemoteCandidates = _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'callieCandidate' : 'callerCandidate');
 

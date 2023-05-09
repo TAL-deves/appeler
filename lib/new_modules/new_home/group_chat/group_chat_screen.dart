@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:appeler/core/app_constants/app_color.dart';
 import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../../../modules/calling/screen/call_enum/call_enum.dart';
@@ -26,6 +28,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
   final _localRenderer = RTCVideoRenderer();
   MediaStream? _localStream;
+
   final _widgetMap = <String, Widget>{};
   final _addedUser = <String>{};
 
@@ -54,14 +57,24 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     setState(() {
       _localRenderer.srcObject = _localStream;
       _widgetMap['local'] = Flexible(
-        child: Container(
-          key: const Key('local'),
-          margin: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(color: Colors.black),
-          child: RTCVideoView(_localRenderer, mirror: true),
+        child: Stack(
+          children: [
+            Container(
+              key: const Key('local'),
+              margin: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(color: Colors.black),
+              child: RTCVideoView(_localRenderer, mirror: true),
+            ),
+            Positioned(
+              top: 10,
+              left: 10,
+              child: Text(AuthManagementUseCase.curUser!, style: TextStyle(color: kRedColor, fontSize: 20),),
+            ),
+          ],
         ),
       );
     });
+    _addCurrentUser();
   }
 
   void _addCurrentUser() {
@@ -71,7 +84,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         'isMute': false,
         'handUp': false,
       };
-      _userDoc.set(curMap);
+      _userDoc.set(curMap).then((value){
+        _offerAnswerHostUser();
+      });
     });
   }
 
@@ -110,17 +125,34 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             setState(() {
               _addedUser.add(curItem);
               _widgetMap[curItem] = Flexible(
-                child: GroupCallingRemoteScreen(
-                  callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
-                      ? CallEnum.outgoing
-                      : CallEnum.incoming,
-                  id: curItem,
-                  localStream: _localStream!,
+                child: Stack(
+                  children: [
+                    GroupCallingRemoteScreen(
+                      callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
+                          ? CallEnum.outgoing
+                          : CallEnum.incoming,
+                      id: curItem,
+                      localStream: _localStream!,
+                    ),
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Text(curItem, style: const TextStyle(color: kRedColor, fontSize: 20),),
+                    ),
+                  ],
                 ),
               );
             });
           }
         }
+        // for(final item in _widgetMap.entries){
+        //   if(item.key != 'local' && !mp.containsKey(item.key)){
+        //     setState(() {
+        //       _addedUser.remove(item.key);
+        //       _widgetMap.remove(item.key);
+        //     });
+        //   }
+        // }
       }
     });
   }
@@ -135,8 +167,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   @override
   void initState() {
     _initLocalRenderer();
-    _addCurrentUser();
-    _offerAnswerHostUser();
+    //_addCurrentUser();
+    //_offerAnswerHostUser();
     super.initState();
   }
 
