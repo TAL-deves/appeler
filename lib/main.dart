@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:appeler/core/app_utilities/app_utilities.dart';
-import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
-import 'package:appeler/modules/group_calling/screen/for_host/group_calling_host_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -11,8 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 import 'core/app_router/app_router.dart';
 //import 'dart:html' as html;
-
-import 'modules/auth/api/auth_management.dart';
 
 late final SharedPreferences sharedPref;
 
@@ -60,9 +56,95 @@ class MyApp extends StatelessWidget {
       //home: const GroupCallingClientScreen()
       //home: const TestPage(),
       //home: const AuthPhonePage(),
+      //home: TestWork()
     );
   }
 }
+
+class MyText extends StatefulWidget {
+  const MyText({super.key, required this.textValue});
+
+  final String textValue;
+
+  @override
+  State<MyText> createState() => _MyTextState();
+}
+
+class _MyTextState extends State<MyText> {
+  late final innerValue = widget.textValue;
+  @override
+  Widget build(BuildContext context) {
+    return Text(innerValue);
+  }
+}
+
+
+class TestWork extends StatefulWidget {
+  const TestWork({Key? key}) : super(key: key);
+
+  @override
+  State<TestWork> createState() => _TestWorkState();
+}
+
+class _TestWorkState extends State<TestWork> {
+  final _widgetMap = <String, Widget>{};
+
+
+  Widget _addButton(String value){
+    return TextButton(
+      child: Text(value),
+      onPressed: (){
+        setState(() {
+          _widgetMap[value] = MyText(textValue: value, key: UniqueKey());
+        });
+      },
+    );
+  }
+
+  Widget _removeButton(String value){
+    return TextButton(
+      child: Text(value),
+      onPressed: (){
+        setState(() {
+          _widgetMap.remove(value);
+        });
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('test'),),
+      body: Column(
+        children: [
+          Column(
+            children: _widgetMap.entries.map((e) => e.value).toList(),
+          ),
+          Row(
+            children: [
+              Column(
+                children: [
+                  _addButton('123'),
+                  _addButton('456'),
+                  _addButton('789'),
+                ],
+              ),
+              Column(
+                children: [
+                  _removeButton('123'),
+                  _removeButton('456'),
+                  _removeButton('789'),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 
 class TestPage extends StatefulWidget {
   const TestPage({Key? key}) : super(key: key);
@@ -82,16 +164,16 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
   }
 
   void listenTest(){
-    final docUser = FirebaseFirestore.instance.collection('users').doc('123').collection('test');
-    final stream = docUser.snapshots().listen((snapshot) {
-      final list = snapshot.docChanges;
-      for(var i = 0; i < list.length; ++i){
-        final curItem = list[i];
-        final dataIs = curItem.doc.data();
-        final type = curItem.type;
-        print('data: ${dataIs}    type: $type');
-      }
-    });
+    // final docUser = FirebaseFirestore.instance.collection('users').doc('123').collection('test');
+    // final stream = docUser.snapshots().listen((snapshot) {
+    //   final list = snapshot.docChanges;
+    //   for(var i = 0; i < list.length; ++i){
+    //     final curItem = list[i];
+    //     final dataIs = curItem.doc.data();
+    //     final type = curItem.type;
+    //     print('data: ${dataIs}    type: $type');
+    //   }
+    // });
   }
 
   void work2() async{

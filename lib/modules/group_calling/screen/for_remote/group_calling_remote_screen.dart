@@ -166,6 +166,11 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     _candidateSubs?.cancel();
   }
 
+  void _clearPeerConnection(){
+    _peerConnection.close();
+    //_peerConnection.dispose();
+  }
+
   @override
   void initState() {
     _initRendererOfferAnswer();
@@ -174,10 +179,11 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
 
   @override
   void dispose() {
+    print('dispose is called for id: ${widget.id}');
     _deleteRoomAndRecoverState();
     _disposeRemoteRenderer();
     _cancelSubscriptions();
-    //_peerConnection.dispose();
+    _clearPeerConnection();
     super.dispose();
   }
 

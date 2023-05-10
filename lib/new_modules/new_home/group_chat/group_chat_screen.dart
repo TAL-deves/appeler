@@ -5,9 +5,7 @@ import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-
 import '../../../modules/calling/screen/call_enum/call_enum.dart';
 import '../../../modules/group_calling/screen/for_remote/group_calling_remote_screen.dart';
 
@@ -57,10 +55,10 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     setState(() {
       _localRenderer.srcObject = _localStream;
       _widgetMap['local'] = Flexible(
+        key: UniqueKey(),
         child: Stack(
           children: [
             Container(
-              key: const Key('local'),
               margin: const EdgeInsets.all(16),
               decoration: const BoxDecoration(color: Colors.black),
               child: RTCVideoView(_localRenderer, mirror: true),
@@ -68,13 +66,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             Positioned(
               top: 10,
               left: 10,
-              child: Text(AuthManagementUseCase.curUser!, style: TextStyle(color: kRedColor, fontSize: 20),),
+              child: Text(AuthManagementUseCase.curUser!, style: const TextStyle(color: kRedColor, fontSize: 20),),
             ),
           ],
         ),
       );
     });
     _addCurrentUser();
+    _offerAnswerHostUser();
   }
 
   void _addCurrentUser() {
@@ -84,9 +83,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         'isMute': false,
         'handUp': false,
       };
-      _userDoc.set(curMap).then((value){
-        _offerAnswerHostUser();
-      });
+      _userDoc.set(curMap);
     });
   }
 
@@ -110,7 +107,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     _localStream?.dispose();
   }
 
-  void disposeSubs(){
+  void _disposeSubs(){
     _hostSubs?.cancel();
     _roomSubs?.cancel();
   }
@@ -122,43 +119,47 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         for(final item in mp.entries){
           final curItem = item.key;
           if(curItem != AuthManagementUseCase.curUser && !_addedUser.contains(curItem)){
-            setState(() {
-              _addedUser.add(curItem);
-              _widgetMap[curItem] = Flexible(
-                child: Stack(
-                  children: [
-                    GroupCallingRemoteScreen(
-                      callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
-                          ? CallEnum.outgoing
-                          : CallEnum.incoming,
-                      id: curItem,
-                      localStream: _localStream!,
-                    ),
-                    Positioned(
-                      top: 10,
-                      left: 10,
-                      child: Text(curItem, style: const TextStyle(color: kRedColor, fontSize: 20),),
-                    ),
-                  ],
-                ),
-              );
-            });
+            _addedUser.add(curItem);
+            _widgetMap[curItem] = Flexible(
+              key: UniqueKey(),
+              child: Stack(
+                children: [
+                  GroupCallingRemoteScreen(
+                    key: ValueKey(curItem),
+                    callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
+                        ? CallEnum.outgoing
+                        : CallEnum.incoming,
+                    id: curItem,
+                    localStream: _localStream!,
+                  ),
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: Text(curItem, style: const TextStyle(color: kRedColor, fontSize: 20),),
+                  ),
+                ],
+              ),
+            );
           }
         }
-        // for(final item in _widgetMap.entries){
-        //   if(item.key != 'local' && !mp.containsKey(item.key)){
-        //     setState(() {
-        //       _addedUser.remove(item.key);
-        //       _widgetMap.remove(item.key);
-        //     });
-        //   }
-        // }
+        final list = <String>[];
+        for(final item in _widgetMap.entries){
+          if(item.key != 'local' && !mp.containsKey(item.key)) list.add(item.key);
+        }
+        for (final item in list){
+          _addedUser.remove(item);
+          _widgetMap.remove(item);
+        }
+        setState(() {
+
+        });
       }
     });
   }
 
   @override
   void dispose() {
+    _disposeSubs();
     _removeCurrentUser();
     _disposeLocalRenderer();
     super.dispose();
