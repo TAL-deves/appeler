@@ -68,6 +68,24 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
               left: 10,
               child: Text(AuthManagementUseCase.curUser!, style: const TextStyle(color: kRedColor, fontSize: 20),),
             ),
+            PositionThumbsWidget(
+              top: 20,
+              right: 20,
+              userId: AuthManagementUseCase.curUser!,
+              groupId: widget.groupId,
+            ),
+            PositionMicWidget(
+              bottom: 20,
+              right: 20,
+              userId: AuthManagementUseCase.curUser!,
+              groupId: widget.groupId,
+            ),
+            PositionCameraWidget(
+              bottom: 20,
+              left: 20,
+              userId: AuthManagementUseCase.curUser!,
+              groupId: widget.groupId,
+            ),
           ],
         ),
       );
@@ -80,8 +98,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     _userDoc.get().then((value) {
       final curMap = value.data()!;
       curMap[AuthManagementUseCase.curUser!] = {
-        'isMute': false,
+        'isMute': true,
         'handUp': false,
+        'isCameraOn': true,
       };
       _userDoc.set(curMap);
     });
@@ -137,6 +156,24 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     left: 10,
                     child: Text(curItem, style: const TextStyle(color: kRedColor, fontSize: 20),),
                   ),
+                  PositionThumbsWidget(
+                    top: 20,
+                    right: 20,
+                    userId: curItem,
+                    groupId: widget.groupId,
+                  ),
+                  PositionMicWidget(
+                    bottom: 20,
+                    right: 20,
+                    userId: curItem,
+                    groupId: widget.groupId,
+                  ),
+                  PositionCameraWidget(
+                    bottom: 20,
+                    left: 20,
+                    userId: curItem,
+                    groupId: widget.groupId,
+                  ),
                 ],
               ),
             );
@@ -173,17 +210,239 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     super.initState();
   }
 
+  void _commonStatusChangeWork({required String workKey}){
+    _userDoc.get().then((value) {
+      final curMap = value.data()!;
+      curMap[AuthManagementUseCase.curUser!][workKey] = !curMap[AuthManagementUseCase.curUser!][workKey];
+      _userDoc.set(curMap);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('ID: ${widget.groupId}'),
       ),
-      body: _localStream == null
-            ? const Center(child: CircularProgressIndicator(),)
-            : Column(
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InnerIconButton(
+                icon: Icons.thumb_up_off_alt_sharp,
+                onPressed: (){
+                  _commonStatusChangeWork(workKey: 'handUp');
+                },
+                enabled: false,
+              ),
+              const SizedBox(width: 5),
+              InnerIconButton(
+                icon: Icons.mic,
+                onPressed: (){
+                  _commonStatusChangeWork(workKey: 'isMute');
+                },
+                enabled: true,
+              ),
+              const SizedBox(width: 5),
+              InnerIconButton(
+                icon: Icons.video_call,
+                onPressed: (){
+                  _commonStatusChangeWork(workKey: 'isCameraOn');
+                },
+                enabled: true,
+              ),
+            ],
+          ),
+          Expanded(
+            child: _localStream == null
+                ? const Center(child: CircularProgressIndicator(),)
+                : Column(
               children: _widgetMap.entries.map((e) => e.value).toList(),
-            )
+            ),
+          )
+        ],
+      )
     );
   }
 }
+
+class PositionThumbsWidget extends StatefulWidget {
+  const PositionThumbsWidget({super.key, this.left, this.bottom, this.right, this.top, required this.userId, required this.groupId});
+
+  final double? left, top, right, bottom;
+  final String userId, groupId;
+  
+  @override
+  State<PositionThumbsWidget> createState() => _PositionThumbsWidgetState();
+}
+
+class _PositionThumbsWidgetState extends State<PositionThumbsWidget> {
+  final _groupChatRooms = FirebaseFirestore.instance.collection('group-chat-rooms');
+  late final _userDoc = _groupChatRooms.doc(widget.groupId);
+  var _isEnabled = false;
+  
+  StreamSubscription? _sub;
+  
+  @override
+  void initState() {
+    _sub = _userDoc.snapshots().listen((event) {
+      final mp = event.data()?[widget.userId];
+      if(mp != null){
+        setState(() {
+          _isEnabled = mp['handUp'];
+        });
+      }
+    });
+    super.initState();
+  }
+  
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: widget.top,
+      left: widget.left,
+      right: widget.right,
+      bottom: widget.bottom,
+      child: Icon(Icons.thumb_up_off_alt_sharp, color: _isEnabled ? kYellowColor : kWhiteColor)
+    );
+  }
+}
+
+class PositionMicWidget extends StatefulWidget {
+  const PositionMicWidget({super.key, this.left, this.bottom, this.right, this.top, required this.userId, required this.groupId});
+
+  final double? left, top, right, bottom;
+  final String userId, groupId;
+
+  @override
+  State<PositionMicWidget> createState() => _PositionMicWidgetState();
+}
+
+class _PositionMicWidgetState extends State<PositionMicWidget> {
+  final _groupChatRooms = FirebaseFirestore.instance.collection('group-chat-rooms');
+  late final _userDoc = _groupChatRooms.doc(widget.groupId);
+  var _isEnabled = true;
+
+  StreamSubscription? _sub;
+
+  @override
+  void initState() {
+    _sub = _userDoc.snapshots().listen((event) {
+      final mp = event.data()?[widget.userId];
+      if(mp != null){
+        setState(() {
+          _isEnabled = mp['isMute'];
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: widget.top,
+      left: widget.left,
+      right: widget.right,
+      bottom: widget.bottom,
+      child: Icon(_isEnabled ? Icons.mic : Icons.mic_off, color: kWhiteColor),
+    );
+  }
+}
+
+class PositionCameraWidget extends StatefulWidget {
+  const PositionCameraWidget({super.key, this.left, this.bottom, this.right, this.top, required this.userId, required this.groupId});
+
+  final double? left, top, right, bottom;
+  final String userId, groupId;
+
+  @override
+  State<PositionCameraWidget> createState() => _PositionCameraWidgetState();
+}
+
+class _PositionCameraWidgetState extends State<PositionCameraWidget> {
+  final _groupChatRooms = FirebaseFirestore.instance.collection('group-chat-rooms');
+  late final _userDoc = _groupChatRooms.doc(widget.groupId);
+  var _isEnabled = true;
+
+  StreamSubscription? _sub;
+
+  @override
+  void initState() {
+    _sub = _userDoc.snapshots().listen((event) {
+      final mp = event.data()?[widget.userId];
+      if(mp != null){
+        setState(() {
+          _isEnabled = mp['isCameraOn'];
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: widget.top,
+      left: widget.left,
+      right: widget.right,
+      bottom: widget.bottom,
+      child: Icon(_isEnabled ? Icons.video_camera_front : Icons.videocam_off , color: kWhiteColor),
+    );
+  }
+}
+
+class InnerIconButton extends StatefulWidget {
+  const InnerIconButton({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    required this.enabled,
+  });
+
+  final IconData icon;
+  final Function() onPressed;
+  final bool enabled;
+
+  @override
+  State<InnerIconButton> createState() => _InnerIconButtonState();
+}
+
+class _InnerIconButtonState extends State<InnerIconButton> {
+  late var _isActive = widget.enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          _isActive = !_isActive;
+          widget.onPressed.call();
+        });
+      },
+      child: AbsorbPointer(
+        child: Icon(widget.icon, color: _isActive ? kGreenColor : null),
+      ),
+    );
+  }
+}
+

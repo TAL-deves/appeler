@@ -62,19 +62,45 @@ class MyApp extends StatelessWidget {
 }
 
 class MyText extends StatefulWidget {
-  const MyText({super.key, required this.textValue});
+  const MyText({super.key, required this.textValue, required this.keyValue});
 
-  final String textValue;
+  final String textValue, keyValue;
 
   @override
   State<MyText> createState() => _MyTextState();
 }
 
 class _MyTextState extends State<MyText> {
-  late final innerValue = widget.textValue;
+  late final innerTextValue = widget.textValue;
+
   @override
   Widget build(BuildContext context) {
-    return Text(innerValue);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Key is :${widget.keyValue}'),
+        const SizedBox(width: 10,),
+        Text('Value is : $innerTextValue'),
+      ],
+    );
+  }
+}
+
+class MyText2 extends StatelessWidget {
+  const MyText2({super.key, required this.textValue, required this.keyValue});
+
+  final String textValue, keyValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Key is : $keyValue'),
+        const SizedBox(width: 10,),
+        Text('Value is: $textValue'),
+      ],
+    );
   }
 }
 
@@ -89,13 +115,12 @@ class TestWork extends StatefulWidget {
 class _TestWorkState extends State<TestWork> {
   final _widgetMap = <String, Widget>{};
 
-
   Widget _addButton(String value){
     return TextButton(
       child: Text(value),
       onPressed: (){
         setState(() {
-          _widgetMap[value] = MyText(textValue: value, key: UniqueKey());
+          _widgetMap[value] = MyText(textValue: value, keyValue: value, key: UniqueKey());
         });
       },
     );
