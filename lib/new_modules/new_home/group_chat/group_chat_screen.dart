@@ -34,7 +34,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
   Future<MediaStream> get _getUserMediaStream async {
     final mp = <String, dynamic>{
-      'audio': false,
+      'audio': true,
       'video': kIsWeb
           ? {'facingMode': 'user'}
           : {
@@ -241,6 +241,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 icon: Icons.mic,
                 onPressed: (){
                   _commonStatusChangeWork(workKey: 'isMute');
+                  final audioTrackEnabled = !_localStream!.getAudioTracks()[0].enabled;
+                  _localStream?.getAudioTracks()[0].enabled = audioTrackEnabled;
                 },
                 enabled: true,
               ),
@@ -249,6 +251,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 icon: Icons.video_call,
                 onPressed: (){
                   _commonStatusChangeWork(workKey: 'isCameraOn');
+                  final videoTrackEnabled = !_localStream!.getVideoTracks()[0].enabled;
+                  _localStream?.getVideoTracks()[0].enabled = videoTrackEnabled;
                 },
                 enabled: true,
               ),
@@ -310,7 +314,7 @@ class _PositionThumbsWidgetState extends State<PositionThumbsWidget> {
       left: widget.left,
       right: widget.right,
       bottom: widget.bottom,
-      child: Icon(Icons.thumb_up_off_alt_sharp, color: _isEnabled ? kYellowColor : kWhiteColor)
+      child: Icon(Icons.thumb_up_off_alt_sharp, color: _isEnabled ? kYellowColor : kWhiteColor, size: 50,)
     );
   }
 }
@@ -358,7 +362,7 @@ class _PositionMicWidgetState extends State<PositionMicWidget> {
       left: widget.left,
       right: widget.right,
       bottom: widget.bottom,
-      child: Icon(_isEnabled ? Icons.mic : Icons.mic_off, color: kWhiteColor),
+      child: Icon(_isEnabled ? Icons.mic : Icons.mic_off, color: kWhiteColor, size: 50),
     );
   }
 }
@@ -406,7 +410,7 @@ class _PositionCameraWidgetState extends State<PositionCameraWidget> {
       left: widget.left,
       right: widget.right,
       bottom: widget.bottom,
-      child: Icon(_isEnabled ? Icons.video_camera_front : Icons.videocam_off , color: kWhiteColor),
+      child: Icon(_isEnabled ? Icons.video_camera_front : Icons.videocam_off , color: kWhiteColor, size: 50,),
     );
   }
 }
