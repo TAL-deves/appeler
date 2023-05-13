@@ -50,7 +50,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
           final curData = item.doc.data();
           if(curData != null){
             final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
-            await _peerConnection.addCandidate(candidate);
+            _peerConnection.addCandidate(candidate);
           }
         }
       }
@@ -59,7 +59,6 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
 
   Future<void> _initRemoteRenderer() async{
     await _remoteRenderer.initialize();
-    _setRemoteCandidate();
   }
 
   Future<void> _disposeRemoteRenderer() async{
@@ -139,8 +138,9 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
   }
 
   void _initRendererOfferAnswer() async{
-    await _initPeerConnection();
     await _initRemoteRenderer();
+    await _initPeerConnection();
+    _setRemoteCandidate();
     if(widget.callEnum == CallEnum.outgoing){ _createOffer(); }
     else{ _createAnswer(); }
   }
