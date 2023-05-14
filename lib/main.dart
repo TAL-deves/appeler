@@ -30,6 +30,7 @@ void main() async{
       appId: "1:926347959879:web:8f71cce0c2f22919b6db62",
     ) : null,
   );
+  FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: false);
   sharedPref = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }

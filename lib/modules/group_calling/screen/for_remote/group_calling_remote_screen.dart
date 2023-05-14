@@ -5,9 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:uuid/uuid.dart';
 import '../../../auth/api/auth_management.dart';
-
-final _addedRemoteCandidate = <String>{};
 
 class GroupCallingRemoteScreen extends StatefulWidget {
   const GroupCallingRemoteScreen({
@@ -33,6 +32,8 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
           ? '${AuthManagementUseCase.curUser}+${widget.id}'
           : '${widget.id}+${AuthManagementUseCase.curUser}'
   );
+
+  final uuid = const Uuid();
 
   Future<MediaStream> get _getUserMediaStream async {
     final mp = <String, dynamic>{
@@ -73,31 +74,20 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
   }
 
   void _setRemoteCandidate() {
-    _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) async{
-      for(var item in event.docChanges){
-        if(item.type == DocumentChangeType.added){
-          final curDoc = item.doc;
-          if(!_addedRemoteCandidate.contains(curDoc.id)){
-            _addedRemoteCandidate.add(curDoc.id);
-            final curData = curDoc.data();
-            print('new remote candidate id is: ${curDoc.id}');
-            print('new remote added candidate is: $curData');
+    Future.delayed(const Duration(seconds: 2)).then((value){
+      _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) async{
+        for(final item in event.docChanges){
+          if(item.type == DocumentChangeType.added){
+            final curData = item.doc.data();
+            print('new remote added candidate is: $curData and id is: ${item.doc.id}');
+            ++totalCandidate;
             if(curData != null){
               final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
               await _peerConnection.addCandidate(candidate);
             }
           }
         }
-        // if(item.type == DocumentChangeType.added){
-        //   final curData = item.doc.data();
-        //   print('new remote added candidate is: $curData');
-        //   ++totalCandidate;
-        //   if(curData != null){
-        //     final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
-        //     await _peerConnection.addCandidate(candidate);
-        //   }
-        // }
-      }
+      });
     });
   }
 
@@ -136,18 +126,21 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     };
 
     final pc = await createPeerConnection(config);
+
     //_localStream = await _getUserMediaStream;
     //await pc.addStream(_localStream!);
 
-    //await pc.addStream(widget.localStream);
+    await pc.addStream(widget.localStream);
 
-    widget.localStream.getTracks().forEach((track) {
-      pc.addTrack(track, widget.localStream);
-    });
+    // widget.localStream.getTracks().forEach((track) {
+    //   pc.addTrack(track, widget.localStream);
+    // });
 
     pc.onIceCandidate = (e){
       if(e.candidate != null){
-        _curRoomSelfCandidates.add(e.toMap());
+        //_curRoomSelfCandidates.add(e.toMap());
+        _curRoomSelfCandidates.doc(uuid.v4()).set(e.toMap());
+        //_curRoomSelfCandidates.doc((++_docId).toString()).set(e.toMap());
       }
     };
 
@@ -231,6 +224,9 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
   @override
   void initState() {
     _initRendererOfferAnswer();
+    Future.delayed(const Duration(seconds: 10)).then((value){
+      print('total candidate is: $totalCandidate');
+    });
     super.initState();
   }
 
