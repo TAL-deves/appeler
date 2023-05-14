@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:appeler/modules/calling/screen/call_enum/call_enum.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import '../../../auth/api/auth_management.dart';
+
+final _addedRemoteCandidate = <String>{};
 
 class GroupCallingRemoteScreen extends StatefulWidget {
   const GroupCallingRemoteScreen({
@@ -31,28 +34,69 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
           : '${widget.id}+${AuthManagementUseCase.curUser}'
   );
 
+  Future<MediaStream> get _getUserMediaStream async {
+    final mp = <String, dynamic>{
+      'audio': true,
+      'video': kIsWeb
+          ? {'facingMode': 'user'}
+          : {
+        'width': '640',
+        'height': '480',
+        'frameRate': '30',
+        'facingMode': 'user',
+        'optional': [],
+      }
+    };
+    final stream = await navigator.mediaDevices.getUserMedia(mp);
+    return stream;
+  }
+
   //late final _curRoom = _chatRooms.doc();
 
   late final _curRoomSelfCandidates = _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'callerCandidate': 'callieCandidate');
   late final _curRoomRemoteCandidates = _curRoom.collection(widget.callEnum == CallEnum.outgoing ? 'callieCandidate' : 'callerCandidate');
 
-  MediaStream? _remoteStream;
+  MediaStream? _remoteStream, _localStream;
   late RTCPeerConnection _peerConnection;
 
   StreamSubscription? _curRoomSubs, _candidateSubs;
 
   final _remoteRenderer = RTCVideoRenderer();
 
+  var totalCandidate = 0;
+
+  Future<void> _disposeLocalStream() async{
+    _localStream?.getTracks().forEach((element) {
+      element.stop();
+    });
+    _localStream?.dispose();
+  }
+
   void _setRemoteCandidate() {
     _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) async{
       for(var item in event.docChanges){
         if(item.type == DocumentChangeType.added){
-          final curData = item.doc.data();
-          if(curData != null){
-            final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
-            _peerConnection.addCandidate(candidate);
+          final curDoc = item.doc;
+          if(!_addedRemoteCandidate.contains(curDoc.id)){
+            _addedRemoteCandidate.add(curDoc.id);
+            final curData = curDoc.data();
+            print('new remote candidate id is: ${curDoc.id}');
+            print('new remote added candidate is: $curData');
+            if(curData != null){
+              final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
+              await _peerConnection.addCandidate(candidate);
+            }
           }
         }
+        // if(item.type == DocumentChangeType.added){
+        //   final curData = item.doc.data();
+        //   print('new remote added candidate is: $curData');
+        //   ++totalCandidate;
+        //   if(curData != null){
+        //     final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
+        //     await _peerConnection.addCandidate(candidate);
+        //   }
+        // }
       }
     });
   }
@@ -74,7 +118,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
       'iceServers': [
         //{ "url": "stun:34.143.165.178:3478" },
         {
-          "url": "turn:34.143.165.178:3478?transport=udp",
+          "urls": "turn:34.143.165.178:3478?transport=udp",
           "username": "test",
           "credential": "test123",
         },
@@ -83,11 +127,23 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
         //   "username": "citlrtc",
         //   "credential": "c1tlr7c",
         // }
+        // {
+        //   "urls": "turn:openrelay.metered.ca:80",
+        //   "username": "openrelayproject",
+        //   "credential": "openrelayproject",
+        // }
       ]
     };
 
     final pc = await createPeerConnection(config);
-    await pc.addStream(widget.localStream);
+    //_localStream = await _getUserMediaStream;
+    //await pc.addStream(_localStream!);
+
+    //await pc.addStream(widget.localStream);
+
+    widget.localStream.getTracks().forEach((track) {
+      pc.addTrack(track, widget.localStream);
+    });
 
     pc.onIceCandidate = (e){
       if(e.candidate != null){
@@ -166,8 +222,9 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     _candidateSubs?.cancel();
   }
 
-  void _clearPeerConnection(){
-    _peerConnection.close();
+  void _clearPeerConnection() async{
+    _disposeLocalStream();
+    await _peerConnection.close();
     //_peerConnection.dispose();
   }
 
@@ -179,7 +236,6 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
 
   @override
   void dispose() {
-    print('dispose is called for id: ${widget.id}');
     _deleteRoomAndRecoverState();
     _disposeRemoteRenderer();
     _cancelSubscriptions();
