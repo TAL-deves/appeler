@@ -14,8 +14,10 @@ late final SharedPreferences sharedPref;
 
 //old work
 
+late final WidgetsBinding engine;
+
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
+  engine = WidgetsFlutterBinding.ensureInitialized();
   // html.window.onUnload.listen((event) async{
   //   AuthManagementUseCase.updateOnlineStatus(false);
   // });

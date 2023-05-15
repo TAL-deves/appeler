@@ -1,13 +1,13 @@
-import 'package:appeler/modules/auth/api/auth_management.dart';
-import 'package:appeler/modules/auth/phone/page.dart';
-import 'package:appeler/modules/calling/screen/calling_screen.dart';
-import 'package:appeler/modules/group_calling/screen/for_client/group_calling_client_screen.dart';
-import 'package:appeler/modules/group_calling/screen/for_host/group_calling_host_screen.dart';
 import 'package:appeler/new_modules/new_home/group_chat/group_chat_screen.dart';
 import 'package:appeler/new_modules/new_home/new_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../modules/home/screen/home_screen.dart';
+import '../../modules_old/auth/api/auth_management.dart';
+import '../../modules_old/auth/phone/page.dart';
+import '../../modules_old/calling/screen/calling_screen.dart';
+import '../../modules_old/group_calling/screen/for_client/group_calling_client_screen.dart';
+import '../../modules_old/group_calling/screen/for_host/group_calling_host_screen.dart';
+import '../../modules_old/home/screen/home_screen.dart';
 
 const kDefaultRoute = '/';
 

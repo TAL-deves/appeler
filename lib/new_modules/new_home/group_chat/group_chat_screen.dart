@@ -1,13 +1,13 @@
 import 'dart:async';
-
 import 'package:appeler/core/app_constants/app_color.dart';
-import 'package:appeler/modules/auth/api/auth_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import '../../../modules/calling/screen/call_enum/call_enum.dart';
-import '../../../modules/group_calling/screen/for_remote/group_calling_remote_screen.dart';
+import '../../../core/app_common/api/use_case/auth_management.dart';
+import '../../../modules_old/calling/screen/call_enum/call_enum.dart';
+import '../../../modules_old/group_calling/screen/for_remote/group_calling_remote_screen.dart';
+
 
 const kGroupChatScreenRoute = 'groupChatScreen';
 
