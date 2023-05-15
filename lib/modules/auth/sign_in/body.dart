@@ -12,12 +12,12 @@ typedef OnForgotPassword = void Function(
 );
 typedef OnCreateAccount = void Function();
 
-class SignInBody extends StatefulWidget {
+class AuthSignInFragment extends StatefulWidget {
   final OnSignIn onSignIn;
   final OnForgotPassword onForgetPassword;
   final OnCreateAccount onCreateAccount;
 
-  const SignInBody({
+  const AuthSignInFragment({
     Key? key,
     required this.onSignIn,
     required this.onForgetPassword,
@@ -25,10 +25,10 @@ class SignInBody extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SignInBody> createState() => _SignInBodyState();
+  State<AuthSignInFragment> createState() => _AuthSignInFragmentState();
 }
 
-class _SignInBodyState extends State<SignInBody> {
+class _AuthSignInFragmentState extends State<AuthSignInFragment> {
   late PhoneEditingController phone;
   late PasswordEditingController password;
 

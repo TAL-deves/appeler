@@ -30,7 +30,7 @@ class _SignInPageState extends State<SignInPage> {
           statusBarIconBrightness: Brightness.dark,
         ),
       ),
-      body: SignInBody(
+      body: AuthSignInFragment(
         onSignIn: signIn,
         onForgetPassword: forgotPassword,
         onCreateAccount: createAccount,

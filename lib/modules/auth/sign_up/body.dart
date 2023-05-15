@@ -8,21 +8,21 @@ typedef OnSignUp = Function(
   String password,
 );
 
-class SignUpBody extends StatefulWidget {
+class AuthSignUpFragment extends StatefulWidget {
   final Function() onSignIn;
   final OnSignUp onSignUp;
 
-  const SignUpBody({
+  const AuthSignUpFragment({
     Key? key,
     required this.onSignIn,
     required this.onSignUp,
   }) : super(key: key);
 
   @override
-  State<SignUpBody> createState() => _SignUpBodyState();
+  State<AuthSignUpFragment> createState() => _AuthSignUpFragmentState();
 }
 
-class _SignUpBodyState extends State<SignUpBody> {
+class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
   late EmailEditingController email;
   late PhoneEditingController phone;
   late PasswordEditingController password;

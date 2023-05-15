@@ -63,29 +63,17 @@ void _registerDio() {
             handler.next(options);
           },
           onResponse: (response, handler) async {
-            //print('interceptor: ${response.statusCode}');
-            //print('from interceptor: ${response.data}');
             final curData =
                 await AppEncryptionUtilities.getJsonFromApiData(response.data);
-            print('on response call');
-            print(curData);
             if (curData.contains('Token not found') ||
                 curData.contains('No token in DB') ||
                 curData.contains('token is expired')) {
               if (!loggingOutProgress) {
                 loggingOutProgress = true;
-                //final response = await CommonReceiveUseCase.parseCommonResponse(curData);
                 if (AppAlertDialog.logoutDialogIsOpen) {
                   AppUtilities.popTopWidget();
                   AppAlertDialog.logoutDialogIsOpen = false;
                 }
-                // AppAlertDialog.textShowAlertDialogFromNavContext(
-                //   title: LocaleKeys.sessionTimeOut.tr(),
-                //   bodyMessage: LocaleKeys.sessionExpired.tr(),
-                //   //title: response.result!.status.toString(),
-                //   //bodyMessage: response.result!.errMsg,
-                // );
-                //await Future.delayed(const Duration(milliseconds: 2500));
                 AppSnackBar.showFailureSnackBar(
                   message:
                       'Session expired due to inactivity, Please login again!',
@@ -103,7 +91,6 @@ void _registerDio() {
                 statusMessage: response.statusMessage,
                 extra: response.extra,
                 headers: response.headers,
-                //data: await AppEncryptionUtilities.getJsonFromApiData(response.data),
                 data: curData,
               ));
             }

@@ -18,7 +18,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SignUpBody(
+      body: AuthSignUpFragment(
         onSignIn: signIn,
         onSignUp: signUp,
       ),
