@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:appeler/modules/calling/screen/call_enum/call_enum.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:uuid/uuid.dart';
 import '../../../auth/api/auth_management.dart';
 
 class GroupCallingRemoteScreen extends StatefulWidget {
@@ -33,24 +31,22 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
           : '${widget.id}+${AuthManagementUseCase.curUser}'
   );
 
-  final uuid = const Uuid();
-
-  Future<MediaStream> get _getUserMediaStream async {
-    final mp = <String, dynamic>{
-      'audio': true,
-      'video': kIsWeb
-          ? {'facingMode': 'user'}
-          : {
-        'width': '640',
-        'height': '480',
-        'frameRate': '30',
-        'facingMode': 'user',
-        'optional': [],
-      }
-    };
-    final stream = await navigator.mediaDevices.getUserMedia(mp);
-    return stream;
-  }
+  // Future<MediaStream> get _getUserMediaStream async {
+  //   final mp = <String, dynamic>{
+  //     'audio': true,
+  //     'video': kIsWeb
+  //         ? {'facingMode': 'user'}
+  //         : {
+  //       'width': '640',
+  //       'height': '480',
+  //       'frameRate': '30',
+  //       'facingMode': 'user',
+  //       'optional': [],
+  //     }
+  //   };
+  //   final stream = await navigator.mediaDevices.getUserMedia(mp);
+  //   return stream;
+  // }
 
   //late final _curRoom = _chatRooms.doc();
 
@@ -74,8 +70,8 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
   }
 
   void _setRemoteCandidate() {
-    Future.delayed(const Duration(seconds: 2)).then((value){
-      _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) async{
+    Future.delayed(const Duration(seconds: 3)).then((value){
+      _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event){
         for(final item in event.docChanges){
           if(item.type == DocumentChangeType.added){
             final curData = item.doc.data();
@@ -83,7 +79,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
             ++totalCandidate;
             if(curData != null){
               final candidate = RTCIceCandidate(curData['candidate'], curData['sdpMid'], curData['sdpMLineIndex']);
-              await _peerConnection.addCandidate(candidate);
+              _peerConnection.addCandidate(candidate);
             }
           }
         }
@@ -130,7 +126,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
     //_localStream = await _getUserMediaStream;
     //await pc.addStream(_localStream!);
 
-    await pc.addStream(widget.localStream);
+    pc.addStream(widget.localStream);
 
     // widget.localStream.getTracks().forEach((track) {
     //   pc.addTrack(track, widget.localStream);
@@ -138,8 +134,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
 
     pc.onIceCandidate = (e){
       if(e.candidate != null){
-        //_curRoomSelfCandidates.add(e.toMap());
-        _curRoomSelfCandidates.doc(uuid.v4()).set(e.toMap());
+        _curRoomSelfCandidates.add(e.toMap());
         //_curRoomSelfCandidates.doc((++_docId).toString()).set(e.toMap());
       }
     };
@@ -245,7 +240,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
       body: _remoteStream == null
           ? const Center(child: CircularProgressIndicator())
           : Container(
-            key: const Key('local'),
+            key: UniqueKey(),
             margin: const EdgeInsets.all(16),
             decoration: const BoxDecoration(color: Colors.black),
             child: RTCVideoView(_remoteRenderer, mirror: true),

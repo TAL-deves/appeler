@@ -44,7 +44,6 @@ dependencies:
       url: https://github.com/flutter-webrtc/flutter-webrtc.git
       ref: main
   wakelock: ^0.6.2
-  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:
