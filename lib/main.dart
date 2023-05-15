@@ -13,7 +13,7 @@ import 'core/app_router/app_router.dart';
 late final SharedPreferences sharedPref;
 
 //old work
-//for muhib
+//revert
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // html.window.onUnload.listen((event) async{
