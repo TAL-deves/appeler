@@ -242,7 +242,7 @@ class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {
             key: UniqueKey(),
             margin: const EdgeInsets.all(16),
             decoration: const BoxDecoration(color: Colors.black),
-            child: RTCVideoView(_remoteRenderer, mirror: true),
+            child: RTCVideoView(_remoteRenderer),
           ),
     );
   }

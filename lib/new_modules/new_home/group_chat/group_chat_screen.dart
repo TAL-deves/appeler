@@ -220,7 +220,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             Container(
               margin: const EdgeInsets.all(16),
               decoration: const BoxDecoration(color: Colors.black),
-              child: RTCVideoView(_localRenderer, mirror: true),
+              child: RTCVideoView(_localRenderer),
             ),
             Positioned(
               top: 10,
