@@ -44,6 +44,7 @@ dependencies:
       url: https://github.com/flutter-webrtc/flutter-webrtc.git
       ref: main
   wakelock: ^0.6.2
+  flutter_foreground_task: ^4.1.0
 
 dev_dependencies:
   flutter_test:

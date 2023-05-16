@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:appeler/core/app_utilities/app_utilities.dart';
@@ -5,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 import 'core/app_router/app_router.dart';
@@ -14,6 +16,8 @@ late final SharedPreferences sharedPref;
 
 //old work
 //revert
+
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // html.window.onUnload.listen((event) async{
@@ -35,29 +39,48 @@ void main() async{
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Appeler',
-      scrollBehavior: ScrollConfiguration.of(context).copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-        },
+    return WithForegroundTask(
+      child: MaterialApp(
+        title: 'Appeler',
+        scrollBehavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+          },
+        ),
+        navigatorKey: AppUtilities.appNavigatorKey,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue),
+        onGenerateRoute: appRouter.onGenerateRoute,
+        //home: const GroupCallingHostScreen(curList: [])
+        //home: const GroupCallingClientScreen()
+        //home: const TestPage(),
+        //home: const AuthPhonePage(),
+        //home: TestWork()
       ),
-      navigatorKey: AppUtilities.appNavigatorKey,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      onGenerateRoute: appRouter.onGenerateRoute,
-      //home: const GroupCallingHostScreen(curList: [])
-      //home: const GroupCallingClientScreen()
-      //home: const TestPage(),
-      //home: const AuthPhonePage(),
-      //home: TestWork()
     );
   }
 }
