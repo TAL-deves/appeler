@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -62,19 +63,21 @@ class _RemoteContributorState extends State<RemoteContributor> {
   }
 
   void _setRemoteCandidate() {
-    Future.delayed(const Duration(seconds: 3)).then((value) {
-      _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) {
-        for (final item in event.docChanges) {
-          if (item.type == DocumentChangeType.added) {
-            final curData = item.doc.data();
-            ++totalCandidate;
-            if (curData != null) {
-              final candidate = RTCIceCandidate(curData['candidate'],
-                  curData['sdpMid'], curData['sdpMLineIndex']);
-              _peerConnection.addCandidate(candidate);
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      Future.delayed(const Duration(seconds: 3)).then((value) {
+        _candidateSubs = _curRoomRemoteCandidates.snapshots().listen((event) {
+          for (final item in event.docChanges) {
+            if (item.type == DocumentChangeType.added) {
+              final curData = item.doc.data();
+              ++totalCandidate;
+              if (curData != null) {
+                final candidate = RTCIceCandidate(curData['candidate'],
+                    curData['sdpMid'], curData['sdpMLineIndex']);
+                _peerConnection.addCandidate(candidate);
+              }
             }
           }
-        }
+        });
       });
     });
   }

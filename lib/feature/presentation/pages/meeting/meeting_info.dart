@@ -12,7 +12,7 @@ class MeetingInfo {
   MeetingInfo({
     required this.id,
     this.isCameraOn = true,
-    this.isMuted = true,
+    this.isMuted = false,
     this.isSilent = false,
     this.cameraType = CameraType.front,
   });

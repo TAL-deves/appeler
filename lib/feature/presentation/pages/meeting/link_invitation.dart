@@ -88,9 +88,9 @@ class LinkInviteView extends StatelessWidget {
                   color: Colors.blue.shade200,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Icon(
                       Icons.share_outlined,
                       color: Colors.black,

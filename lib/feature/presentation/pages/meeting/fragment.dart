@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:appeler/feature/presentation/pages/meeting/contributor_card.dart';
+import 'package:appeler/feature/presentation/pages/meeting/local_user.dart';
 import 'package:appeler/feature/presentation/pages/meeting/remote_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

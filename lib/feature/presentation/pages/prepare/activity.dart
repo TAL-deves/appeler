@@ -25,6 +25,15 @@ class PrepareActivity extends StatefulWidget {
 class _PrepareActivityState extends State<PrepareActivity> {
   late bool isSilent = false;
   late bool isFrontCamera = true;
+  var joined = false;
+
+  @override
+  void dispose() {
+    if(!joined){
+      locator<MeetingHandler>().removeStatus(widget.meetingId);
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +97,11 @@ class _PrepareActivityState extends State<PrepareActivity> {
         body: PrepareFragment(
           info: MeetingInfo(
             id: widget.meetingId,
-            isCameraOn: true,
             isSilent: isSilent,
-            isMuted: true,
             cameraType: isFrontCamera ? CameraType.front : CameraType.back,
           ),
           onPrepare: (context, info) {
+            joined = true;
             Navigator.pushReplacementNamed(
               context,
               MeetingActivity.route,

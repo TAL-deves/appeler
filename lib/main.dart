@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:wakelock/wakelock.dart';
 import 'index.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Wakelock.enable();
   await Firebase.initializeApp(
     options: kIsWeb
         ? const FirebaseOptions(
@@ -21,7 +22,6 @@ Future<void> main() async {
   );
   await diInit();
   FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: false);
-
   runApp(const Application());
 }
 
