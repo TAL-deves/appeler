@@ -43,11 +43,15 @@ class _MeetingCameraState extends State<MeetingCamera> {
             SizedBox(
               width: 150,
               height: 250,
-              child: CameraView(
-                type: widget.cameraType,
+              child: Image.network(
+                "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
+                fit: BoxFit.cover,
               ),
+              // child: CameraView(
+              //   type: widget.cameraType,
+              // ),
             ),
-          Container(
+          if(!isCameraOn) Container(
             width: 80,
             height: 80,
             clipBehavior: Clip.antiAlias,

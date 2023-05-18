@@ -45,8 +45,8 @@ class MeetingFragmentState extends State<MeetingFragment> {
       'video': kIsWeb
           ? {'facingMode': 'user'}
           : {
-              'width': '640',
-              'height': '480',
+              'width': '320',
+              'height': '240',
               'frameRate': '30',
               'facingMode': 'user',
               'optional': [],
@@ -81,7 +81,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
     _offerAnswerHostUser();
   }
 
-  void onSilent(bool silent) => Helper.setSpeakerphoneOn(silent);
+  void onSilent(bool silent) => Helper.setSpeakerphoneOn(!silent);
 
   void onCameraSwitch() {
     if (_localStream != null) {
