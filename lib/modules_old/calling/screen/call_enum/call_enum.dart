@@ -1,4 +1,0 @@
-enum CallEnum{
-  outgoing,
-  incoming
-}

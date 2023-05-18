@@ -1,0 +1,4 @@
+enum ContributorType{
+  outgoing,
+  incoming
+}

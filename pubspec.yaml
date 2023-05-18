@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_andomie: ^0.1.0
+  flutter_andomie: ^0.1.2
   cupertino_icons: ^1.0.2
   cloud_firestore: ^4.7.0
   firebase_core: ^2.12.0
@@ -30,6 +30,8 @@ dependencies:
   upgrader: ^6.3.0
   flutter_svg: ^2.0.5
   get_it: ^7.3.0
+  camera: ^0.10.5
+  share_plus: ^6.3.4
 
 dev_dependencies:
   flutter_test:
@@ -40,3 +42,6 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/images/

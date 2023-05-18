@@ -1,112 +1,113 @@
-import 'package:dio/dio.dart';
+import 'package:appeler/feature/data/remote/sources/room.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_andomie/core.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'index.dart';
 
-final di = GetIt.I;
+GetIt locator = GetIt.instance;
 
-Future<void> registerAllDependency() async {
-  _registerLogin();
-  _registerDio();
-  _registerSharedPref();
-  await di.allReady();
+Future<void> diInit() async {
+  final local = await SharedPreferences.getInstance();
+  final firebaseAuth = FirebaseAuth.instance;
+  final facebookAuth = FacebookAuth.instance;
+  final biometricAuth = LocalAuthentication();
+  final database = FirebaseFirestore.instance;
+  final realtime = FirebaseDatabase.instance;
+  locator.registerLazySingleton<SharedPreferences>(() => local);
+  locator.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);
+  locator.registerLazySingleton<FacebookAuth>(() => facebookAuth);
+  locator.registerLazySingleton<LocalAuthentication>(() => biometricAuth);
+  locator.registerLazySingleton<FirebaseFirestore>(() => database);
+  locator.registerLazySingleton<FirebaseDatabase>(() => realtime);
+  _helpers();
+  _dataSources();
+  _repositories();
+  _handlers();
+  _controllers();
+  await locator.allReady();
 }
 
-void _registerSharedPref() {
-  di.registerSingletonAsync<SharedPreferences>(
-      () async => await SharedPreferences.getInstance());
+void _helpers() {}
+
+void _dataSources() {
+  locator.registerLazySingleton<AuthDataSource>(() {
+    return AuthDataSourceImpl(
+      facebookAuth: locator(),
+      firebaseAuth: locator(),
+      localAuth: locator(),
+    );
+  });
+  locator.registerLazySingleton<LocalDataSource<UserEntity>>(() {
+    return LocalUserDataSource(db: locator());
+  });
+  locator.registerLazySingleton<DataSource<Meeting>>(() {
+    return MeetingDataSource();
+  });
 }
 
-void _registerLogin() {
-  di.registerLazySingleton<SavedUserUseCase>(
-      () => SavedUserUseCaseImp(sharedPreferences: di()));
-  di.registerLazySingleton<SignInUseCase>(
-      () => SignInUseCase(apiPath: ApiInfo.login, dio: di()));
-  di.registerLazySingleton<SignUpUseCase>(
-      () => SignUpUseCase(apiPath: ApiInfo.register, dio: di()));
-  di.registerLazySingleton<SignOutUseCase>(
-      () => SignOutUseCase(apiPath: ApiInfo.logout, dio: di()));
-  di.registerLazySingleton<ClearTokenUseCase>(
-      () => ClearTokenUseCase(apiPath: ApiInfo.clearToken, dio: di()));
-  di.registerLazySingleton<AuthManager>(() => AuthManagerImpl(
-        clearTokenUseCase: di(),
-        savedUserUseCase: di(),
-        signInUseCase: di(),
-        signUpUseCase: di(),
-        signOutUseCase: di(),
-        dio: di(),
-      ));
-
-  di.registerFactory<AuthCubit>(
-      () => AuthCubit(authManager: di()));
+void _repositories() {
+  locator.registerLazySingleton<AuthRepository>(() {
+    return AuthRepositoryImpl(
+      authDataSource: locator.call(),
+    );
+  });
+  locator.registerLazySingleton<DataRepository<UserEntity>>(() {
+    return UserRepository(
+      remote: UserDataSource(),
+    );
+  });
+  locator.registerLazySingleton<LocalDataRepository<UserEntity>>(() {
+    return LocalDataRepositoryImpl<UserEntity>(
+      local: locator(),
+    );
+  });
+  locator.registerLazySingleton<DataRepository<Meeting>>(() {
+    return DataRepositoryImpl<Meeting>(
+      remote: locator(),
+    );
+  });
 }
 
-var loggingOutProgress = false;
+void _handlers() {
+  locator.registerLazySingleton<AuthHandler>(() {
+    return AuthHandlerImpl(repository: locator());
+  });
+  locator.registerLazySingleton<UserHandler>(() {
+    return UserHandlerImpl(
+      repository: locator(),
+      localDataRepository: locator(),
+    );
+  });
+  locator.registerLazySingleton<MeetingHandler>(() {
+    return MeetingHandler(
+      repository: locator(),
+    );
+  });
+}
 
-void _registerDio() {
-  di.registerLazySingleton<BaseOptions>(() => BaseOptions(
-        baseUrl: ApiInfo.appBaseUrl,
-        responseType: ResponseType.plain,
-        connectTimeout: const Duration(seconds: 15),
-        // TODO : 15 * 1000
-        receiveTimeout: const Duration(seconds: 15),
-        // TODO: 15 * 1000
-        validateStatus: (status) => status! < 500,
-        headers: {'Authorization': ApiInfo.authorization},
-      ));
-  di.registerLazySingleton<Dio>(
-    () => Dio(di())
-      ..interceptors.add(
-        InterceptorsWrapper(
-          onRequest: (options, handler) {
-            handler.next(options);
-          },
-          onResponse: (response, handler) async {
-            final curData =
-                await AppEncryptionUtilities.getJsonFromApiData(response.data);
-            if (curData.contains('Token not found') ||
-                curData.contains('No token in DB') ||
-                curData.contains('token is expired')) {
-              if (!loggingOutProgress) {
-                loggingOutProgress = true;
-                if (AppAlertDialog.logoutDialogIsOpen) {
-                  AppUtilities.popTopWidget();
-                  AppAlertDialog.logoutDialogIsOpen = false;
-                }
-                AppSnackBar.showFailureSnackBar(
-                  message:
-                      'Session expired due to inactivity, Please login again!',
-                );
-                await Future.delayed(const Duration(milliseconds: 1500));
-                AppUtilities.forceLogoutFromApplication();
-                loggingOutProgress = false;
-              }
-            } else {
-              handler.next(Response(
-                requestOptions: response.requestOptions,
-                redirects: response.redirects,
-                isRedirect: response.isRedirect,
-                statusCode: response.statusCode,
-                statusMessage: response.statusMessage,
-                extra: response.extra,
-                headers: response.headers,
-                data: curData,
-              ));
-            }
-          },
-          onError: (error, handler) {
-            final customDioError = CustomDioError(
-              requestOptions: error.requestOptions,
-              error: error.error,
-              message: error.message,
-              response: error.response,
-              stackTrace: error.stackTrace,
-              type: error.type,
-            );
-            handler.next(customDioError);
-          },
-        ),
-      ),
-  );
+void _controllers() {
+  locator.registerFactory<AppAuthController>(() {
+    return AppAuthController(
+      handler: locator(),
+      userHandler: locator(),
+    );
+  });
+  locator.registerFactory<HomeController>(() {
+    return HomeController(
+      handler: locator(),
+      userHandler: locator(),
+      roomHandler: locator(),
+    );
+  });
+  locator.registerFactory<MeetingController>(() {
+    return MeetingController(
+      handler: locator(),
+    );
+  });
 }

@@ -1,4 +1,4 @@
 library core;
 
-export 'app_common/index.dart';
-export 'app_utilities/index.dart';
+export 'constants/index.dart';
+export 'utils/index.dart';
