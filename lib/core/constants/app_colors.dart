@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:app_color/app_color.dart';
 
 class AppColors {
   const AppColors._();
 
-  static const Color primary = Colors.blue;
-  static const Color secondary = Colors.grey;
-
-  static const MaterialColor primarySwatch = Colors.blue;
+  static AppColor primary = AppColor.fromCode(0xffea2e61);
+  static AppColor secondary = AppColor.fromCode(0xff808080);
 }
