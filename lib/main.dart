@@ -34,7 +34,7 @@ class Application extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: AppInfo.name,
       theme: ThemeData(
-        primarySwatch: AppColors.primarySwatch,
+        primarySwatch: AppColors.primary,
       ),
       initialRoute: SplashActivity.route,
       onGenerateRoute: AppRouter.I.generate,

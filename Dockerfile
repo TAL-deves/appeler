@@ -24,10 +24,10 @@ COPY . .
 RUN flutter pub get
 
 # Build the Flutter app for the desired platform
-RUN flutter build web --release
+RUN flutter build web
 
 # Expose the default Flutter web port
 EXPOSE 8989
 
+# Run the flutter app
 CMD ["flutter", "run", "--release", "-d", "web-server", "--web-hostname", "0.0.0.0", "--web-port", "8989"]
-#CMD ["flutter", "run", "--release"]

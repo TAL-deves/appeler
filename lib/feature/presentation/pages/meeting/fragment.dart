@@ -5,6 +5,7 @@ import 'package:appeler/feature/presentation/pages/meeting/remote_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -176,16 +177,26 @@ class MeetingFragmentState extends State<MeetingFragment> {
       child: Column(
         children: [
           Expanded(
-            child: GridView(
-              padding: const EdgeInsets.all(24),
-              // reverse: isReserveMode,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                childAspectRatio: 3 / 5,
-              ),
-              children: _widgetMap.entries.map((e) => e.value).toList(),
+            child: FrameView(
+              width: double.infinity,
+              padding: 24,
+              items: _widgetMap.entries.map((e) => e.value).toList(),
+              frameBuilder: (context, layer, item) {
+                return item;
+              },
             ),
           ),
+          // Expanded(
+          //   child: GridView(
+          //     padding: const EdgeInsets.all(24),
+          //     // reverse: isReserveMode,
+          //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: crossAxisCount,
+          //       childAspectRatio: 3 / 5,
+          //     ),
+          //     children: _widgetMap.entries.map((e) => e.value).toList(),
+          //   ),
+          // ),
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 24,
