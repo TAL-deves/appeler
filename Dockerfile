@@ -30,4 +30,4 @@ RUN flutter build web
 EXPOSE 8989
 
 # Run the flutter app
-CMD ["flutter", "run", "-d", "web-server", "--web-hostname", "0.0.0.0", "--web-port", "8989"]
+CMD ["flutter", "run", "--release", "-d", "web-server", "--web-hostname", "0.0.0.0", "--web-port", "8989"]
