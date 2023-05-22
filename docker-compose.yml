@@ -1,0 +1,12 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'  # Modify the port numbers as per your app's requirements
+    volumes:
+      - .:/app
+    environment:
+      - FLUTTER_SDK=/usr/lib/flutter
