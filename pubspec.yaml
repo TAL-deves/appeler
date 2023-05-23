@@ -32,6 +32,10 @@ dependencies:
   get_it: ^7.3.0
   camera: ^0.10.5
   share_plus: ^6.3.4
+  local_auth: ^2.1.6
+  flutter_facebook_auth: ^5.0.11
+  firebase_database: ^10.2.1
+  firebase_auth: ^4.6.1
 
 #flutter_tools:
 #  web-server:
