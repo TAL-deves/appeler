@@ -5,7 +5,6 @@ import 'package:appeler/feature/presentation/pages/meeting/remote_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -180,11 +179,14 @@ class MeetingFragmentState extends State<MeetingFragment> {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
-              child: FrameView(
-                items: _widgetMap.entries.map((e) => e.value).toList(),
-                frameBuilder: (context, layer, item) {
-                  return item;
-                },
+              child: GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: snapCountFromMap,
+                  childAspectRatio: 1,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                children: _widgetMap.entries.map((e) => e.value).toList(),
               ),
             ),
           ),
@@ -260,6 +262,12 @@ class MeetingFragmentState extends State<MeetingFragment> {
       ),
     );
   }
+
+  int get snapCountFromMap => _widgetMap.entries.length <= 2
+      ? 1
+      : _widgetMap.entries.length <= 6 && _widgetMap.entries.length > 1
+          ? 2
+          : 3;
 
   @override
   void dispose() {

@@ -212,6 +212,7 @@ class _RemoteContributorState extends State<RemoteContributor> {
     _disposeRemoteRenderer();
     _cancelSubscriptions();
     _clearPeerConnection();
+    print("Item dispose : ${widget.uid}");
     super.dispose();
   }
 
