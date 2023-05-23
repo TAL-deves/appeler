@@ -177,13 +177,15 @@ class MeetingFragmentState extends State<MeetingFragment> {
       child: Column(
         children: [
           Expanded(
-            child: FrameView(
+            child: Container(
               width: double.infinity,
-              padding: 24,
-              items: _widgetMap.entries.map((e) => e.value).toList(),
-              frameBuilder: (context, layer, item) {
-                return item;
-              },
+              padding: const EdgeInsets.all(24),
+              child: FrameView(
+                items: _widgetMap.entries.map((e) => e.value).toList(),
+                frameBuilder: (context, layer, item) {
+                  return item;
+                },
+              ),
             ),
           ),
           // Expanded(

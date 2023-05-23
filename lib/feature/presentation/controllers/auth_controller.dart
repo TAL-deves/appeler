@@ -1,23 +1,23 @@
 import 'package:flutter_andomie/core.dart';
 
-class AppAuthController extends AuthController {
+class AppAuthController extends DefaultAuthController {
 
   AppAuthController({
     required super.handler,
     required super.userHandler,
   });
 
-  Future<bool> signIn(UserEntity data) async {
+  Future<bool> signIn(AuthInfo data) async {
     await signInByEmail(data);
     return true;
   }
 
-  Future<bool> signUp(UserEntity data) async {
+  Future<bool> signUp(AuthInfo data) async {
     await signUpByEmail(data);
     return true;
   }
 
-  Future<bool> forgot(UserEntity data) async {
+  Future<bool> forgot(AuthInfo data) async {
     return true;
   }
 }

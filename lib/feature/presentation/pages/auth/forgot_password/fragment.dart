@@ -67,7 +67,7 @@ class _AuthForgotPasswordFragmentState
             text: "Find",
             borderRadius: 12,
             primary: AppColors.primary,
-            onExecute: () => widget.onForgot.call(UserEntity(
+            onExecute: () => widget.onForgot.call(AuthInfo(
               email: email.text,
               phone: phone.number.numberWithCode,
             )),

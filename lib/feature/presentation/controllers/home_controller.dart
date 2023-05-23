@@ -3,7 +3,7 @@ import 'package:flutter_andomie/core.dart';
 import '../../../index.dart';
 import '../../domain/handlers/meeting.dart';
 
-class HomeController extends AuthController {
+class HomeController extends DefaultAuthController {
   final MeetingHandler roomHandler;
 
   HomeController({

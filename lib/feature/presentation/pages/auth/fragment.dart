@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../index.dart';
 
-typedef AuthCreateHandler = Function(UserEntity data);
-typedef AuthForgotHandler = Function(UserEntity data);
+typedef AuthCreateHandler = Function(AuthInfo data);
+typedef AuthForgotHandler = Function(AuthInfo data);
 
-typedef AuthSignInHandler = Function(UserEntity data);
-typedef AuthSignUpHandler = Function(UserEntity data);
+typedef AuthSignInHandler = Function(AuthInfo data);
+typedef AuthSignUpHandler = Function(AuthInfo data);
 
 class AuthFragment extends StatefulWidget {
   final AuthFragmentType type;

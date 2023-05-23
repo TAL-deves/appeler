@@ -43,7 +43,7 @@ void _dataSources() {
       localAuth: locator(),
     );
   });
-  locator.registerLazySingleton<LocalDataSource<UserEntity>>(() {
+  locator.registerLazySingleton<LocalDataSource<AuthInfo>>(() {
     return LocalUserDataSource(db: locator());
   });
   locator.registerLazySingleton<DataSource<Meeting>>(() {
@@ -57,13 +57,13 @@ void _repositories() {
       authDataSource: locator.call(),
     );
   });
-  locator.registerLazySingleton<DataRepository<UserEntity>>(() {
+  locator.registerLazySingleton<DataRepository<AuthInfo>>(() {
     return UserRepository(
       remote: UserDataSource(),
     );
   });
-  locator.registerLazySingleton<LocalDataRepository<UserEntity>>(() {
-    return LocalDataRepositoryImpl<UserEntity>(
+  locator.registerLazySingleton<LocalDataRepository<AuthInfo>>(() {
+    return LocalDataRepositoryImpl<AuthInfo>(
       local: locator(),
     );
   });
