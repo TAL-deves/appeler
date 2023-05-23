@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
       //home: const GroupCallingClientScreen()
       //home: const TestPage(),
       //home: const AuthPhonePage(),
-      //home: TestWork()
+      //home: const TestWork()
     );
   }
 }
@@ -73,6 +73,12 @@ class MyText extends StatefulWidget {
 
 class _MyTextState extends State<MyText> {
   late final innerTextValue = widget.textValue;
+
+  @override
+  void dispose() {
+    print('dispose is called with ${widget.keyValue}');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +127,7 @@ class _TestWorkState extends State<TestWork> {
       child: Text(value),
       onPressed: (){
         setState(() {
-          _widgetMap[value] = MyText(textValue: value, keyValue: value, key: UniqueKey());
+          _widgetMap[value] = Container(key: UniqueKey(), child: MyText(textValue: value, keyValue: value, key: UniqueKey()));
         });
       },
     );
@@ -151,6 +157,9 @@ class _TestWorkState extends State<TestWork> {
             children: [
               Column(
                 children: [
+                  _addButton('111'),
+                  _addButton('222'),
+                  _addButton('333'),
                   _addButton('123'),
                   _addButton('456'),
                   _addButton('789'),
@@ -158,6 +167,9 @@ class _TestWorkState extends State<TestWork> {
               ),
               Column(
                 children: [
+                  _removeButton('111'),
+                  _removeButton('222'),
+                  _removeButton('333'),
                   _removeButton('123'),
                   _removeButton('456'),
                   _removeButton('789'),

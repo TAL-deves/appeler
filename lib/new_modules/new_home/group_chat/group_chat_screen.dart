@@ -54,40 +54,39 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     _localStream = await _getUserMediaStream;
     setState(() {
       _localRenderer.srcObject = _localStream;
-      _widgetMap['local'] = Flexible(
+      _widgetMap['local'] = Stack(
         key: UniqueKey(),
-        child: Stack(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(color: Colors.black),
-              child: RTCVideoView(_localRenderer, mirror: true),
-            ),
-            Positioned(
-              top: 10,
-              left: 10,
-              child: Text(AuthManagementUseCase.curUser!, style: const TextStyle(color: kRedColor, fontSize: 20),),
-            ),
-            PositionThumbsWidget(
-              top: 20,
-              right: 20,
-              userId: AuthManagementUseCase.curUser!,
-              groupId: widget.groupId,
-            ),
-            PositionMicWidget(
-              bottom: 20,
-              right: 20,
-              userId: AuthManagementUseCase.curUser!,
-              groupId: widget.groupId,
-            ),
-            PositionCameraWidget(
-              bottom: 20,
-              left: 20,
-              userId: AuthManagementUseCase.curUser!,
-              groupId: widget.groupId,
-            ),
-          ],
-        ),
+        children: [
+          Container(
+            key: UniqueKey(),
+            margin: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(color: Colors.black),
+            child: RTCVideoView(_localRenderer, mirror: true),
+          ),
+          Positioned(
+            top: 10,
+            left: 10,
+            child: Text(AuthManagementUseCase.curUser!, style: const TextStyle(color: kRedColor, fontSize: 20),),
+          ),
+          PositionThumbsWidget(
+            top: 20,
+            right: 20,
+            userId: AuthManagementUseCase.curUser!,
+            groupId: widget.groupId,
+          ),
+          PositionMicWidget(
+            bottom: 20,
+            right: 20,
+            userId: AuthManagementUseCase.curUser!,
+            groupId: widget.groupId,
+          ),
+          PositionCameraWidget(
+            bottom: 20,
+            left: 20,
+            userId: AuthManagementUseCase.curUser!,
+            groupId: widget.groupId,
+          ),
+        ],
       );
     });
     _addCurrentUser();
@@ -139,43 +138,41 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           final curItem = item.key;
           if(curItem != AuthManagementUseCase.curUser && !_addedUser.contains(curItem)){
             _addedUser.add(curItem);
-            _widgetMap[curItem] = Flexible(
+            _widgetMap[curItem] = Stack(
               key: UniqueKey(),
-              child: Stack(
-                children: [
-                  GroupCallingRemoteScreen(
-                    key: ValueKey(curItem),
-                    callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
-                        ? CallEnum.outgoing
-                        : CallEnum.incoming,
-                    id: curItem,
-                    localStream: _localStream!,
-                  ),
-                  Positioned(
-                    top: 10,
-                    left: 10,
-                    child: Text(curItem, style: const TextStyle(color: kRedColor, fontSize: 20),),
-                  ),
-                  PositionThumbsWidget(
-                    top: 20,
-                    right: 20,
-                    userId: curItem,
-                    groupId: widget.groupId,
-                  ),
-                  PositionMicWidget(
-                    bottom: 20,
-                    right: 20,
-                    userId: curItem,
-                    groupId: widget.groupId,
-                  ),
-                  PositionCameraWidget(
-                    bottom: 20,
-                    left: 20,
-                    userId: curItem,
-                    groupId: widget.groupId,
-                  ),
-                ],
-              ),
+              children: [
+                GroupCallingRemoteScreen(
+                  key: UniqueKey(),
+                  callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
+                      ? CallEnum.outgoing
+                      : CallEnum.incoming,
+                  id: curItem,
+                  localStream: _localStream!,
+                ),
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Text(curItem, style: const TextStyle(color: kRedColor, fontSize: 20),),
+                ),
+                PositionThumbsWidget(
+                  top: 20,
+                  right: 20,
+                  userId: curItem,
+                  groupId: widget.groupId,
+                ),
+                PositionMicWidget(
+                  bottom: 20,
+                  right: 20,
+                  userId: curItem,
+                  groupId: widget.groupId,
+                ),
+                PositionCameraWidget(
+                  bottom: 20,
+                  left: 20,
+                  userId: curItem,
+                  groupId: widget.groupId,
+                ),
+              ],
             );
           }
         }
@@ -205,8 +202,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   @override
   void initState() {
     _initLocalRenderer();
-    //_addCurrentUser();
-    //_offerAnswerHostUser();
     super.initState();
   }
 
@@ -261,7 +256,17 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           Expanded(
             child: _localStream == null
                 ? const Center(child: CircularProgressIndicator(),)
-                : Column(
+                //: Column(children: _widgetMap.entries.map((e) => e.value).toList()),
+                : GridView(
+              padding: const EdgeInsets.all(16),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1,
+              ),
               children: _widgetMap.entries.map((e) => e.value).toList(),
             ),
           )
