@@ -77,7 +77,7 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
             text: "Already have an account! ",
             buttonText: "Sign in",
             buttonTextColor: AppColors.primary,
-            onPressed: () => widget.onSignIn(UserEntity(
+            onPressed: () => widget.onSignIn(AuthInfo(
               email: email.text,
               password: password.text,
               phone: phone.number.numberWithCode,
@@ -88,7 +88,7 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
             text: "Register",
             borderRadius: 12,
             primary: AppColors.primary,
-            onExecute: () => widget.onSignUp.call(UserEntity(
+            onExecute: () => widget.onSignUp.call(AuthInfo(
               email: email.text,
               password: password.text,
               phone: phone.number.numberWithCode,

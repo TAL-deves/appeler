@@ -68,7 +68,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
             textAlign: TextAlign.end,
             padding: const EdgeInsets.all(8),
             text: "Forget password?",
-            onPressed: () => widget.onForgetPassword.call(UserEntity(
+            onPressed: () => widget.onForgetPassword.call(AuthInfo(
               email: email.text,
               password: password.text,
             )),
@@ -80,7 +80,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
             text: "Don't have an account? ",
             buttonText: "Sign up!",
             buttonTextColor: AppColors.primary,
-            onPressed: () => widget.onCreateAccount.call(UserEntity(
+            onPressed: () => widget.onCreateAccount.call(AuthInfo(
               email: email.text,
               password: password.text,
             )),
@@ -90,7 +90,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
             text: "Login",
             borderRadius: 12,
             primary: AppColors.primary,
-            onExecute: () => widget.onSignIn.call(UserEntity(
+            onExecute: () => widget.onSignIn.call(AuthInfo(
               email: email.text,
               password: password.text,
             )),
