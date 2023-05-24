@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:appeler/core/app_constants/app_color.dart';
 import 'package:appeler/core/app_utilities/app_utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -81,14 +82,23 @@ class _MyTextState extends State<MyText> {
   }
 
   @override
+  void initState() {
+    print('init is called with ${widget.keyValue}');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('Key is :${widget.keyValue}'),
-        const SizedBox(width: 10,),
-        Text('Value is : $innerTextValue'),
-      ],
+    return Container(
+      color: kRedColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Key is :${widget.keyValue}'),
+          const SizedBox(width: 10,),
+          Text('Value is : $innerTextValue'),
+        ],
+      ),
     );
   }
 }
@@ -100,13 +110,16 @@ class MyText2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('Key is : $keyValue'),
-        const SizedBox(width: 10,),
-        Text('Value is: $textValue'),
-      ],
+    return Container(
+      color: kRedColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Key is : $keyValue'),
+          const SizedBox(width: 10,),
+          Text('Value is: $textValue'),
+        ],
+      ),
     );
   }
 }
@@ -119,15 +132,18 @@ class TestWork extends StatefulWidget {
   State<TestWork> createState() => _TestWorkState();
 }
 
-class _TestWorkState extends State<TestWork> {
+class _TestWorkState extends State<TestWork>{
   final _widgetMap = <String, Widget>{};
+  final _keyMap = <String, GlobalKey>{};
 
   Widget _addButton(String value){
     return TextButton(
       child: Text(value),
       onPressed: (){
         setState(() {
-          _widgetMap[value] = Container(key: UniqueKey(), child: MyText(textValue: value, keyValue: value, key: UniqueKey()));
+          final curKey = GlobalKey();
+          _keyMap[value] = curKey;
+          _widgetMap[value] = MyText(textValue: value, keyValue: value, key: curKey);
         });
       },
     );
@@ -139,6 +155,7 @@ class _TestWorkState extends State<TestWork> {
       onPressed: (){
         setState(() {
           _widgetMap.remove(value);
+          _keyMap.remove(value);
         });
       },
     );
@@ -148,39 +165,53 @@ class _TestWorkState extends State<TestWork> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('test'),),
-      body: Column(
-        children: [
-          Column(
-            children: _widgetMap.entries.map((e) => e.value).toList(),
-          ),
-          Row(
-            children: [
-              Column(
-                children: [
-                  _addButton('111'),
-                  _addButton('222'),
-                  _addButton('333'),
-                  _addButton('123'),
-                  _addButton('456'),
-                  _addButton('789'),
-                ],
-              ),
-              Column(
-                children: [
-                  _removeButton('111'),
-                  _removeButton('222'),
-                  _removeButton('333'),
-                  _removeButton('123'),
-                  _removeButton('456'),
-                  _removeButton('789'),
-                ],
-              )
-            ],
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if(_widgetMap.length == 1) _widgetMap['111']!
+            else Column(children: _widgetMap.entries.map((e) => e.value).toList()),
+        // GridView(
+        // padding: const EdgeInsets.all(16),
+        // scrollDirection: Axis.vertical,
+        // shrinkWrap: true,
+        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //   crossAxisCount: 2,
+        //   crossAxisSpacing: 10,
+        //   mainAxisSpacing: 10,
+        //   childAspectRatio: 1,
+        // ),
+        // children: _widgetMap.entries.map((e) => e.value).toList(),
+        // ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    _addButton('111'),
+                    _addButton('222'),
+                    _addButton('333'),
+                    _addButton('123'),
+                    _addButton('456'),
+                    _addButton('789'),
+                  ],
+                ),
+                Column(
+                  children: [
+                    _removeButton('111'),
+                    _removeButton('222'),
+                    _removeButton('333'),
+                    _removeButton('123'),
+                    _removeButton('456'),
+                    _removeButton('789'),
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
+
 }
 
 

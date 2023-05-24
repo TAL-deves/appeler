@@ -19,8 +19,7 @@ class GroupCallingRemoteScreen extends StatefulWidget {
   final MediaStream localStream;
 
   @override
-  State<GroupCallingRemoteScreen> createState() =>
-      _GroupCallingRemoteScreenState();
+  State<GroupCallingRemoteScreen> createState() => _GroupCallingRemoteScreenState();
 }
 
 class _GroupCallingRemoteScreenState extends State<GroupCallingRemoteScreen> {

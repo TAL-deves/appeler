@@ -28,6 +28,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   MediaStream? _localStream;
 
   final _widgetMap = <String, Widget>{};
+  final _keyMap = <String, GlobalKey>{};
   final _addedUser = <String>{};
 
   StreamSubscription? _roomSubs, _hostSubs;
@@ -138,11 +139,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           final curItem = item.key;
           if(curItem != AuthManagementUseCase.curUser && !_addedUser.contains(curItem)){
             _addedUser.add(curItem);
+            final newKey = GlobalKey();
+            _keyMap[curItem] = newKey;
             _widgetMap[curItem] = Stack(
-              key: UniqueKey(),
+              //key: UniqueKey(),
               children: [
                 GroupCallingRemoteScreen(
-                  key: UniqueKey(),
+                  key: newKey,
+                  //key: UniqueKey(),
                   callEnum: AuthManagementUseCase.curUser!.compareTo(curItem) > 0
                       ? CallEnum.outgoing
                       : CallEnum.incoming,
@@ -183,6 +187,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         for (final item in list){
           _addedUser.remove(item);
           _widgetMap.remove(item);
+          _keyMap.remove(item);
         }
         setState(() {
 
@@ -256,7 +261,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           Expanded(
             child: _localStream == null
                 ? const Center(child: CircularProgressIndicator(),)
-                //: Column(children: _widgetMap.entries.map((e) => e.value).toList()),
+                : _widgetMap.length < 3 ? Column(children: _widgetMap.entries.map((e) => Expanded(child: e.value)).toList())
                 : GridView(
               padding: const EdgeInsets.all(16),
               scrollDirection: Axis.vertical,
