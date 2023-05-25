@@ -225,7 +225,7 @@ class _RemoteContributorState extends State<RemoteContributor> {
       controller: controller,
       config: config,
       renderer: _remoteRenderer,
-      mirror: true,
+      mirror: false,
       meetingId: widget.meetingId,
       contributorId: widget.uid,
     );

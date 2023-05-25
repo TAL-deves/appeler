@@ -5,6 +5,7 @@ class MeetingInfo {
   bool isCameraOn;
   bool isMuted;
   bool isSilent;
+  bool isShareScreen;
   CameraType cameraType;
 
   bool get isFrontCamera => cameraType == CameraType.front;
@@ -15,6 +16,7 @@ class MeetingInfo {
     this.isMuted = false,
     this.isSilent = false,
     this.cameraType = CameraType.front,
+    this.isShareScreen = false,
   });
 
   MeetingInfo attach({
@@ -22,6 +24,7 @@ class MeetingInfo {
     bool? isCameraOn,
     bool? isMuted,
     bool? isSilent,
+    bool? isShareScreen,
     CameraType? cameraType,
   }) {
     return MeetingInfo(
@@ -30,11 +33,12 @@ class MeetingInfo {
       isMuted: isMuted ?? this.isMuted,
       isSilent: isSilent ?? this.isSilent,
       cameraType: cameraType ?? this.cameraType,
+      isShareScreen: isShareScreen ?? this.isShareScreen,
     );
   }
 
   @override
   String toString() {
-    return "MeetingInfo ($id, $isCameraOn, $isMuted, $isSilent, $cameraType)";
+    return "MeetingInfo ($id, $isCameraOn, $isMuted, $isSilent, $cameraType, $isShareScreen)";
   }
 }

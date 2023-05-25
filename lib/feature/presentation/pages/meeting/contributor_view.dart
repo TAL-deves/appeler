@@ -41,7 +41,7 @@ class ContributorView extends StatelessWidget {
                 item.isCameraOn
                     ? RTCVideoView(
                         renderer,
-                        mirror: true,
+                        mirror: mirror,
                         objectFit:
                             RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
                       )

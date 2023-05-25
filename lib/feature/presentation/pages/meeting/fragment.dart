@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:appeler/feature/presentation/pages/meeting/local_user.dart';
 import 'package:appeler/feature/presentation/pages/meeting/meeting_view.dart';
@@ -7,9 +8,56 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-
 import '../../../../index.dart';
+import 'dart:io';
+
+@pragma('vm:entry-point')
+void startCallback() {
+  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
+}
+
+class MyTaskHandler extends TaskHandler {
+  SendPort? _sendPort;
+  int _eventCount = 0;
+
+  @override
+  Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
+    _sendPort = sendPort;
+    final customData = await FlutterForegroundTask.getData<String>(key: 'customData');
+    print('customData: $customData');
+  }
+
+  @override
+  Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
+    FlutterForegroundTask.updateService(
+      notificationTitle: 'Foreground Service',
+      notificationText: 'Service event: $_eventCount',
+    );
+
+    sendPort?.send(_eventCount);
+
+    _eventCount++;
+  }
+
+  @override
+  Future<void> onDestroy(DateTime timestamp, SendPort? sendPort) async {
+    // You can use the clearAllData function to clear all the stored data.
+    await FlutterForegroundTask.clearAllData();
+  }
+
+  @override
+  void onButtonPressed(String id) {
+    print('onButtonPressed >> $id');
+  }
+
+  @override
+  void onNotificationPressed() {
+    FlutterForegroundTask.launchApp("/resume-route");
+    _sendPort?.send('onNotificationPressed');
+  }
+}
 
 class MeetingFragment extends StatefulWidget {
   final MeetingInfo info;
@@ -28,6 +76,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMute = widget.info.isMuted;
   late bool isFrontCamera = widget.info.isFrontCamera;
+  late bool isShareScreen = widget.info.isShareScreen;
   late SizeConfig config = SizeConfig.of(context, size: Size.zero);
   bool isRiseHand = false;
   bool isReserveMode = true;
@@ -55,14 +104,137 @@ class MeetingFragmentState extends State<MeetingFragment> {
               'optional': [],
             }
     };
-    final stream = await navigator.mediaDevices.getUserMedia(mp);
+    final mediaDevices = navigator.mediaDevices;
+    final stream = await (isShareScreen ? mediaDevices.getDisplayMedia(mp) : mediaDevices.getUserMedia(mp));
     return stream;
+  }
+
+  ReceivePort? _receivePort;
+
+  Future<void> _requestPermissionForAndroid() async {
+    if (!Platform.isAndroid) {
+      return;
+    }
+
+    if (!await FlutterForegroundTask.canDrawOverlays) {
+      await FlutterForegroundTask.openSystemAlertWindowSettings();
+    }
+
+    if (!await FlutterForegroundTask.isIgnoringBatteryOptimizations) {
+      await FlutterForegroundTask.requestIgnoreBatteryOptimization();
+    }
+
+    final NotificationPermission notificationPermissionStatus = await FlutterForegroundTask.checkNotificationPermission();
+
+    if (notificationPermissionStatus != NotificationPermission.granted) {
+      await FlutterForegroundTask.requestNotificationPermission();
+    }
+  }
+
+  void _initForegroundTask() {
+    FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        id: 500,
+        channelId: 'notification_channel_id',
+        channelName: 'Foreground Notification',
+        channelDescription:
+        'This notification appears when the foreground service is running.',
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
+        iconData: const NotificationIconData(
+          resType: ResourceType.mipmap,
+          resPrefix: ResourcePrefix.ic,
+          name: 'launcher',
+          backgroundColor: Colors.orange,
+        ),
+        buttons: [
+          const NotificationButton(id: 'sendButton', text: 'Send'),
+          const NotificationButton(id: 'testButton', text: 'Test'),
+        ],
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(
+        showNotification: true,
+        playSound: false,
+      ),
+      foregroundTaskOptions: const ForegroundTaskOptions(
+        interval: 5000,
+        isOnceEvent: false,
+        autoRunOnBoot: true,
+        allowWakeLock: true,
+        allowWifiLock: true,
+      ),
+    );
+  }
+
+  Future<bool> _startForegroundTask() async {
+    await FlutterForegroundTask.saveData(key: 'customData', value: 'hello');
+    final ReceivePort? receivePort = FlutterForegroundTask.receivePort;
+    final bool isRegistered = _registerReceivePort(receivePort);
+    if (!isRegistered) {
+      print('Failed to register receivePort!');
+      return false;
+    }
+
+    if (await FlutterForegroundTask.isRunningService) {
+      return FlutterForegroundTask.restartService();
+    } else {
+      return FlutterForegroundTask.startService(
+        notificationTitle: 'Foreground Service is running',
+        notificationText: 'Tap to return to the app',
+        callback: startCallback,
+      );
+    }
+  }
+
+  Future<bool> _stopForegroundTask() {
+    return FlutterForegroundTask.stopService();
+  }
+
+
+
+  bool _registerReceivePort(ReceivePort? newReceivePort) {
+    if (newReceivePort == null) {
+      return false;
+    }
+
+    _closeReceivePort();
+
+    _receivePort = newReceivePort;
+    _receivePort?.listen((data) {
+      if (data is int) {
+        print('eventCount: $data');
+      } else if (data is String) {
+        if (data == 'onNotificationPressed') {
+          //Navigator.of(context).pushNamed('/resume-route');
+        }
+      } else if (data is DateTime) {
+        print('timestamp: ${data.toString()}');
+      }
+    });
+
+    return _receivePort != null;
+  }
+
+  void _closeReceivePort() {
+    _receivePort?.close();
+    _receivePort = null;
   }
 
   @override
   void initState() {
-    _initLocalRenderer();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if(!kIsWeb){
+        await _requestPermissionForAndroid();
+        _initForegroundTask();
+        if (await FlutterForegroundTask.isRunningService) {
+          final newReceivePort = FlutterForegroundTask.receivePort;
+          _registerReceivePort(newReceivePort);
+        }
+        _startForegroundTask();
+      }
+      _initLocalRenderer();
+    });
   }
 
   void _initLocalRenderer() async {
@@ -78,6 +250,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
         renderer: _localRenderer,
         meetingId: widget.info.id,
         uid: AuthHelper.uid,
+        mirror: !isShareScreen,
       );
     });
     _setStatus();
@@ -100,9 +273,9 @@ class MeetingFragmentState extends State<MeetingFragment> {
   }
 
   void onMute() {
-    if (_localStream != null) {
-      _localStream?.getAudioTracks()[0].enabled = !isMute;
-      _changeStatus(key: 'isMute');
+    if (_localStream != null && _localStream!.getAudioTracks().isNotEmpty) {
+     _localStream?.getAudioTracks()[0].enabled = !isMute;
+     _changeStatus(key: 'isMute');
     }
   }
 
@@ -230,63 +403,12 @@ class MeetingFragmentState extends State<MeetingFragment> {
       height: double.infinity,
       child: Column(
         children: [
-          // if (itemCount == 1 || itemCount == 2)
-          //   Expanded(
-          //     child: Flex(
-          //       direction: isVerticalMode ? Axis.vertical : Axis.horizontal,
-          //       children: [
-          //         Expanded(
-          //           child: Container(
-          //             color: Colors.white.withAlpha(50),
-          //             child: childAt(0),
-          //           ),
-          //         ),
-          //         if (itemCount == 2)
-          //           Expanded(
-          //             child: Flex(
-          //               direction:
-          //                   isVerticalMode ? Axis.vertical : Axis.horizontal,
-          //               children: [
-          //                 SizedBox(
-          //                   width: isVerticalMode ? null : 4,
-          //                   height: isVerticalMode ? 4 : null,
-          //                 ),
-          //                 Expanded(
-          //                   child: Container(
-          //                     color: Colors.white.withAlpha(50),
-          //                     child: childAt(1),
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //       ],
-          //     ),
-          //   )
-          // else if (itemCount >= 3)
-          //   Expanded(
-          //     child: GridView(
-          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //         crossAxisCount: snapCount,
-          //         childAspectRatio: 1,
-          //         crossAxisSpacing: 4,
-          //         mainAxisSpacing: 4,
-          //       ),
-          //       children: children,
-          //     ),
-          //   )
-          // else
-          //   Expanded(
-          //     child: Container(),
-          //   ),
           Expanded(
             child: MeetingView(
               items: children,
               itemBackground: Colors.black.withAlpha(50),
               itemSpace: 5,
-              frameBuilder: (context, layer, item) {
-                return item;
-              },
+              frameBuilder: (context, layer, item) { return item; },
             ),
           ),
           Container(
@@ -360,6 +482,8 @@ class MeetingFragmentState extends State<MeetingFragment> {
     _disposeSubs();
     _removeStatus();
     _disposeLocalRenderer();
+    _closeReceivePort();
+    _stopForegroundTask();
     super.dispose();
   }
 

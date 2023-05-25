@@ -24,6 +24,7 @@ class MeetingActivity extends StatefulWidget {
 class _MeetingActivityState extends State<MeetingActivity> {
   late bool isSilent = widget.data.isSilent;
   late bool isFrontCamera = widget.data.isFrontCamera;
+  late bool isScreenShare = widget.data.isShareScreen;
 
   final globalKey = GlobalKey<MeetingFragmentState>();
 
@@ -92,7 +93,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
                           ? Icons.volume_off_outlined
                           : Icons.volume_up_outlined,
                     ),
-                    ImageButton(
+                    if(!isScreenShare) ImageButton(
                       onClick: () {
                         isFrontCamera = !isFrontCamera;
                         setState(switchCamera);

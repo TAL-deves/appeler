@@ -10,12 +10,14 @@ class ContributorCard extends StatefulWidget {
   final RTCVideoRenderer renderer;
   final String meetingId;
   final String uid;
+  final bool mirror;
 
   const ContributorCard({
     Key? key,
     required this.renderer,
     required this.meetingId,
     required this.uid,
+    required this.mirror,
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class _ContributorCardState extends State<ContributorCard> {
       controller: controller,
       config: config,
       renderer: widget.renderer,
-      mirror: true,
+      mirror: widget.mirror,
       meetingId: widget.meetingId,
       contributorId: widget.uid,
     );

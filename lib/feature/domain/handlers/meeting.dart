@@ -50,16 +50,16 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
   }) {
     var ref = root.doc(id);
     ref.get().then((value) {
-      final data = value.data()!;
-      if (data is Map<String, dynamic>) {
+      final data = value.data();
+      if (data != null && data is Map<String, dynamic>) {
         data[AuthHelper.uid] = {
           'isMute': isMute,
           'handUp': isRiseHand,
           'isCameraOn': isCameraOn,
           'isFrontCamera': isFrontCamera,
         };
+        ref.set(data);
       }
-      ref.set(data);
     });
   }
 
@@ -72,8 +72,8 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
   }) {
     var ref = root.doc(id);
     ref.get().then((value) {
-      final data = value.data()!;
-      if (data is Map<String, dynamic>) {
+      final data = value.data();
+      if (data != null && data is Map<String, dynamic>) {
         data[AuthHelper.uid] = {
           'isMute': isMute,
           'handUp': isRiseHand,
@@ -88,8 +88,8 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
   void removeStatus(String id) {
     var ref = root.doc(id);
     ref.get().then((value) {
-      final data = value.data()!;
-      if (data is Map<String, dynamic>) {
+      final data = value.data();
+      if (data != null && data is Map<String, dynamic>) {
         data.remove(AuthHelper.uid);
         if (data.isEmpty) {
           ref.delete();
