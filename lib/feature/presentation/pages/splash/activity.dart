@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:flutter_andomie/widgets.dart';
 
 import '../../../../index.dart';
 
@@ -14,23 +13,29 @@ class SplashActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SplashView(
-      title: AppInfo.name,
-      subtitle: AppInfo.description,
-      logo: AppInfo.logo,
-      onRoute: (context) {
-        return AuthHelper.isLoggedIn
-            ? Navigator.pushReplacementNamed(
-                context,
-                HomeActivity.route,
-                arguments: AuthHelper.uid,
-              )
-            : Navigator.pushReplacementNamed(
-                context,
-                AuthActivity.route,
-                arguments: AuthFragmentType.signIn,
-              );
-      },
+    return AppScreen(
+      child: AppSplashView(
+        title: AppInfo.name,
+        titleAllCaps: true,
+        titleExtraSize: 2,
+        titleSize: 24,
+        titleColor: AppColors.secondary,
+        subtitle: AppInfo.description,
+        logo: AppInfo.logo,
+        logoColor: AppColors.primary,
+        onRoute: (context) {
+          return AuthHelper.isLoggedIn
+              ? Navigator.pushReplacementNamed(
+                  context,
+                  HomeActivity.route,
+                  arguments: AuthHelper.uid,
+                )
+              : Navigator.pushReplacementNamed(
+                  context,
+                  WelcomeActivity.route,
+                );
+        },
+      ),
     );
   }
 }

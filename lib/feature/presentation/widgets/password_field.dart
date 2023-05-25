@@ -48,6 +48,7 @@ class _PasswordFieldState extends State<PasswordField> {
         inputFormatters: controller.formatter(widget.digits),
         maxLength: widget.maxCharacters,
         buildCounter: counter,
+        obscureText: true,
         onChanged: (value) {
           isChangedState = true;
         },

@@ -13,6 +13,8 @@ class AppRouter {
     switch (route) {
       case SplashActivity.route:
         return _splash(data);
+      case WelcomeActivity.route:
+        return _welcome(data);
       case AuthActivity.route:
         return _auth(data);
       case HomeActivity.route:
@@ -31,6 +33,12 @@ class AppRouter {
   Route<T> _splash<T>(Object? data) {
     return MaterialPageRoute(
       builder: (context) => const SplashActivity(),
+    );
+  }
+
+  Route<T> _welcome<T>(Object? data) {
+    return MaterialPageRoute(
+      builder: (context) => const WelcomeActivity(),
     );
   }
 

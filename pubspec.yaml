@@ -53,5 +53,6 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/icons/
 #  custom_server:
 #    port: 8080

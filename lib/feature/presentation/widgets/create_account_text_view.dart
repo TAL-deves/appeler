@@ -6,6 +6,7 @@ class CreateAccountTextView extends StatelessWidget {
   final String text;
   final double? textSize;
   final Color? textColor;
+  final FontWeight? textWeight;
   final String buttonText;
   final Color? buttonTextColor;
   final FontWeight? buttonTextWeight;
@@ -22,6 +23,7 @@ class CreateAccountTextView extends StatelessWidget {
     this.textAlign,
     this.textColor,
     this.textSize,
+    this.textWeight,
     this.buttonText = "Sign up",
     this.buttonTextColor,
     this.buttonTextWeight = FontWeight.bold,
@@ -55,6 +57,7 @@ class CreateAccountTextView extends StatelessWidget {
             style: TextStyle(
               color: textColor,
               fontSize: textSize,
+              fontWeight: textWeight,
             ),
           ),
         ),

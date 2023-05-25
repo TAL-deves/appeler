@@ -1,3 +1,4 @@
+import 'package:appeler/feature/presentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
@@ -40,63 +41,79 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: LinearLayout(
-        orientation: Axis.vertical,
-        paddingVertical: 24,
-        paddingHorizontal: 32,
-        children: [
-          const TextView(
-            width: double.infinity,
-            text: "Sign in",
-            textAlign: TextAlign.start,
-            textColor: Colors.black,
-            fontWeight: FontWeight.bold,
-            textSize: 24,
-            marginVertical: 24,
+    return LinearLayout(
+      scrollable: true,
+      orientation: Axis.vertical,
+      crossGravity: CrossAxisAlignment.center,
+      paddingTop: 120,
+      paddingHorizontal: 32,
+      paddingBottom: 24,
+      children: [
+        const AppLogo(),
+        const SizedBox(height: 24),
+        EmailField(
+          controller: email,
+          hint: "Enter your email",
+        ),
+        PasswordField(
+          hint: "Enter your password",
+          controller: password,
+          margin: EdgeInsets.zero,
+        ),
+        AppTextButton(
+          width: double.infinity,
+          textAlign: TextAlign.end,
+          fontWeight: FontWeight.bold,
+          padding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 8,
           ),
-          EmailField(
-            controller: email,
-          ),
-          PasswordField(
-            hint: "Enter your password",
-            controller: password,
-            margin: EdgeInsets.zero,
-          ),
-          AppTextButton(
-            width: double.infinity,
-            textAlign: TextAlign.end,
-            padding: const EdgeInsets.all(8),
-            text: "Forget password?",
-            onPressed: () => widget.onForgetPassword.call(AuthInfo(
-              email: email.text,
-              password: password.text,
-            )),
-          ),
-          CreateAccountTextView(
-            width: double.infinity,
-            textAlign: TextAlign.end,
-            padding: const EdgeInsets.all(8),
-            text: "Don't have an account? ",
-            buttonText: "Sign up!",
-            buttonTextColor: AppColors.primary,
-            onPressed: () => widget.onCreateAccount.call(AuthInfo(
-              email: email.text,
-              password: password.text,
-            )),
-          ),
-          Button(
-            margin: const EdgeInsets.symmetric(vertical: 24),
-            text: "Login",
-            borderRadius: 12,
-            primary: AppColors.primary,
-            onExecute: () => widget.onSignIn.call(AuthInfo(
-              email: email.text,
-              password: password.text,
-            )),
-          ),
-        ],
-      ),
+          text: "Forget password?",
+          onPressed: () => widget.onForgetPassword.call(AuthInfo(
+            email: email.text,
+            password: password.text,
+          )),
+        ),
+        Button(
+          margin: const EdgeInsets.symmetric(vertical: 24),
+          text: "Login",
+          borderRadius: 25,
+          primary: AppColors.primary,
+          onExecute: () => widget.onSignIn.call(AuthInfo(
+            email: email.text,
+            password: password.text,
+          )),
+        ),
+        const OrText(),
+        OAuthButton(
+          text: "Login With Google",
+          background: AppColors.primary,
+          icon: "logo",
+          onClick: (context) {},
+        ),
+        OAuthButton(
+          text: "Login With Facebook",
+          background: AppColors.secondary,
+          icon: "logo",
+          onClick: (context) {},
+        ),
+        CreateAccountTextView(
+          width: double.infinity,
+          textAlign: TextAlign.center,
+          margin: const EdgeInsets.only(top: 24),
+          padding: const EdgeInsets.all(24),
+          text: "Don't have an account ?  ",
+          textWeight: FontWeight.w500,
+          textColor: AppColors.primary.withAlpha(200),
+          buttonText: "Sign Up",
+          buttonTextColor: AppColors.secondary,
+          onPressed: () => widget.onCreateAccount.call(AuthInfo(
+            email: email.text,
+            password: password.text,
+          )),
+        ),
+      ],
     );
   }
 }
+

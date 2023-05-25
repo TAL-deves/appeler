@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
+
 import 'index.dart';
 
 Future<void> main() async {
@@ -21,7 +22,8 @@ Future<void> main() async {
         : null,
   );
   await diInit();
-  FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: false);
+  FirebaseFirestore.instance.settings =
+      const Settings(persistenceEnabled: false);
   runApp(const Application());
 }
 
