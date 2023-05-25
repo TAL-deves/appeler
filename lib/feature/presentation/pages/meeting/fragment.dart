@@ -230,57 +230,9 @@ class MeetingFragmentState extends State<MeetingFragment> {
       height: double.infinity,
       child: Column(
         children: [
-          // if (itemCount == 1 || itemCount == 2)
-          //   Expanded(
-          //     child: Flex(
-          //       direction: isVerticalMode ? Axis.vertical : Axis.horizontal,
-          //       children: [
-          //         Expanded(
-          //           child: Container(
-          //             color: Colors.white.withAlpha(50),
-          //             child: childAt(0),
-          //           ),
-          //         ),
-          //         if (itemCount == 2)
-          //           Expanded(
-          //             child: Flex(
-          //               direction:
-          //                   isVerticalMode ? Axis.vertical : Axis.horizontal,
-          //               children: [
-          //                 SizedBox(
-          //                   width: isVerticalMode ? null : 4,
-          //                   height: isVerticalMode ? 4 : null,
-          //                 ),
-          //                 Expanded(
-          //                   child: Container(
-          //                     color: Colors.white.withAlpha(50),
-          //                     child: childAt(1),
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //       ],
-          //     ),
-          //   )
-          // else if (itemCount >= 3)
-          //   Expanded(
-          //     child: GridView(
-          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //         crossAxisCount: snapCount,
-          //         childAspectRatio: 1,
-          //         crossAxisSpacing: 4,
-          //         mainAxisSpacing: 4,
-          //       ),
-          //       children: children,
-          //     ),
-          //   )
-          // else
-          //   Expanded(
-          //     child: Container(),
-          //   ),
           Expanded(
             child: MeetingView(
+              config: config,
               items: children,
               itemBackground: Colors.black.withAlpha(50),
               itemSpace: 5,
