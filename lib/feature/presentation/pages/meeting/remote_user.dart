@@ -175,7 +175,7 @@ class _RemoteContributorState extends State<RemoteContributor> {
 
   Future<void> _deleteInnerCollection() async {
     final innerCollection = await _curRoomSelfCandidates.get();
-    for (var item in innerCollection.docs) {
+    for (final item in innerCollection.docs) {
       await item.reference.delete();
     }
   }

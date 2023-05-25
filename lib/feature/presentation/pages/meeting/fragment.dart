@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:isolate';
-
+import 'dart:ui';
 import 'package:appeler/feature/presentation/pages/meeting/local_user.dart';
 import 'package:appeler/feature/presentation/pages/meeting/meeting_view.dart';
 import 'package:appeler/feature/presentation/pages/meeting/remote_user.dart';
@@ -26,6 +26,8 @@ class MyTaskHandler extends TaskHandler {
   Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
     _sendPort = sendPort;
     final customData = await FlutterForegroundTask.getData<String>(key: 'customData');
+    WidgetsFlutterBinding.ensureInitialized();
+    DartPluginRegistrant.ensureInitialized();
     print('customData: $customData');
   }
 
@@ -71,7 +73,7 @@ class MeetingFragment extends StatefulWidget {
   State<MeetingFragment> createState() => MeetingFragmentState();
 }
 
-class MeetingFragmentState extends State<MeetingFragment> {
+class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObserver{
   late final controller = context.read<MeetingController>();
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMute = widget.info.isMuted;
@@ -110,6 +112,11 @@ class MeetingFragmentState extends State<MeetingFragment> {
   }
 
   ReceivePort? _receivePort;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('App state is: $state');
+  }
 
   Future<void> _requestPermissionForAndroid() async {
     if (!Platform.isAndroid) {
@@ -190,8 +197,6 @@ class MeetingFragmentState extends State<MeetingFragment> {
     return FlutterForegroundTask.stopService();
   }
 
-
-
   bool _registerReceivePort(ReceivePort? newReceivePort) {
     if (newReceivePort == null) {
       return false;
@@ -222,19 +227,22 @@ class MeetingFragmentState extends State<MeetingFragment> {
 
   @override
   void initState() {
+    print('meeting fragment is called');
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if(!kIsWeb){
-        await _requestPermissionForAndroid();
-        _initForegroundTask();
-        if (await FlutterForegroundTask.isRunningService) {
-          final newReceivePort = FlutterForegroundTask.receivePort;
-          _registerReceivePort(newReceivePort);
-        }
-        _startForegroundTask();
-      }
-      _initLocalRenderer();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   if(!kIsWeb){
+    //     await _requestPermissionForAndroid();
+    //     _initForegroundTask();
+    //     if (await FlutterForegroundTask.isRunningService) {
+    //       final newReceivePort = FlutterForegroundTask.receivePort;
+    //       _registerReceivePort(newReceivePort);
+    //     }
+    //     _startForegroundTask();
+    //   }
+    //   _initLocalRenderer();
+    // });
+    _initLocalRenderer();
   }
 
   void _initLocalRenderer() async {
@@ -484,6 +492,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
     _disposeLocalRenderer();
     _closeReceivePort();
     _stopForegroundTask();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
