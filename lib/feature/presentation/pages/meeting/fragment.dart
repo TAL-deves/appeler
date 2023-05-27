@@ -95,7 +95,8 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
 
   Future<MediaStream> get _getUserMediaStream async {
     final mp = <String, dynamic>{
-      'audio': true,
+      'audio': false,
+      // 'video': Platform.isIOS ? {'deviceId': 'broadcast'} : true
       'video': kIsWeb
           ? {'facingMode': 'user'}
           : {
