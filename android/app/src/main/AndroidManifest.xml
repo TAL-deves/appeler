@@ -14,6 +14,13 @@
         android:label="appeler"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <service
+            android:name="id.flutter.flutter_background_service.BackgroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="mediaProjection" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

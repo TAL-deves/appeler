@@ -1,11 +1,13 @@
 import 'dart:ui';
-
+import 'dart:io';
 import 'package:appeler/core/app_constants/app_color.dart';
 import 'package:appeler/core/app_utilities/app_utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 import 'core/app_router/app_router.dart';
@@ -13,10 +15,121 @@ import 'core/app_router/app_router.dart';
 
 late final SharedPreferences sharedPref;
 
-//old work
-//revert
+Future<void> initializeService() async {
+  final service = FlutterBackgroundService();
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'my_foreground',
+    'MY FOREGROUND SERVICE',
+    description: 'This channel is used for important notifications.',
+    importance: Importance.low,
+  );
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  if (Platform.isIOS) {
+    await flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        iOS: DarwinInitializationSettings(),
+      ),
+    );
+  }
+
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+    alert: true,
+    badge: true,
+    sound: true,
+    critical: true,
+  );
+
+  await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      onStart: onStart,
+      autoStart: true,
+      isForegroundMode: true,
+      notificationChannelId: 'my_foreground',
+      initialNotificationTitle: 'AWESOME SERVICE',
+      initialNotificationContent: 'Initializing',
+      foregroundServiceNotificationId: 888,
+    ),
+    iosConfiguration: IosConfiguration(
+      autoStart: true,
+      onForeground: onStart,
+      onBackground: onIosBackground,
+    ),
+  );
+
+  service.startService();
+}
+
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  print('on ios background is called');
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+  return true;
+}
+
+@pragma('vm:entry-point')
+void onStart(ServiceInstance service) async {
+  print('on start is called');
+  DartPluginRegistrant.ensureInitialized();
+
+  /// OPTIONAL when use custom notification
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  service.on('setAsForeground').listen((event) {
+    flutterLocalNotificationsPlugin.show(
+      888,
+      'COOL SERVICE',
+      'Awesome ${DateTime.now()}',
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'my_foreground',
+            'MY FOREGROUND SERVICE',
+            icon: 'ic_bg_service_small',
+            ongoing: true,
+          ),
+          iOS: DarwinNotificationDetails(
+              subtitle: 'my_foreground'
+          )
+      ),
+    );
+  });
+
+  service.on('setAsBackground').listen((event) {
+    flutterLocalNotificationsPlugin.show(
+      888,
+      'COOL SERVICE',
+      'Awesome ${DateTime.now()}',
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'my_foreground',
+            'MY FOREGROUND SERVICE',
+            icon: 'ic_bg_service_small',
+            ongoing: true,
+          ),
+          iOS: DarwinNotificationDetails(
+              subtitle: 'my_foreground'
+          )
+      ),
+    );
+  });
+
+  service.on('stopService').listen((event) {
+    service.stopSelf();
+  });
+
+  // bring to foreground
+}
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeService();
   // html.window.onUnload.listen((event) async{
   //   AuthManagementUseCase.updateOnlineStatus(false);
   // });
@@ -300,4 +413,3 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver{
     );
   }
 }
-

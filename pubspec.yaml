@@ -44,6 +44,9 @@ dependencies:
       url: https://github.com/flutter-webrtc/flutter-webrtc.git
       ref: main
   wakelock: ^0.6.2
+  flutter_background_service: ^2.4.6
+  device_info_plus: ^8.2.2
+  flutter_local_notifications: ^14.1.0
 
 dev_dependencies:
   flutter_test:
