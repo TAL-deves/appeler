@@ -18,8 +18,8 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
     return root.doc(id);
   }
 
-  Stream<Contributor> liveContributor(String meetingId, String id) {
-    final controller = StreamController<Contributor>();
+  Stream<MeetingContributor> liveContributor(String meetingId, String id) {
+    final controller = StreamController<MeetingContributor>();
     try {
       root.doc(meetingId).snapshots().listen((event) {
         if (event.exists || event.data() != null) {
@@ -27,7 +27,7 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
           if (value is Map<String, dynamic>) {
             var data = value[id];
             if (data is Map<String, dynamic>) {
-              var con = Contributor.from(data);
+              var con = MeetingContributor.from(data);
               controller.add(con);
             }
           }

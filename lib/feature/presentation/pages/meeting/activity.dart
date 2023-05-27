@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../index.dart';
@@ -38,7 +38,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
   }
 
   void switchCamera() {
-    globalKey.currentState?.onCameraSwitch();
+    globalKey.currentState?.onSwitchCamera(true);
   }
 
   @override
@@ -50,65 +50,66 @@ class _MeetingActivityState extends State<MeetingActivity> {
             ? BlocProvider.value(value: widget.homeController!)
             : BlocProvider(create: (context) => locator<HomeController>())
       ],
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.light,
-            statusBarBrightness: Brightness.light,
-          ),
-          backgroundColor: Colors.transparent,
-          actionsIconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          title: Text(
-            widget.data.id,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-            ),
-          ),
-          actions: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    ImageButton(
-                      onClick: () {
-                        isSilent = !isSilent;
-                        setState(silent);
-                      },
-                      icon: isSilent
-                          ? Icons.volume_off_outlined
-                          : Icons.volume_up_outlined,
-                    ),
-                    ImageButton(
-                      onClick: () {
-                        isFrontCamera = !isFrontCamera;
-                        setState(switchCamera);
-                      },
-                      icon: isFrontCamera
-                          ? Icons.camera_front_outlined
-                          : Icons.camera_rear_outlined,
-                      tint: Colors.white,
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
-        body: SafeArea(
+      child: AppScreen(
+        autoLeading: false,
+        title: widget.data.id,
+        toolbar: (context, value) {
+          return StackLayout(
+            width: double.infinity,
+            children: [
+              IconView(
+                positionType: ViewPositionType.centerStart,
+                icon: Icons.message_outlined,
+                tint: AppColors.primary,
+                background: Colors.transparent,
+              ),
+              LinearLayout(
+                positionType: ViewPositionType.center,
+                layoutGravity: LayoutGravity.center,
+                children: [
+                  RawIconView(
+                    icon: AppInfo.logo,
+                    tint: AppColors.primary,
+                    size: 24,
+                  ),
+                  const TextView(
+                    marginBottom: 16,
+                    text: AppInfo.name,
+                    textColor: Colors.black,
+                  ),
+                ],
+              ),
+              LinearLayout(
+                positionType: ViewPositionType.centerEnd,
+                orientation: Axis.horizontal,
+                crossGravity: CrossAxisAlignment.center,
+                children: [
+                  IconView(
+                    icon: isSilent
+                        ? Icons.volume_off_outlined
+                        : Icons.volume_up_outlined,
+                    tint: AppColors.primary,
+                    onClick: (context) {
+                      isSilent = !isSilent;
+                      setState(silent);
+                    },
+                  ),
+                  IconView(
+                    icon: isFrontCamera
+                        ? Icons.camera_front_outlined
+                        : Icons.camera_rear_outlined,
+                    tint: AppColors.primary,
+                    onClick: (context) {
+                      isFrontCamera = !isFrontCamera;
+                      setState(switchCamera);
+                    },
+                  )
+                ],
+              )
+            ],
+          );
+        },
+        child: SafeArea(
           child: MeetingFragment(
             key: globalKey,
             info: widget.data,

@@ -1,88 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:flutter_andomie/widgets.dart';
 
-import '../../../../index.dart';
+class ContributorView<T extends Contributor> extends StatelessWidget {
+  final double borderRadius;
+  final double margin;
+  final Color? background;
+  final Stream<T> stream;
+  final Widget renderView;
+  final OnViewBuilder<T>? userView;
 
-class RemoteContributor extends StatefulWidget {
-  final RTCVideoRenderer renderer;
-  final String meetingId;
-  final String uid;
-
-  const RemoteContributor({
+  const ContributorView({
     Key? key,
-    required this.renderer,
-    required this.meetingId,
-    required this.uid,
-  }) : super(key: key);
-
-  @override
-  State<RemoteContributor> createState() => _RemoteContributorState();
-}
-
-class _RemoteContributorState extends State<RemoteContributor> {
-  late final config = SizeConfig.of(context);
-  late final controller = context.read<MeetingController>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 150,
-      clipBehavior: Clip.antiAlias,
-      margin: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white24,
-        borderRadius: BorderRadius.circular(config.dx(8)),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          RTCVideoView(
-            widget.renderer,
-            mirror: true,
-          ),
-          _Buttons(
-            controller: controller,
-            config: config,
-            meetingId: widget.meetingId,
-            uid: widget.uid,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Buttons extends StatelessWidget {
-  final MeetingController controller;
-  final SizeConfig config;
-  final String meetingId;
-  final String uid;
-
-  const _Buttons({
-    Key? key,
-    required this.controller,
-    required this.config,
-    required this.meetingId,
-    required this.uid,
+    this.background,
+    this.borderRadius = 0,
+    this.margin = 0,
+    required this.renderView,
+    this.userView,
+    required this.stream,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      margin: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white24,
-        borderRadius: BorderRadius.circular(config.dx(8)),
-      ),
-      child: StreamBuilder(
-          stream: controller.handler.liveContributor(meetingId, uid),
-          builder: (context, state) {
-            var item = state.data ?? MeetingContributor();
-            return Stack(
+    return StreamView(
+      stream: stream,
+      margin: margin,
+      background: background,
+      borderRadius: borderRadius,
+      builder: (context, value) {
+        var item = value ?? ContributorImpl();
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            item.isCameraOn
+                ? renderView
+                : userView?.call(context, item as T) ??
+                const ImageView(
+                  width: 80,
+                  height: 80,
+                  shape: ViewShape.circular,
+                  image:
+                  "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
+                  scaleType: BoxFit.cover,
+                ),
+            Stack(
               alignment: Alignment.center,
               children: [
                 if (item.isRiseHand)
@@ -138,8 +99,34 @@ class _Buttons extends StatelessWidget {
                   ),
                 ),
               ],
-            );
-          }),
+            ),
+          ],
+        );
+      }
     );
   }
 }
+
+abstract class Contributor extends Entity {
+  final bool? cameraOn;
+  final bool? muted;
+  final bool? riseHand;
+  final bool? shareScreen;
+
+  Contributor({
+    super.id,
+    super.timeMills,
+    this.cameraOn,
+    this.muted,
+    this.riseHand,
+    this.shareScreen,
+  });
+
+  bool get isCameraOn => cameraOn ?? false;
+
+  bool get isMuted => muted ?? false;
+
+  bool get isRiseHand => riseHand ?? false;
+}
+
+class ContributorImpl extends Contributor {}

@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../../../../index.dart';
-import 'contributor_view.dart';
 
 class RemoteContributor extends StatefulWidget {
   final String uid;
@@ -222,12 +221,15 @@ class _RemoteContributorState extends State<RemoteContributor> {
   @override
   Widget build(BuildContext context) {
     return ContributorView(
-      controller: controller,
-      config: config,
-      renderer: _remoteRenderer,
-      mirror: true,
-      meetingId: widget.meetingId,
-      contributorId: widget.uid,
+      renderView: RTCVideoView(
+        _remoteRenderer,
+        mirror: true,
+        objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+      ),
+      stream: controller.handler.liveContributor(
+        widget.meetingId,
+        widget.uid,
+      ),
     );
   }
 }

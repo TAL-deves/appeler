@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_andomie/widgets.dart';
 
 class ScreenView extends StatelessWidget {
+  final bool authShowLeading;
   final EdgeInsetsGeometry? padding;
   final Color? toolbarColor;
   final Color? toolbarIconTint;
@@ -24,8 +26,12 @@ class ScreenView extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final List<Widget>? actions;
 
+  final OnViewBuilder? onTitleBuilder;
+  final OnViewBuilder? onLeadingBuilder;
+
   const ScreenView({
     Key? key,
+    this.authShowLeading = true,
     this.background,
     this.backgroundImage = "",
     this.behindAppbar = false,
@@ -47,6 +53,8 @@ class ScreenView extends StatelessWidget {
     this.titleWeight,
     this.actions,
     this.child,
+    this.onTitleBuilder,
+    this.onLeadingBuilder,
   }) : super(key: key);
 
   @override
@@ -57,6 +65,7 @@ class ScreenView extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: background,
       appBar: AppBar(
+        automaticallyImplyLeading: authShowLeading,
         elevation: toolbarColor != Colors.transparent ? elevation : 0,
         toolbarHeight: toolbarHeight,
         backgroundColor: toolbarColor,
@@ -67,17 +76,19 @@ class ScreenView extends StatelessWidget {
         iconTheme: IconThemeData(
           color: toolbarIconTint,
         ),
+        leading: onLeadingBuilder?.call(context, null),
         actions: actions,
-        title: Text(
-          title ?? "",
-          textAlign: TextAlign.center,
-          style: titleStyle.copyWith(
-            color: titleColor,
-            fontSize: titleSize,
-            fontWeight: titleWeight,
-            letterSpacing: titleExtraSize,
-          ),
-        ),
+        title: onTitleBuilder?.call(context, title) ??
+            Text(
+              title ?? "",
+              textAlign: TextAlign.center,
+              style: titleStyle.copyWith(
+                color: titleColor,
+                fontSize: titleSize,
+                fontWeight: titleWeight,
+                letterSpacing: titleExtraSize,
+              ),
+            ),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: statusBarColor ?? toolbarColor ?? Colors.transparent,
           statusBarIconBrightness: statusBarBrightness,

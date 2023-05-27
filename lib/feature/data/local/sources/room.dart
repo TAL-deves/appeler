@@ -2,9 +2,10 @@ import 'package:flutter_andomie/core.dart';
 
 import '../../../../index.dart';
 
-class RemoteMeetingDataSource extends FireStoreDataSourceImpl<Meeting> {
-  RemoteMeetingDataSource({
+class LocalMeetingDataSource extends LocalDataSourceImpl<Meeting> {
+  LocalMeetingDataSource({
     super.path = ApiKeys.meetings,
+    required super.db,
   });
 
   @override

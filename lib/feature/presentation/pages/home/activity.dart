@@ -16,9 +16,9 @@ class HomeActivity extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => locator<HomeController>()),
       ],
-      child: BlocConsumer<HomeController, AuthResponse>(
+      child: BlocConsumer<HomeController, Response<AuthInfo>>(
         listener: (context, state) {
-          if (!state.isLoggedIn) {
+          if (!state.isSuccessful) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               AuthActivity.route,

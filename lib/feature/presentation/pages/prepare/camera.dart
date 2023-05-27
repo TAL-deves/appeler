@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/widgets.dart';
 
 import '../../index.dart';
 
 class MeetingCamera extends StatefulWidget {
+  final double width, height;
   final bool initialCameraEnable;
   final bool initialMuteEnable;
   final CameraType cameraType;
+  final dynamic avatar;
   final Function(bool isCameraOn) onCameraStateChange;
   final Function(bool isMicroOn) onMicroStateChange;
 
@@ -16,6 +19,9 @@ class MeetingCamera extends StatefulWidget {
     this.cameraType = CameraType.front,
     required this.onCameraStateChange,
     required this.onMicroStateChange,
+    this.width = 150,
+    this.height = 250,
+    this.avatar,
   }) : super(key: key);
 
   @override
@@ -29,74 +35,60 @@ class _MeetingCameraState extends State<MeetingCamera> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
-      height: 250,
+      width: widget.width,
+      height: widget.height,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.8),
         borderRadius: BorderRadius.circular(24),
       ),
-      child: Stack(
-        alignment: Alignment.center,
+      child: StackLayout(
+        layoutGravity: Alignment.center,
         children: [
           if (isCameraOn)
-            SizedBox(
-              width: 150,
-              height: 250,
-              child: Image.network(
-                "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
-                fit: BoxFit.cover,
+            ImageView(
+              image: widget.avatar,
+              scaleType: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            )
+          // CameraView(
+          //   type: widget.cameraType,
+          // ),
+          else
+            ImageView(
+              image: widget.avatar,
+              scaleType: BoxFit.cover,
+              width: widget.width * 0.5,
+              shape: ViewShape.circular,
+            ),
+          LinearLayout(
+            padding: 12,
+            mainGravity: MainAxisAlignment.spaceBetween,
+            positionType: ViewPositionType.flexBottom,
+            orientation: Axis.horizontal,
+            children: [
+              ImageButton(
+                icon: isCameraOn ? Icons.videocam : Icons.videocam_off_outlined,
+                background: Colors.white24,
+                tint: Colors.white,
+                onClick: () {
+                  isCameraOn = !isCameraOn;
+                  widget.onCameraStateChange.call(isCameraOn);
+                  setState(() {});
+                },
               ),
-              // child: CameraView(
-              //   type: widget.cameraType,
-              // ),
-            ),
-          if(!isCameraOn) Container(
-            width: 80,
-            height: 80,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.network(
-              "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
-              fit: BoxFit.fill,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ImageButton(
-                    icon: isCameraOn
-                        ? Icons.videocam
-                        : Icons.videocam_off_outlined,
-                    background: Colors.white24,
-                    tint: Colors.white,
-                    onClick: () {
-                      isCameraOn = !isCameraOn;
-                      widget.onCameraStateChange.call(isCameraOn);
-                      setState(() {});
-                    },
-                  ),
-                  ImageButton(
-                    icon: isMuted ? Icons.mic_off : Icons.mic,
-                    background: Colors.white24,
-                    tint: Colors.white,
-                    onClick: () {
-                      isMuted = !isMuted;
-                      widget.onMicroStateChange.call(isMuted);
-                      setState(() {});
-                    },
-                  ),
-                ],
+              ImageButton(
+                icon: isMuted ? Icons.mic_off : Icons.mic,
+                background: Colors.white24,
+                tint: Colors.white,
+                onClick: () {
+                  isMuted = !isMuted;
+                  widget.onMicroStateChange.call(isMuted);
+                  setState(() {});
+                },
               ),
-            ),
+            ],
           ),
         ],
       ),

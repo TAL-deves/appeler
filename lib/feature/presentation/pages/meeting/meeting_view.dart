@@ -806,7 +806,7 @@ class _FrameLayerMultiple<T> extends StatelessWidget {
                         height: double.infinity,
                         color: Colors.black.withOpacity(0.35),
                         alignment: Alignment.center,
-                        child: RawText(
+                        child: RawTextView(
                           textAlign: TextAlign.center,
                           text: "+${controller.invisibleItemSize}",
                           textColor: Colors.white,

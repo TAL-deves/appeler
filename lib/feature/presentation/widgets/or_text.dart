@@ -31,7 +31,7 @@ class OrText extends StatelessWidget {
           height: 1.5,
           marginEnd: 8,
         ),
-        RawText(
+        RawTextView(
           text: "Or",
           textColor: textColor,
           textSize: 16,

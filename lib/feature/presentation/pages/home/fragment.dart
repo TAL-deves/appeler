@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -62,7 +63,14 @@ class _HomeFragmentState extends State<HomeFragment> {
           layoutGravity: LayoutGravity.center,
           paddingHorizontal: 50,
           children: [
-            MeetingIdField(controller: code),
+            MeetingIdField(
+              controller: code,
+              icon: Icons.copy_all,
+              iconVisible: index == 0,
+              onCopyOrShare: (value) async => await ClipboardHelper.setText(
+                value,
+              ),
+            ),
             Button(
               text: buttonName,
               borderRadius: 25,
@@ -127,14 +135,14 @@ class _Buttons extends StatelessWidget {
               layoutGravity: LayoutGravity.center,
               padding: 12,
               children: [
-                const RawText(
+                const RawTextView(
                   text: "Create\nMeet",
                   textColor: Colors.white,
                   textAlign: TextAlign.center,
                   textSize: 14,
                 ),
                 const SizedBox(height: 8),
-                RawIcon(
+                RawIconView(
                   icon: AppIcons.createMeet,
                   tint: AppColors.primary,
                   size: 18,
@@ -150,14 +158,14 @@ class _Buttons extends StatelessWidget {
               padding: 12,
               onClick: onScheduleMeet,
               children: [
-                const RawText(
+                const RawTextView(
                   text: "Schedule\nMeet",
                   textColor: Colors.white,
                   textAlign: TextAlign.center,
                   textSize: 14,
                 ),
                 const SizedBox(height: 8),
-                RawIcon(
+                RawIconView(
                   icon: AppIcons.scheduleMeet,
                   tint: AppColors.primary,
                   size: 18,
@@ -177,7 +185,7 @@ class _Buttons extends StatelessWidget {
           height: 120,
           shape: ViewShape.squire,
           children: [
-            const RawText(
+            const RawTextView(
               text: "Join\nMeet",
               textColor: Colors.white,
               textAlign: TextAlign.center,
@@ -185,7 +193,7 @@ class _Buttons extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 8),
-            RawIcon(
+            RawIconView(
               icon: AppIcons.joinMeet,
               tint: AppColors.secondary,
               size: 24,

@@ -18,13 +18,16 @@ class AuthActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScreen(
       child: BlocProvider(
-        create: (context) => locator<AppAuthController>(),
-        child: BlocConsumer<AppAuthController, AuthResponse>(
+        create: (context) => locator<AuthController>(),
+        child: BlocConsumer<AuthController, Response<AuthInfo>>(
           listener: (context, state) {
             if (state.isSuccessful) {
               Navigator.pushNamedAndRemoveUntil(
-                  context, HomeActivity.route, (route) => false,
-                  arguments: state.user);
+                context,
+                HomeActivity.route,
+                (route) => false,
+                arguments: state.data,
+              );
             }
           },
           builder: (context, state) {

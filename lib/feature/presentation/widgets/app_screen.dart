@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/widgets.dart';
 
 import '../../../index.dart';
 
 class AppScreen extends StatelessWidget {
+  final bool autoLeading;
   final EdgeInsetsGeometry? padding;
   final Color? toolbarColor;
   final double elevation;
@@ -20,9 +22,12 @@ class AppScreen extends StatelessWidget {
   final FontWeight? titleWeight;
   final Widget? child;
   final List<Widget>? actions;
+  final OnViewBuilder? toolbar;
+  final OnViewBuilder? onLeadingBuilder;
 
   const AppScreen({
     Key? key,
+    this.autoLeading = true,
     this.background,
     this.backgroundImage = "",
     this.toolbarColor = Colors.transparent,
@@ -40,12 +45,16 @@ class AppScreen extends StatelessWidget {
     this.titleWeight,
     this.child,
     this.actions,
+    this.toolbar,
+    this.onLeadingBuilder,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ScreenView(
       key: key,
+      authShowLeading: autoLeading,
+      actions: actions,
       background: background ?? Colors.white,
       backgroundImage: AppContents.backgroundCover,
       behindAppbar: true,
@@ -65,6 +74,8 @@ class AppScreen extends StatelessWidget {
       titleWeight: titleWeight,
       toolbarColor: toolbarColor,
       toolbarHeight: toolbarHeight,
+      onLeadingBuilder: onLeadingBuilder,
+      onTitleBuilder: toolbar,
       child: child,
     );
   }

@@ -6,6 +6,7 @@ import 'package:appeler/feature/presentation/pages/meeting/remote_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -68,9 +69,9 @@ class MeetingFragmentState extends State<MeetingFragment> {
   void _initLocalRenderer() async {
     await _localRenderer.initialize();
     _localStream = await _getUserMediaStream;
-    if (!widget.info.isFrontCamera) onCameraSwitch();
-    onCameraOn();
-    onMute();
+    onCameraOn(isCameraOn);
+    onMute(isMute);
+    onSwitchCamera(!widget.info.isFrontCamera);
     setState(() {
       _localRenderer.srcObject = _localStream;
       _widgetMap['local'] = ContributorCard(
@@ -84,29 +85,34 @@ class MeetingFragmentState extends State<MeetingFragment> {
     _offerAnswerHostUser();
   }
 
-  void onSilent(bool silent) => Helper.setSpeakerphoneOn(!silent);
-
-  void onCameraSwitch() {
-    if (_localStream != null) {
-      Helper.switchCamera(_localStream!.getVideoTracks()[0]);
-    }
-  }
-
-  void onCameraOn() {
+  void onCameraOn(bool value) {
+    isCameraOn = value;
     if (_localStream != null) {
       _localStream?.getVideoTracks()[0].enabled = isCameraOn;
       _changeStatus(key: 'isCameraOn');
     }
   }
 
-  void onMute() {
+  void onMute(bool value) {
+    isMute = value;
     if (_localStream != null) {
       _localStream?.getAudioTracks()[0].enabled = !isMute;
       _changeStatus(key: 'isMute');
     }
   }
 
-  void onRiseHand() {
+  void onSilent(bool value) => Helper.setSpeakerphoneOn(!value);
+
+  void onSwitchCamera(bool value) {
+    if (_localStream != null && value) {
+      Helper.switchCamera(_localStream!.getVideoTracks()[0]);
+    }
+  }
+
+  void onMore(bool value) {}
+
+  void onRiseHand(bool value) {
+    isRiseHand = value;
     _changeStatus(key: 'handUp');
   }
 
@@ -225,81 +231,48 @@ class MeetingFragmentState extends State<MeetingFragment> {
   @override
   Widget build(BuildContext context) {
     config = SizeConfig.of(context);
-    return SizedBox(
+    return LinearLayout(
       width: double.infinity,
       height: double.infinity,
-      child: Column(
-        children: [
-          Expanded(
-            child: MeetingView(
-              config: config,
-              items: children,
-              itemBackground: Colors.black.withAlpha(50),
-              itemSpace: 5,
-              frameBuilder: (context, layer, item) {
-                return item;
-              },
-            ),
+      children: [
+        Expanded(
+          child: MeetingView(
+            config: config,
+            items: children,
+            itemBackground: Colors.black.withAlpha(50),
+            itemSpace: 5,
+            frameBuilder: (context, layer, item) {
+              return item;
+            },
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ImageButton(
-                  icon: Icons.call_end,
-                  tint: Colors.white,
-                  background: Colors.red,
-                  size: 32,
-                  onClick: () => Navigator.pop(context),
-                ),
-                ImageButton(
-                  icon: isCameraOn
-                      ? Icons.videocam_outlined
-                      : Icons.videocam_off_outlined,
-                  tint: isCameraOn ? Colors.black : Colors.white,
-                  background: isCameraOn ? Colors.white : Colors.white12,
-                  size: 32,
-                  onClick: () {
-                    isCameraOn = !isCameraOn;
-                    setState(onCameraOn);
-                  },
-                ),
-                ImageButton(
-                  icon: isMute ? Icons.mic_off : Icons.mic,
-                  tint: isMute ? Colors.white : Colors.black,
-                  background: isMute ? Colors.white12 : Colors.white,
-                  size: 32,
-                  onClick: () {
-                    isMute = !isMute;
-                    setState(onMute);
-                  },
-                ),
-                ImageButton(
-                  icon: Icons.back_hand_outlined,
-                  tint: isRiseHand ? Colors.black : Colors.white,
-                  background: isRiseHand ? Colors.white : Colors.white12,
-                  size: 32,
-                  onClick: () {
-                    isRiseHand = !isRiseHand;
-                    setState(onRiseHand);
-                  },
-                ),
-                ImageButton(
-                  icon: Icons.more_vert,
-                  tint: Colors.white,
-                  background: Colors.white12,
-                  size: 32,
-                  onClick: () {},
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+        MeetingControls(
+          activeColor: AppColors.secondary,
+          inactiveColor: AppColors.secondary.withAlpha(25),
+          activeIconColor: Colors.white,
+          inactiveIconColor: AppColors.secondary,
+          isCameraOn: isCameraOn,
+          isFrontCamera: widget.info.isFrontCamera,
+          isMuted: isMute,
+          isRiseHand: isRiseHand,
+          isSilent: widget.info.isSilent,
+          onCameraOn: onCameraOn,
+          onMute: onMute,
+          onMore: onMore,
+          onRiseHand: onRiseHand,
+          onSilent: onSilent,
+          onSwitchCamera: onSwitchCamera,
+          onCancel: (context) => Navigator.pop(context),
+          cancelProperty: const ButtonProperty(
+            tint: Colors.red,
+            background: Colors.transparent,
+            size: 40,
+            padding: 0,
+            icon: Icons.call_end_rounded,
+            splashColor: Colors.transparent,
+          ),
+        ),
+      ],
     );
   }
 

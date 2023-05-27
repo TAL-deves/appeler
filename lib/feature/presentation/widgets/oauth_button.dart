@@ -27,7 +27,7 @@ class OAuthButton extends StatelessWidget {
       marginTop: 24,
       onClick: onClick,
       children: [
-        RawText(
+        RawTextView(
           text: text,
           textSize: 16,
           textColor: Colors.white,
