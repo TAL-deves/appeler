@@ -12,6 +12,16 @@ class AuthController extends DefaultAuthController {
     return true;
   }
 
+  Future<bool> signInWithGoogle(AuthInfo data) async {
+    super.signInByGoogle(data);
+    return true;
+  }
+
+  Future<bool> signInWithFacebook(AuthInfo data) async {
+    super.signInByFacebook(data);
+    return true;
+  }
+
   Future<bool> signUp(AuthInfo data) async {
     super.signUpByEmail(data);
     return true;

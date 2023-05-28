@@ -90,6 +90,18 @@ class _HomeFragmentState extends State<HomeFragment> {
                 } else {}
               },
             ),
+            TextView(
+              text: "Logout",
+              borderRadius: 25,
+              marginTop: 24,
+              onClick: (context) {
+                Navigator.pushNamed(
+                  context,
+                  AuthActivity.route,
+                  arguments: AuthFragmentType.signIn,
+                );
+              },
+            ),
           ],
         )
       ],
@@ -97,7 +109,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   String get buttonName => index == 0
-      ? "Create"
+      ? "Join"
       : index == 1
           ? "Join"
           : "Schedule";

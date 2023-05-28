@@ -1,18 +1,22 @@
-import 'package:appeler/feature/presentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../index.dart';
 
 class AuthSignInFragment extends StatefulWidget {
   final AuthSignInHandler onSignIn;
+  final AuthSignInHandler onSignInWithGoogle;
+  final AuthSignInHandler onSignInWithFacebook;
   final AuthForgotHandler onForgetPassword;
   final AuthCreateHandler onCreateAccount;
 
   const AuthSignInFragment({
     Key? key,
     required this.onSignIn,
+    required this.onSignInWithGoogle,
+    required this.onSignInWithFacebook,
     required this.onForgetPassword,
     required this.onCreateAccount,
   }) : super(key: key);
@@ -74,28 +78,55 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
             password: password.text,
           )),
         ),
-        Button(
-          margin: const EdgeInsets.symmetric(vertical: 24),
-          text: "Login",
-          borderRadius: 25,
-          primary: AppColors.primary,
-          onExecute: () => widget.onSignIn.call(AuthInfo(
-            email: email.text,
-            password: password.text,
-          )),
+        BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
+          builder: (context, state) {
+            return StackLayout(
+              width: double.infinity,
+              marginVertical: 24,
+              height: 65,
+              children: [
+                if (state.isLoading)
+                  const SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(),
+                  )
+                else
+                  Button(
+                    text: "Sign Up",
+                    borderRadius: 25,
+                    primary: AppColors.primary,
+                    onExecute: () => widget.onSignIn.call(
+                      AuthInfo(
+                        email: email.text,
+                        password: password.text,
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
         const OrText(),
         OAuthButton(
           text: "Login With Google",
           background: AppColors.primary,
-          icon: "logo",
-          onClick: (context) {},
+          onClick: (context) => widget.onSignInWithGoogle.call(
+            AuthInfo(
+              email: email.text,
+              password: password.text,
+            ),
+          ),
         ),
         OAuthButton(
           text: "Login With Facebook",
           background: AppColors.secondary,
-          icon: "logo",
-          onClick: (context) {},
+          onClick: (context) => widget.onSignInWithFacebook.call(
+            AuthInfo(
+              email: email.text,
+              password: password.text,
+            ),
+          ),
         ),
         CreateAccountTextView(
           width: double.infinity,
@@ -116,4 +147,3 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
     );
   }
 }
-

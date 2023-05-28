@@ -21,6 +21,13 @@ class AuthActivity extends StatelessWidget {
         create: (context) => locator<AuthController>(),
         child: BlocConsumer<AuthController, AuthResponse<AuthInfo>>(
           listener: (context, state) {
+            if (state.isError || state.isMessage) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.isMessage ? state.message : state.error),
+                ),
+              );
+            }
             if (state.isAuthenticated) {
               Navigator.pushNamedAndRemoveUntil(
                 context,

@@ -3,16 +3,16 @@ import 'package:flutter_andomie/widgets.dart';
 
 class OAuthButton extends StatelessWidget {
   final String text;
-  final Color background;
-  final String icon;
-  final OnViewClickListener onClick;
+  final Color? background;
+  final String? icon;
+  final OnViewClickListener? onClick;
 
   const OAuthButton({
     Key? key,
     required this.text,
-    required this.background,
-    required this.icon,
-    required this.onClick,
+    this.background,
+    this.icon,
+    this.onClick,
   }) : super(key: key);
 
   @override

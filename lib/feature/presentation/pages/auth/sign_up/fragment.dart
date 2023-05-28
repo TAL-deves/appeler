@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../index.dart';
 
 class AuthSignUpFragment extends StatefulWidget {
   final AuthSignInHandler onSignIn;
+  final AuthSignInHandler onSignInWithGoogle;
+  final AuthSignInHandler onSignInWithFacebook;
   final AuthSignUpHandler onSignUp;
 
   const AuthSignUpFragment({
     Key? key,
     required this.onSignIn,
+    required this.onSignInWithGoogle,
+    required this.onSignInWithFacebook,
     required this.onSignUp,
   }) : super(key: key);
 
@@ -82,35 +87,64 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
           buttonText: "Login here",
           textColor: AppColors.primary,
           textWeight: FontWeight.w500,
-          onPressed: () => widget.onSignIn(AuthInfo(
-            email: email.text,
-            password: password.text,
-            phone: phone.number.numberWithCode,
-          )),
+          onPressed: () => widget.onSignIn(
+            AuthInfo(
+              email: email.text,
+              password: password.text,
+              phone: phone.number.numberWithCode,
+            ),
+          ),
         ),
-        Button(
-          margin: const EdgeInsets.symmetric(vertical: 24),
-          text: "Sign up",
-          borderRadius: 25,
-          primary: AppColors.primary,
-          onExecute: () => widget.onSignUp.call(AuthInfo(
-            email: email.text,
-            password: password.text,
-            phone: phone.number.numberWithCode,
-          )),
+        BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
+          builder: (context, state) {
+            return StackLayout(
+              width: double.infinity,
+              marginVertical: 24,
+              height: 65,
+              children: [
+                if (state.isLoading)
+                  const SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(),
+                  )
+                else
+                  Button(
+                    text: "Sign up",
+                    borderRadius: 25,
+                    primary: AppColors.primary,
+                    onExecute: () => widget.onSignUp.call(
+                      AuthInfo(
+                        email: email.text,
+                        password: password.text,
+                        phone: phone.number.numberWithCode,
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
         const OrText(),
         OAuthButton(
           text: "Login With Google",
           background: AppColors.primary,
-          icon: "logo",
-          onClick: (context) {},
+          onClick: (context) => widget.onSignInWithGoogle.call(
+            AuthInfo(
+              email: email.text,
+              password: password.text,
+            ),
+          ),
         ),
         OAuthButton(
           text: "Login With Facebook",
           background: AppColors.secondary,
-          icon: "logo",
-          onClick: (context) {},
+          onClick: (context) => widget.onSignInWithFacebook.call(
+            AuthInfo(
+              email: email.text,
+              password: password.text,
+            ),
+          ),
         ),
       ],
     );

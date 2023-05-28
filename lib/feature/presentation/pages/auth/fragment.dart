@@ -37,6 +37,8 @@ class _AuthFragmentState extends State<AuthFragment> {
       case AuthFragmentType.signIn:
         return AuthSignInFragment(
           onSignIn: controller.signIn,
+          onSignInWithGoogle: controller.signInWithGoogle,
+          onSignInWithFacebook: controller.signInWithFacebook,
           onCreateAccount: (data) => Navigator.pushNamed(
             context,
             AuthActivity.route,
@@ -51,6 +53,8 @@ class _AuthFragmentState extends State<AuthFragment> {
       case AuthFragmentType.signUp:
         return AuthSignUpFragment(
           onSignUp: controller.signUp,
+          onSignInWithGoogle: controller.signInWithGoogle,
+          onSignInWithFacebook: controller.signInWithFacebook,
           onSignIn: (data) => Navigator.pop(context, data),
         );
       case AuthFragmentType.forgotPassword:
