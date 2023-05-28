@@ -6,6 +6,7 @@ class AppTextButton extends StatelessWidget {
   final String text;
   final double? textSize;
   final Color? textColor;
+  final FontWeight? fontWeight;
   final TextAlign? textAlign;
   final Function()? onPressed;
 
@@ -15,6 +16,7 @@ class AppTextButton extends StatelessWidget {
     this.height,
     this.margin,
     this.padding,
+    this.fontWeight,
     this.text = "",
     this.textAlign,
     this.textColor,
@@ -38,6 +40,7 @@ class AppTextButton extends StatelessWidget {
             style: TextStyle(
               color: textColor,
               fontSize: textSize,
+              fontWeight: fontWeight,
             ),
           ),
         ),

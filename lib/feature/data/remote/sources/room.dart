@@ -2,8 +2,8 @@ import 'package:flutter_andomie/core.dart';
 
 import '../../../../index.dart';
 
-class MeetingDataSource extends FireStoreDataSourceImpl<Meeting> {
-  MeetingDataSource({
+class RemoteMeetingDataSource extends FireStoreDataSourceImpl<Meeting> {
+  RemoteMeetingDataSource({
     super.path = ApiKeys.meetings,
   });
 

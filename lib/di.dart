@@ -46,8 +46,14 @@ void _dataSources() {
   locator.registerLazySingleton<LocalDataSource<AuthInfo>>(() {
     return LocalUserDataSource(db: locator());
   });
-  locator.registerLazySingleton<DataSource<Meeting>>(() {
-    return MeetingDataSource();
+  locator.registerLazySingleton<RemoteDataSource<AuthInfo>>(() {
+    return RemoteUserDataSource();
+  });
+  locator.registerLazySingleton<LocalDataSource<Meeting>>(() {
+    return LocalMeetingDataSource(db: locator());
+  });
+  locator.registerLazySingleton<RemoteDataSource<Meeting>>(() {
+    return RemoteMeetingDataSource();
   });
 }
 
@@ -58,17 +64,14 @@ void _repositories() {
     );
   });
   locator.registerLazySingleton<DataRepository<AuthInfo>>(() {
-    return UserRepository(
-      remote: UserDataSource(),
-    );
-  });
-  locator.registerLazySingleton<LocalDataRepository<AuthInfo>>(() {
-    return LocalDataRepositoryImpl<AuthInfo>(
+    return DataRepositoryImpl<AuthInfo>(
       local: locator(),
+      remote: locator(),
     );
   });
   locator.registerLazySingleton<DataRepository<Meeting>>(() {
     return DataRepositoryImpl<Meeting>(
+      local: locator(),
       remote: locator(),
     );
   });
@@ -78,10 +81,9 @@ void _handlers() {
   locator.registerLazySingleton<AuthHandler>(() {
     return AuthHandlerImpl(repository: locator());
   });
-  locator.registerLazySingleton<UserHandler>(() {
-    return UserHandlerImpl(
+  locator.registerLazySingleton<DataHandler<AuthInfo>>(() {
+    return DataHandlerImpl<AuthInfo>(
       repository: locator(),
-      localDataRepository: locator(),
     );
   });
   locator.registerLazySingleton<MeetingHandler>(() {
@@ -92,8 +94,8 @@ void _handlers() {
 }
 
 void _controllers() {
-  locator.registerFactory<AppAuthController>(() {
-    return AppAuthController(
+  locator.registerFactory<AuthController>(() {
+    return AuthController(
       handler: locator(),
       userHandler: locator(),
     );

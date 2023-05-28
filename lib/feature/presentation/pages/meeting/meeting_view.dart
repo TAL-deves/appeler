@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
 
 typedef FrameBuilder<T> = Widget Function(
@@ -14,6 +15,7 @@ class MeetingView<T> extends StatefulWidget {
   final Color? itemBackground;
   final double? itemSpace;
   final List<T>? items;
+  final SizeConfig? config;
 
   const MeetingView({
     Key? key,
@@ -22,6 +24,7 @@ class MeetingView<T> extends StatefulWidget {
     this.itemBackground,
     this.itemSpace,
     this.items,
+    this.config,
   }) : super(key: key);
 
   @override
@@ -30,11 +33,13 @@ class MeetingView<T> extends StatefulWidget {
 
 class _MeetingViewState<T> extends State<MeetingView<T>> {
   late FrameViewController<T> controller;
+  late SizeConfig config = widget.config ?? SizeConfig(context);
 
   @override
   void initState() {
     controller = widget.controller ?? FrameViewController<T>();
     controller.attach(
+      config: config,
       frameBuilder: widget.frameBuilder,
       itemBackground: widget.itemBackground,
       itemSpace: widget.itemSpace,
@@ -46,6 +51,7 @@ class _MeetingViewState<T> extends State<MeetingView<T>> {
   @override
   void didUpdateWidget(covariant MeetingView<T> oldWidget) {
     controller.attach(
+      config: config,
       frameBuilder: widget.frameBuilder,
       itemBackground: widget.itemBackground,
       itemSpace: widget.itemSpace,
@@ -800,7 +806,7 @@ class _FrameLayerMultiple<T> extends StatelessWidget {
                         height: double.infinity,
                         color: Colors.black.withOpacity(0.35),
                         alignment: Alignment.center,
-                        child: RawText(
+                        child: RawTextView(
                           textAlign: TextAlign.center,
                           text: "+${controller.invisibleItemSize}",
                           textColor: Colors.white,
@@ -848,10 +854,12 @@ class _FrameBuilder<T> extends StatelessWidget {
               width: double.infinity,
               height: resizable ? null : double.infinity,
               color: controller.itemBackground,
-              child: controller.frameBuilder?.call(
-                context,
-                controller.layer,
-                item,
+              child: Center(
+                child: controller.frameBuilder?.call(
+                  context,
+                  controller.layer,
+                  item,
+                ),
               ),
             ),
           )
@@ -859,16 +867,19 @@ class _FrameBuilder<T> extends StatelessWidget {
             width: double.infinity,
             height: resizable ? null : double.infinity,
             color: controller.itemBackground,
-            child: controller.frameBuilder?.call(
-              context,
-              controller.layer,
-              item,
+            child: Center(
+              child: controller.frameBuilder?.call(
+                context,
+                controller.layer,
+                item,
+              ),
             ),
           );
   }
 }
 
 class FrameViewController<T> {
+  late SizeConfig config;
   Size size = Size.zero;
   BuildContext? context;
   FrameBuilder<T>? frameBuilder;
@@ -877,16 +888,19 @@ class FrameViewController<T> {
   List<T> items = [];
 
   void setContext(BuildContext context) {
+    this.config = SizeConfig(context);
     this.context = context;
     this.size = MediaQuery.of(context).size;
   }
 
   FrameViewController<T> attach({
+    SizeConfig? config,
     FrameBuilder<T>? frameBuilder,
     Color? itemBackground,
     double? itemSpace,
     List<T>? items,
   }) {
+    this.config = config ?? this.config;
     this.frameBuilder = frameBuilder;
     this.itemBackground = itemBackground;
     this.spaceBetween = itemSpace ?? this.spaceBetween;

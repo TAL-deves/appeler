@@ -81,7 +81,7 @@ class _Buttons extends StatelessWidget {
       child: StreamBuilder(
           stream: controller.handler.liveContributor(meetingId, uid),
           builder: (context, state) {
-            var item = state.data ?? Contributor();
+            var item = state.data ?? MeetingContributor();
             return Stack(
               alignment: Alignment.center,
               children: [
@@ -114,7 +114,7 @@ class _Buttons extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      item.isMute ? Icons.mic_off : Icons.mic,
+                      item.isMuted ? Icons.mic_off : Icons.mic,
                       size: 18,
                       color: Colors.white,
                     ),

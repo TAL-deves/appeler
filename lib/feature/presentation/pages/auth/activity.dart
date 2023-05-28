@@ -16,17 +16,17 @@ class AuthActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider(
-        create: (context) => locator<AppAuthController>(),
-        child: BlocConsumer<AppAuthController, AuthResponse>(
+    return AppScreen(
+      child: BlocProvider(
+        create: (context) => locator<AuthController>(),
+        child: BlocConsumer<AuthController, Response<AuthInfo>>(
           listener: (context, state) {
             if (state.isSuccessful) {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 HomeActivity.route,
                 (route) => false,
-                arguments: state.user
+                arguments: state.data,
               );
             }
           },

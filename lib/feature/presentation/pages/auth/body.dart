@@ -23,11 +23,11 @@ class AuthBody extends StatefulWidget {
 }
 
 class _AuthBodyState extends State<AuthBody> {
-  late AppAuthController controller;
+  late AuthController controller;
 
   @override
   void initState() {
-    controller = context.read<AppAuthController>();
+    controller = context.read<AuthController>();
     super.initState();
   }
 

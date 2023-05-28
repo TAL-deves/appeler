@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/widgets.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../index.dart';
@@ -21,30 +22,28 @@ class _PrepareFragmentState extends State<PrepareFragment> {
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMuted = widget.info.isMuted;
   bool shareScreenEnabled = false;
+  late TextEditingController code = TextEditingController();
+
+  @override
+  void initState() {
+    code.text = widget.info.id;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        color: Colors.white10,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return LinearLayout(
+      layoutGravity: LayoutGravity.center,
+      background: Colors.white10,
+      padding: 40,
+      children: [
+        LinearLayout(
+          layoutGravity: LayoutGravity.center,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 16,
-              ),
-              child: Text(
-                widget.info.id,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                ),
-              ),
-            ),
             MeetingCamera(
+              width: 200,
+              height: 300,
+              avatar: AppContents.prepareMeetingAvatar,
               initialCameraEnable: isCameraOn,
               initialMuteEnable: isMuted,
               cameraType: widget.info.cameraType,
@@ -55,119 +54,44 @@ class _PrepareFragmentState extends State<PrepareFragment> {
                 isMuted = value;
               },
             ),
+            const SizedBox(height: 24),
             ShareScreenButtonForPrepareBody(
               onPressed: (){
                 setState(() { shareScreenEnabled = !shareScreenEnabled; });
               },
               isEnabled: shareScreenEnabled,
             ),
-            Container(
-              margin: const EdgeInsets.only(
-                top: 16,
-              ),
-              child: const Text(
-                "You are the first one here",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 24),
-              color: Colors.black12,
-              height: 1,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.shield_outlined,
-                    color: Colors.black,
-                    size: 24,
-                  ),
-                  SizedBox(
-                    width: 24,
-                  ),
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        text: "This meeting is secured with cloud encryption. ",
-                        children: [
-                          TextSpan(
-                            text: "Learn more",
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.info_outline,
-                    color: Colors.black,
-                    size: 24,
-                  ),
-                  const SizedBox(
-                    width: 24,
-                  ),
-                  const Text(
-                    "Joining info",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const Spacer(),
-                  ImageButton(
-                    icon: Icons.share_outlined,
-                    tint: Colors.black,
-                    size: 24,
-                    onClick: () {
-                      Share.share(
-                        widget.info.id,
-                        subject: "Let's go to meeting ... ",
-                      );
-                    },
-                  ),
-                ],
+          ],
+        ),
+        LinearLayout(
+          paddingTop: 40,
+          layoutGravity: LayoutGravity.center,
+          children: [
+            MeetingIdField(
+              controller: code,
+              icon: Icons.share_outlined,
+              onCopyOrShare: (value) => Share.share(
+                widget.info.id,
+                subject: "Let's go to meeting ... ",
               ),
             ),
             AppIconButton(
+              width: 150,
+              borderRadius: 50,
               text: "Join",
               icon: Icons.videocam_outlined,
-              margin: const EdgeInsets.all(32),
-              onPressed: () => widget.onPrepare(
+              margin: const EdgeInsets.only(top: 40),
+              onClick: (context) => widget.onPrepare(
                 context,
                 widget.info.attach(
                   isCameraOn: isCameraOn,
                   isMuted: isMuted,
-                  isShareScreen: shareScreenEnabled,
                 ),
               ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

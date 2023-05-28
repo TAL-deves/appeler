@@ -40,62 +40,79 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: LinearLayout(
-        orientation: Axis.vertical,
-        paddingVertical: 24,
-        paddingHorizontal: 32,
-        children: [
-          const TextView(
-            width: double.infinity,
-            text: "Create a new account",
-            textAlign: TextAlign.start,
-            textColor: Colors.black,
-            fontWeight: FontWeight.bold,
-            textSize: 24,
-            marginVertical: 24,
-          ),
-          EmailField(
-            hint: "Enter your email",
-            controller: email,
-          ),
-          PhoneField(
-            controller: phone,
-            textCode: "+880",
-            hintCode: "+880",
-            hintNumber: "Enter phone number",
-          ),
-          PasswordField(
-            hint: "Enter your password",
-            controller: password,
-            margin: EdgeInsets.zero,
-          ),
-          CreateAccountTextView(
-            width: double.infinity,
-            textAlign: TextAlign.end,
-            padding: const EdgeInsets.all(8),
-            text: "Already have an account! ",
-            buttonText: "Sign in",
-            buttonTextColor: AppColors.primary,
-            onPressed: () => widget.onSignIn(AuthInfo(
-              email: email.text,
-              password: password.text,
-              phone: phone.number.numberWithCode,
-            )),
-          ),
-          Button(
-            margin: const EdgeInsets.symmetric(vertical: 24),
-            text: "Register",
-            borderRadius: 12,
-            primary: AppColors.primary,
-            onExecute: () => widget.onSignUp.call(AuthInfo(
-              email: email.text,
-              password: password.text,
-              phone: phone.number.numberWithCode,
-            )),
-          ),
-        ],
-      ),
+    return LinearLayout(
+      scrollable: true,
+      orientation: Axis.vertical,
+      crossGravity: CrossAxisAlignment.center,
+      paddingTop: 80,
+      paddingHorizontal: 32,
+      paddingBottom: 24,
+      children: [
+        const AppLogo(),
+        const SizedBox(height: 24),
+        // const TextView(
+        //   width: double.infinity,
+        //   text: "Create a new account",
+        //   textAlign: TextAlign.start,
+        //   textColor: Colors.black,
+        //   fontWeight: FontWeight.bold,
+        //   textSize: 24,
+        //   marginVertical: 24,
+        // ),
+        EmailField(
+          hint: "Enter your email",
+          controller: email,
+        ),
+        PhoneField(
+          controller: phone,
+          textCode: "+880",
+          hintCode: "+880",
+          hintNumber: "Enter phone number",
+        ),
+        PasswordField(
+          hint: "Enter your password",
+          controller: password,
+          margin: EdgeInsets.zero,
+        ),
+        CreateAccountTextView(
+          width: double.infinity,
+          textAlign: TextAlign.end,
+          padding: const EdgeInsets.all(12),
+          text: "Already have an account?  ",
+          buttonText: "Login here",
+          textColor: AppColors.primary,
+          textWeight: FontWeight.w500,
+          onPressed: () => widget.onSignIn(AuthInfo(
+            email: email.text,
+            password: password.text,
+            phone: phone.number.numberWithCode,
+          )),
+        ),
+        Button(
+          margin: const EdgeInsets.symmetric(vertical: 24),
+          text: "Sign up",
+          borderRadius: 25,
+          primary: AppColors.primary,
+          onExecute: () => widget.onSignUp.call(AuthInfo(
+            email: email.text,
+            password: password.text,
+            phone: phone.number.numberWithCode,
+          )),
+        ),
+        const OrText(),
+        OAuthButton(
+          text: "Login With Google",
+          background: AppColors.primary,
+          icon: "logo",
+          onClick: (context) {},
+        ),
+        OAuthButton(
+          text: "Login With Facebook",
+          background: AppColors.secondary,
+          icon: "logo",
+          onClick: (context) {},
+        ),
+      ],
     );
   }
 }

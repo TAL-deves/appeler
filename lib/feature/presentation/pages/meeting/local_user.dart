@@ -1,4 +1,3 @@
-import 'package:appeler/feature/presentation/pages/meeting/contributor_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +36,15 @@ class _ContributorCardState extends State<ContributorCard> {
       mirror: widget.mirror,
       meetingId: widget.meetingId,
       contributorId: widget.uid,
+      renderView: RTCVideoView(
+        widget.renderer,
+        mirror: widget.mirror,
+        objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+      ),
+      stream: controller.handler.liveContributor(
+        widget.meetingId,
+        widget.uid,
+      ),
     );
   }
 }
