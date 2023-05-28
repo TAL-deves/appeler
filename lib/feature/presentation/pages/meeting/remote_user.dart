@@ -152,12 +152,12 @@ class _RemoteContributorState extends State<RemoteContributor> {
   void _createAnswer() async {
     _curRoomSubs = _curRoom.snapshots().listen((snapshot) async {
       final sdpMap = snapshot.data()?['offer'];
-      if (await _peerConnection.getRemoteDescription() == null &&
-          sdpMap != null) {
+      if (await _peerConnection.getRemoteDescription() == null && sdpMap != null) {
         await _setRemoteDescription(sdpMap: sdpMap);
         final answer = await _peerConnection.createAnswer();
         await _peerConnection.setLocalDescription(answer);
-        _curRoom.update({'answer': answer.toMap()});
+        //_curRoom.update({'answer': answer.toMap()});
+        _curRoom.set({'answer': answer.toMap()});
       }
     });
   }

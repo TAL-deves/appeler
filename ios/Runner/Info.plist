@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>RTCScreenSharingExtension</key>
-    <string>bd.tal.calling.appeler.BroadcastExtension</string>
-    <key>RTCAppGroupIdentifier</key>
-    <string>group.bd.tal.calling.appeler.BroadcastExtension</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -34,15 +30,12 @@
 	<string>$(PRODUCT_NAME) Camera Usage!</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) Microphone Usage!</string>
+	<key>RTCAppGroupIdentifier</key>
+	<string>group.bd.tal.calling.appeler</string>
+	<key>RTCScreenSharingExtension</key>
+	<string>bd.tal.calling.appeler.BroadcastExtension</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>fetch</string>
-		<string>processing</string>
-		<string>voip</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

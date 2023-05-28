@@ -95,8 +95,8 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
 
   Future<MediaStream> get _getUserMediaStream async {
     final mp = <String, dynamic>{
-      'audio': false,
-      // 'video': Platform.isIOS ? {'deviceId': 'broadcast'} : true
+      'audio': true,
+      //'video': Platform.isIOS ? {'deviceId': 'broadcast'} : true
       'video': kIsWeb
           ? {'facingMode': 'user'}
           : {
@@ -231,19 +231,19 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
     print('meeting fragment is called');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   if(!kIsWeb){
-    //     await _requestPermissionForAndroid();
-    //     _initForegroundTask();
-    //     if (await FlutterForegroundTask.isRunningService) {
-    //       final newReceivePort = FlutterForegroundTask.receivePort;
-    //       _registerReceivePort(newReceivePort);
-    //     }
-    //     _startForegroundTask();
-    //   }
-    //   _initLocalRenderer();
-    // });
-    _initLocalRenderer();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if(!kIsWeb && Platform.isAndroid){
+        await _requestPermissionForAndroid();
+        _initForegroundTask();
+        if (await FlutterForegroundTask.isRunningService) {
+          final newReceivePort = FlutterForegroundTask.receivePort;
+          _registerReceivePort(newReceivePort);
+        }
+        _startForegroundTask();
+      }
+      _initLocalRenderer();
+    });
+    //_initLocalRenderer();
   }
 
   void _initLocalRenderer() async {
