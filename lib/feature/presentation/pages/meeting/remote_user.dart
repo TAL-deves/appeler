@@ -140,8 +140,7 @@ class _RemoteContributorState extends State<RemoteContributor> {
     _curRoom.set({'offer': offer.toMap()});
     _curRoomSubs = _curRoom.snapshots().listen((snapshot) async {
       final sdpMap = snapshot.data()?['answer'];
-      if (await _peerConnection.getRemoteDescription() == null &&
-          sdpMap != null) {
+      if (await _peerConnection.getRemoteDescription() == null && sdpMap != null) {
         await _setRemoteDescription(sdpMap: sdpMap);
       }
     });
@@ -222,7 +221,6 @@ class _RemoteContributorState extends State<RemoteContributor> {
     return ContributorView(
       renderView: RTCVideoView(
         _remoteRenderer,
-        mirror: true,
         objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
       ),
       stream: controller.handler.liveContributor(

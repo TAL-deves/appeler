@@ -33,8 +33,10 @@ class _PrepareFragmentState extends State<PrepareFragment> {
   @override
   Widget build(BuildContext context) {
     return LinearLayout(
+      scrollable: true,
       layoutGravity: LayoutGravity.center,
       background: Colors.white10,
+      paddingTop: 120,
       padding: 40,
       children: [
         LinearLayout(
@@ -86,6 +88,7 @@ class _PrepareFragmentState extends State<PrepareFragment> {
                 widget.info.attach(
                   isCameraOn: isCameraOn,
                   isMuted: isMuted,
+                  isShareScreen: shareScreenEnabled
                 ),
               ),
             ),

@@ -416,54 +416,45 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
     return LinearLayout(
       width: double.infinity,
       height: double.infinity,
-      child: Column(
-        children: [
+      children: [
           Expanded(
             child: MeetingView(
+              config: config,
               items: children,
               itemBackground: Colors.black.withAlpha(50),
               itemSpace: 5,
-              frameBuilder: (context, layer, item) { return item; },
+              frameBuilder: (context, layer, item) {
+                return item;
+              },
             ),
-      children: [
-        Expanded(
-          child: MeetingView(
-            config: config,
-            items: children,
-            itemBackground: Colors.black.withAlpha(50),
-            itemSpace: 5,
-            frameBuilder: (context, layer, item) {
-              return item;
-            },
           ),
-        ),
-        MeetingControls(
-          activeColor: AppColors.secondary,
-          inactiveColor: AppColors.secondary.withAlpha(25),
-          activeIconColor: Colors.white,
-          inactiveIconColor: AppColors.secondary,
-          isCameraOn: isCameraOn,
-          isFrontCamera: widget.info.isFrontCamera,
-          isMuted: isMute,
-          isRiseHand: isRiseHand,
-          isSilent: widget.info.isSilent,
-          onCameraOn: onCameraOn,
-          onMute: onMute,
-          onMore: onMore,
-          onRiseHand: onRiseHand,
-          onSilent: onSilent,
-          onSwitchCamera: onSwitchCamera,
-          onCancel: (context) => Navigator.pop(context),
-          cancelProperty: const ButtonProperty(
-            tint: Colors.red,
-            background: Colors.transparent,
-            size: 40,
-            padding: 0,
-            icon: Icons.call_end_rounded,
-            splashColor: Colors.transparent,
+          MeetingControls(
+            activeColor: AppColors.secondary,
+            inactiveColor: AppColors.secondary.withAlpha(25),
+            activeIconColor: Colors.white,
+            inactiveIconColor: AppColors.secondary,
+            isCameraOn: isCameraOn,
+            isFrontCamera: widget.info.isFrontCamera,
+            isMuted: isMute,
+            isRiseHand: isRiseHand,
+            isSilent: widget.info.isSilent,
+            onCameraOn: onCameraOn,
+            onMute: onMute,
+            onMore: onMore,
+            onRiseHand: onRiseHand,
+            onSilent: onSilent,
+            onSwitchCamera: onSwitchCamera,
+            onCancel: (context) => Navigator.pop(context),
+            cancelProperty: const ButtonProperty(
+              tint: Colors.red,
+              background: Colors.transparent,
+              size: 40,
+              padding: 0,
+              icon: Icons.call_end_rounded,
+              splashColor: Colors.transparent,
+            ),
           ),
-        ),
-      ],
+        ],
     );
   }
 

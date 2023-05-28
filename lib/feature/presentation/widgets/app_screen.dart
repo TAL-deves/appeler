@@ -59,7 +59,7 @@ class AppScreen extends StatelessWidget {
       backgroundImage: AppContents.backgroundCover,
       behindAppbar: true,
       behindBody: true,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       elevation: elevation,
       padding: padding,
       statusBarColor: statusBarColor,

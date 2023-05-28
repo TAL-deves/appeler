@@ -30,12 +30,6 @@ class _ContributorCardState extends State<ContributorCard> {
   @override
   Widget build(BuildContext context) {
     return ContributorView(
-      controller: controller,
-      config: config,
-      renderer: widget.renderer,
-      mirror: widget.mirror,
-      meetingId: widget.meetingId,
-      contributorId: widget.uid,
       renderView: RTCVideoView(
         widget.renderer,
         mirror: widget.mirror,
