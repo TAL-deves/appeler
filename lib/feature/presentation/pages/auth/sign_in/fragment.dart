@@ -93,7 +93,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
                   )
                 else
                   Button(
-                    text: "Sign Up",
+                    text: "Sign In",
                     borderRadius: 25,
                     primary: AppColors.primary,
                     onExecute: () => widget.onSignIn.call(
