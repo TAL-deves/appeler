@@ -12,7 +12,10 @@ class HomeController extends DefaultAuthController {
     required this.roomHandler,
   });
 
-  String? generateRoom() {
+  String? generateRoom(String? oldRoomId) {
+    if(oldRoomId != null){
+      roomHandler.root.doc(oldRoomId).delete();
+    }
     final newDoc = roomHandler.root.doc();
     newDoc.set(<String, dynamic>{});
     var roomId = newDoc.id;

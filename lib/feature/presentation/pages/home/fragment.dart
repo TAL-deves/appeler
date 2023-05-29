@@ -21,6 +21,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   late HomeController controller;
   late TextEditingController code;
   late int index = 0;
+  String? oldRoomId;
 
   @override
   void initState() {
@@ -40,7 +41,8 @@ class _HomeFragmentState extends State<HomeFragment> {
             const Spacer(flex: 3),
             _Buttons(
               onCreateMeet: (context) {
-                var roomId = controller.generateRoom();
+                final roomId = controller.generateRoom(oldRoomId);
+                oldRoomId = roomId;
                 if (roomId != null) {
                   setState(() {
                     code.text = roomId;
