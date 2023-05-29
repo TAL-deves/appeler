@@ -74,7 +74,6 @@ class _MeetingActivityState extends State<MeetingActivity> {
                     size: 24,
                   ),
                   const TextView(
-                    marginBottom: 16,
                     text: AppInfo.name,
                     textColor: Colors.black,
                   ),

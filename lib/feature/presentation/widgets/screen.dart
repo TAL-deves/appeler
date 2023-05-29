@@ -103,7 +103,7 @@ class ScreenView extends StatelessWidget {
           image: backgroundImage.isNotEmpty
               ? DecorationImage(
                   image: ExactAssetImage(backgroundImage),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 )
               : null,
         ),
