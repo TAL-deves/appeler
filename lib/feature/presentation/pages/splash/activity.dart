@@ -24,16 +24,20 @@ class SplashActivity extends StatelessWidget {
         logo: AppInfo.logo,
         logoColor: AppColors.primary,
         onRoute: (context) {
-          return AuthHelper.isLoggedIn
-              ? Navigator.pushReplacementNamed(
-                  context,
-                  HomeActivity.route,
-                  arguments: AuthHelper.uid,
-                )
-              : Navigator.pushReplacementNamed(
-                  context,
-                  WelcomeActivity.route,
-                );
+          locator<AuthHandler>().isSignIn().then((value){
+            if(value) { Navigator.pushReplacementNamed(context, HomeActivity.route, arguments: AuthHelper.uid,); }
+            else { Navigator.pushReplacementNamed(context, WelcomeActivity.route); }
+          });
+          // return AuthHelper.isLoggedIn
+          //     ? Navigator.pushReplacementNamed(
+          //         context,
+          //         HomeActivity.route,
+          //         arguments: AuthHelper.uid,
+          //       )
+          //     : Navigator.pushReplacementNamed(
+          //         context,
+          //         WelcomeActivity.route,
+          //       );
         },
       ),
     );

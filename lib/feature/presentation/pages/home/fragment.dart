@@ -95,11 +95,13 @@ class _HomeFragmentState extends State<HomeFragment> {
               borderRadius: 25,
               marginTop: 24,
               onClick: (context) {
-                Navigator.pushNamed(
-                  context,
-                  AuthActivity.route,
-                  arguments: AuthFragmentType.signIn,
-                );
+                locator<AuthHandler>().signOut().then((value){
+                  Navigator.pushNamed(
+                    context,
+                    AuthActivity.route,
+                    arguments: AuthFragmentType.signIn,
+                  );
+                });
               },
             ),
           ],
