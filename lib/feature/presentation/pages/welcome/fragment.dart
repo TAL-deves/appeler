@@ -215,24 +215,20 @@ class _Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onClick.call(context),
-      child: AbsorbPointer(
-        child: TextView(
-          background: background,
-          flex: 1,
-          width: 40,
-          height: 40,
-          borderRadiusTL: 50,
-          borderRadiusBR: 50,
-          gravity: Alignment.center,
-          text: text,
-          textColor: Colors.white,
-          textAlign: TextAlign.center,
-          textSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
+    return TextView(
+      background: background,
+      flex: 1,
+      width: 40,
+      height: 40,
+      borderRadiusTL: 50,
+      borderRadiusBR: 50,
+      gravity: Alignment.center,
+      text: text,
+      textColor: Colors.white,
+      textAlign: TextAlign.center,
+      textSize: 16,
+      fontWeight: FontWeight.w500,
+      onClick: onClick,
     );
   }
 }
