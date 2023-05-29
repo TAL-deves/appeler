@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/widgets.dart';
 
 import '../../../index.dart';
 
 class AppScreen extends StatelessWidget {
-  final bool autoLeading;
+  final bool? autoLeading;
   final EdgeInsetsGeometry? padding;
   final Color? toolbarColor;
   final double elevation;
@@ -20,7 +21,7 @@ class AppScreen extends StatelessWidget {
   final double? titleSize;
   final TextStyle titleStyle;
   final FontWeight? titleWeight;
-  final Widget? child;
+  final Widget? body;
   final List<Widget>? actions;
   final OnViewBuilder? toolbar;
   final OnViewBuilder? onLeadingBuilder;
@@ -43,7 +44,7 @@ class AppScreen extends StatelessWidget {
     this.titleSize = 20,
     this.titleStyle = const TextStyle(),
     this.titleWeight,
-    this.child,
+    this.body,
     this.actions,
     this.toolbar,
     this.onLeadingBuilder,
@@ -51,32 +52,42 @@ class AppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenView(
-      key: key,
-      authShowLeading: autoLeading,
-      actions: actions,
-      background: background ?? Colors.white,
-      backgroundImage: AppContents.backgroundCover,
-      behindAppbar: true,
-      behindBody: true,
-      resizeToAvoidBottomInset: true,
-      elevation: elevation,
-      padding: padding,
-      statusBarColor: statusBarColor,
-      statusBarBrightness: statusBarBrightness,
-      toolbarIconTint: AppColors.primary,
-      title: title,
-      titleCenter: titleCenter,
-      titleColor: titleColor,
-      titleExtraSize: titleExtraSize,
-      titleSize: titleSize,
-      titleStyle: titleStyle,
-      titleWeight: titleWeight,
-      toolbarColor: toolbarColor,
-      toolbarHeight: toolbarHeight,
-      onLeadingBuilder: onLeadingBuilder,
-      onTitleBuilder: toolbar,
-      child: child,
+    return Scaffold(
+      body: Center(
+        child: Container(
+          alignment: Alignment.center,
+          constraints: const BoxConstraints(
+            maxWidth: 600,
+          ),
+          child: ScreenView(
+            key: key,
+            authShowLeading: autoLeading ?? !kIsWeb,
+            actions: actions,
+            background: background ?? Colors.white,
+            backgroundImage: AppContents.backgroundCover,
+            behindAppbar: true,
+            behindBody: true,
+            resizeToAvoidBottomInset: true,
+            elevation: elevation,
+            padding: padding,
+            statusBarColor: statusBarColor,
+            statusBarBrightness: statusBarBrightness,
+            toolbarIconTint: AppColors.primary,
+            title: title,
+            titleCenter: titleCenter,
+            titleColor: titleColor,
+            titleExtraSize: titleExtraSize,
+            titleSize: titleSize,
+            titleStyle: titleStyle,
+            titleWeight: titleWeight,
+            toolbarColor: toolbarColor,
+            toolbarHeight: toolbarHeight,
+            onLeadingBuilder: onLeadingBuilder,
+            onTitleBuilder: toolbar,
+            body: body,
+          ),
+        ),
+      ),
     );
   }
 }

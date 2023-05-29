@@ -1,4 +1,3 @@
-import 'package:appeler/index.dart';
 import 'package:flutter/material.dart';
 
 enum IndicatorAnimationType { scaling, sliding }

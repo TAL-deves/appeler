@@ -20,7 +20,7 @@ class ScreenView extends StatelessWidget {
   final double? titleSize;
   final TextStyle titleStyle;
   final FontWeight? titleWeight;
-  final Widget? child;
+  final Widget? body;
   final bool behindAppbar;
   final bool behindBody;
   final bool resizeToAvoidBottomInset;
@@ -52,7 +52,7 @@ class ScreenView extends StatelessWidget {
     this.titleStyle = const TextStyle(),
     this.titleWeight,
     this.actions,
-    this.child,
+    this.body,
     this.onTitleBuilder,
     this.onLeadingBuilder,
   }) : super(key: key);
@@ -107,7 +107,7 @@ class ScreenView extends StatelessWidget {
                 )
               : null,
         ),
-        child: child,
+        child: body,
       ),
     );
   }

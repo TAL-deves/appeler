@@ -46,7 +46,7 @@ class _PrepareActivityState extends State<PrepareActivity> {
       child: AppScreen(
         title: widget.meetingId,
         titleCenter: true,
-        child: PrepareFragment(
+        body: PrepareFragment(
           info: MeetingInfo(
             id: widget.meetingId,
             isSilent: isSilent,

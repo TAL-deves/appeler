@@ -28,7 +28,7 @@ class HomeActivity extends StatelessWidget {
         },
         builder: (context, state) {
           return const AppScreen(
-            child: HomeBody(
+            body: HomeBody(
               type: HomeBodyType.initial,
             ),
           );

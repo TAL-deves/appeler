@@ -14,7 +14,7 @@ class SplashActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
-      child: AppSplashView(
+      body: AppSplashView(
         title: AppInfo.name,
         titleAllCaps: true,
         titleExtraSize: 2,

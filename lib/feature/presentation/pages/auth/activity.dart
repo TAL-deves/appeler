@@ -17,7 +17,7 @@ class AuthActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
-      child: BlocProvider(
+      body: BlocProvider(
         create: (context) => locator<AuthController>(),
         child: BlocConsumer<AuthController, AuthResponse<AuthInfo>>(
           listener: (context, state) {

@@ -91,7 +91,6 @@ class _WelcomeSliderState extends State<WelcomeSlider> {
       children: [
         Expanded(
           child: IntroSlider(
-            key: UniqueKey(),
             renderNextBtn: const SizedBox(),
             renderSkipBtn: const SizedBox(),
             renderDoneBtn: const SizedBox(),
@@ -99,14 +98,14 @@ class _WelcomeSliderState extends State<WelcomeSlider> {
             listCustomTabs: widget.items.map((e) {
               return _SlideViewItem(item: e);
             }).toList(),
-            navigationBarConfig: NavigationBarConfig(
-              navPosition: NavPosition.bottom,
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).viewPadding.top > 0 ? 20 : 10,
-                bottom: MediaQuery.of(context).viewPadding.bottom > 0 ? 20 : 10,
-              ),
-              backgroundColor: Colors.transparent,
-            ),
+            // navigationBarConfig: NavigationBarConfig(
+            //   navPosition: NavPosition.bottom,
+            //   padding: EdgeInsets.only(
+            //     top: MediaQuery.of(context).viewPadding.top > 0 ? 20 : 10,
+            //     bottom: MediaQuery.of(context).viewPadding.bottom > 0 ? 20 : 10,
+            //   ),
+            //   backgroundColor: Colors.transparent,
+            // ),
             indicatorConfig: IndicatorConfig(
               indicatorColor: AppColors.primary.withAlpha(25),
               indicatorColorSelected: AppColors.primary,
@@ -119,7 +118,6 @@ class _WelcomeSliderState extends State<WelcomeSlider> {
             isAutoScroll: false,
             curveScroll: Curves.bounceIn,
           ),
-          //child: IntroSliderView(),
         ),
       ],
     );

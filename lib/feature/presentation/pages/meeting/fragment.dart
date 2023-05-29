@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:appeler/feature/presentation/pages/meeting/local_user.dart';
-import 'package:appeler/feature/presentation/pages/meeting/meeting_view.dart';
-import 'package:appeler/feature/presentation/pages/meeting/remote_user.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
@@ -262,7 +261,7 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
     WidgetsBinding.instance.addObserver(this);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if(!kIsWeb && Platform.isAndroid){
+      if (!kIsWeb && Platform.isAndroid) {
         await _requestPermissionForAndroid();
         _initForegroundTask();
         if (await FlutterForegroundTask.isRunningService) {

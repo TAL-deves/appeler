@@ -241,7 +241,8 @@ class IntroSliderState extends State<IntroSlider>
   int currentTabIndex = 0;
 
   late final int lengthSlide;
-  late double widthDevice;
+
+  //late double widthDevice;
   Timer? timerAutoScroll;
 
   @override
@@ -505,9 +506,12 @@ class IntroSliderState extends State<IntroSlider>
 
   @override
   Widget build(BuildContext context) {
-    widthDevice = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: DefaultTabController(
+    //widthDevice = MediaQuery.of(context).size.width;
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: widget.backgroundColorAllTabs ?? Colors.transparent,
+      child: DefaultTabController(
         length: lengthSlide,
         child: Stack(
           children: <Widget>[
@@ -537,7 +541,6 @@ class IntroSliderState extends State<IntroSlider>
           ],
         ),
       ),
-      backgroundColor: widget.backgroundColorAllTabs ?? Colors.transparent,
     );
   }
 
@@ -559,7 +562,8 @@ class IntroSliderState extends State<IntroSlider>
                   int currentTabIndex = snapshot.data ?? 0;
                   return Container(
                     alignment: Alignment.center,
-                    width: widthDevice / 4,
+                    //width: widthDevice / 4,
+                    width: 100,
                     child: isShowSkipBtn
                         ? buildSkipButton(currentTabIndex)
                         : (isShowPrevBtn
@@ -590,7 +594,8 @@ class IntroSliderState extends State<IntroSlider>
                   int currentTabIndex = snapshot.data ?? 0;
                   return Container(
                     alignment: Alignment.center,
-                    width: widthDevice / 4,
+                    width: 100,
+                    //width: widthDevice / 4,
                     height: 50,
                     child: currentTabIndex + 1 == lengthSlide
                         ? isShowDoneBtn
@@ -609,7 +614,10 @@ class IntroSliderState extends State<IntroSlider>
 
   Widget buildSkipButton(currentTabIndex) {
     if (currentTabIndex + 1 == lengthSlide) {
-      return Container(width: widthDevice / 4);
+      return Container(
+        width: double.infinity,
+        //width: widthDevice / 4,
+      );
     } else {
       return TextButton(
         key: skipButtonKey,
@@ -622,7 +630,10 @@ class IntroSliderState extends State<IntroSlider>
 
   Widget buildPrevButton(currentTabIndex) {
     if (currentTabIndex == 0) {
-      return Container(width: widthDevice / 4);
+      return Container(
+        width: double.infinity,
+        // width: widthDevice / 4,
+      );
     } else {
       return TextButton(
         key: prevButtonKey,

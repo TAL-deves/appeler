@@ -13,7 +13,7 @@ class WelcomeActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
-      child: WelcomeFragment(
+      body: WelcomeFragment(
         onSignIn: (context) => Navigator.pushNamed(
           context,
           AuthActivity.route,

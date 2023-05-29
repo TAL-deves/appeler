@@ -109,7 +109,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
             ],
           );
         },
-        child: SafeArea(
+        body: SafeArea(
           child: MeetingFragment(
             key: globalKey,
             info: widget.data,
