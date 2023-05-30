@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/widgets.dart';
 
-typedef OnControlResponse = Function(bool);
+typedef OnControlClickListener = Function(bool);
 
 class MeetingControls extends StatefulWidget {
   final Color? activeColor, activeIconColor;
@@ -15,14 +15,14 @@ class MeetingControls extends StatefulWidget {
   final bool isRiseHand;
   final bool isSilent;
 
-  final OnControlResponse? onCameraOn;
-  final OnControlResponse? onMore;
-  final OnControlResponse? onMute;
-  final OnControlResponse? onRiseHand;
-  final OnControlResponse? onScreenShare;
-  final OnControlResponse? onSilent;
-  final OnControlResponse? onSwitchCamera;
+  final OnControlClickListener? onCameraOn;
+  final OnControlClickListener? onMute;
+  final OnControlClickListener? onRiseHand;
+  final OnControlClickListener? onScreenShare;
+  final OnControlClickListener? onSilent;
+  final OnControlClickListener? onSwitchCamera;
   final OnViewClickListener? onCancel;
+  final OnViewClickListener? onMore;
 
   const MeetingControls({
     Key? key,
@@ -73,8 +73,6 @@ class _MeetingControlsState extends State<MeetingControls> {
   void onCameraOn() => widget.onCameraOn?.call(isCameraOn);
 
   void onMute() => widget.onMute?.call(isMuted);
-
-  void onMore() => widget.onMore?.call(true);
 
   void onRiseHand() => widget.onRiseHand?.call(isRiseHand);
 
@@ -141,22 +139,22 @@ class _MeetingControlsState extends State<MeetingControls> {
             setState(onScreenShare);
           },
         ),
-        IconView(
-          visibility: false,
-          icon: Icons.back_hand_outlined,
-          tint: isRiseHand ? activeIC : inactiveIC,
-          background: isRiseHand ? activeBG : inactiveBG,
-          onClick: (context) {
-            isRiseHand = !isRiseHand;
-            setState(onRiseHand);
-          },
-        ),
+        // IconView(
+        //   visibility: false,
+        //   icon: Icons.back_hand_outlined,
+        //   tint: isRiseHand ? activeIC : inactiveIC,
+        //   background: isRiseHand ? activeBG : inactiveBG,
+        //   onClick: (context) {
+        //     isRiseHand = !isRiseHand;
+        //     setState(onRiseHand);
+        //   },
+        // ),
         IconView(
           visibility: true,
           icon: Icons.more_vert,
           tint: inactiveIC,
           background: inactiveBG,
-          onClick: (context) => setState(onMore),
+          onClick: widget.onMore,
         ),
       ],
     );

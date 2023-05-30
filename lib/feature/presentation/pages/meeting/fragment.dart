@@ -329,7 +329,9 @@ class MeetingFragmentState extends State<MeetingFragment>
     }
   }
 
-  void onMore(bool value) {}
+  void onMore(BuildContext context) {
+
+  }
 
   void onRiseHand(bool value) {
     isRiseHand = value;
