@@ -23,13 +23,12 @@ class RemoteContributor extends StatefulWidget {
   });
 
   @override
-  State<RemoteContributor> createState() => _RemoteContributorState();
+  State<RemoteContributor> createState() => RemoteContributorState();
 }
 
-class _RemoteContributorState extends State<RemoteContributor> {
+class RemoteContributorState extends State<RemoteContributor> {
   final _chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
-  final _curUser =
-      FirebaseFirestore.instance.collection('users').doc(AuthHelper.uid);
+  final _curUser = FirebaseFirestore.instance.collection('users').doc(AuthHelper.uid);
 
   late final _curRoom = _chatRooms.doc(widget.type == ContributorType.outgoing
       ? '${AuthHelper.uid}+${widget.uid}'
@@ -52,6 +51,20 @@ class _RemoteContributorState extends State<RemoteContributor> {
   final _remoteRenderer = RTCVideoRenderer();
 
   var totalCandidate = 0;
+
+  void replaceVideoStream(MediaStream foreignStream){
+    _peerConnection.getSenders().then((value){
+      for (final element in value) {
+        if(element.track?.kind == 'video'){
+          element.replaceTrack(foreignStream.getVideoTracks()[0]).then((value){
+            print('Track replaced !');
+          }).catchError((error){
+            print(error);
+          });
+        }
+      }}
+    );
+  }
 
   Future<void> _disposeLocalStream() async {
     _localStream?.getTracks().forEach((element) {

@@ -58,7 +58,7 @@ class _MeetingControlsState extends State<MeetingControls> {
 
   void onMute() => widget.onMute?.call(isMuted);
 
-  void onMore() => widget.onMute?.call(true);
+  void onMore() => widget.onMore?.call(true);
 
   void onRiseHand() => widget.onRiseHand?.call(isRiseHand);
 

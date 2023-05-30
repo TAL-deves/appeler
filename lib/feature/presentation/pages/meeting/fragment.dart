@@ -86,30 +86,59 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
   int crossAxisCount = 2;
 
   final _localRenderer = RTCVideoRenderer();
-  MediaStream? _localStream;
+  MediaStream? _localStream, _shareStream;
 
-  final _keyMap = <String, GlobalKey>{};
+  final _keyMap = <String, GlobalKey<RemoteContributorState>>{};
   final _widgetMap = <String, Widget>{};
   final _addedUser = <String>{};
 
   StreamSubscription? _roomSubs, _hostSubs;
 
+  final _streamConfig = <String, dynamic>{
+    'audio': true,
+    //'video': Platform.isIOS ? {'deviceId': 'broadcast'} : true
+    'video': kIsWeb
+        ? {'facingMode': 'user'}
+        : {
+      'width': '320',
+      'height': '240',
+      'frameRate': '30',
+      'facingMode': 'user',
+      'optional': [],
+    }
+  };
+
+  void _replaceVideoStreamOnRemotes(MediaStream stream){
+    for(final item in _keyMap.values){
+      final curItemState = item.currentState;
+      curItemState?.replaceVideoStream(stream);
+    }
+  }
+
+  void _setScreenShareStream() async{
+    try{
+      _shareStream = await _getShareStream;
+      setState(() { _replaceVideoStreamOnRemotes(_shareStream!); });
+    }
+    catch(e){ print(e); }
+  }
+
+  void _recoverCameraStream() async{
+    setState(() {
+      _replaceVideoStreamOnRemotes(_localStream!);
+      _shareStream?.getTracks().forEach((element) { element.stop(); });
+      _shareStream?.dispose();
+      _shareStream = null;
+    });
+  }
+
+  Future<MediaStream> get _getShareStream async {
+    return navigator.mediaDevices.getDisplayMedia(_streamConfig);
+  }
+
   Future<MediaStream> get _getUserMediaStream async {
-    final mp = <String, dynamic>{
-      'audio': true,
-      //'video': Platform.isIOS ? {'deviceId': 'broadcast'} : true
-      'video': kIsWeb
-          ? {'facingMode': 'user'}
-          : {
-              'width': '320',
-              'height': '240',
-              'frameRate': '30',
-              'facingMode': 'user',
-              'optional': [],
-            }
-    };
     final mediaDevices = navigator.mediaDevices;
-    final stream = await (isShareScreen ? mediaDevices.getDisplayMedia(mp) : mediaDevices.getUserMedia(mp));
+    final stream = await (isShareScreen ? mediaDevices.getDisplayMedia(_streamConfig) : mediaDevices.getUserMedia(_streamConfig));
     return stream;
   }
 
@@ -308,7 +337,7 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
         for (final item in mp.entries) {
           final curItem = item.key;
           if (curItem != AuthHelper.uid && !_addedUser.contains(curItem)) {
-            final newKey = GlobalKey();
+            final newKey = GlobalKey<RemoteContributorState>();
             _keyMap[curItem] = newKey;
             _addedUser.add(curItem);
             _widgetMap[curItem] = RemoteContributor(
@@ -413,48 +442,62 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
   @override
   Widget build(BuildContext context) {
     config = SizeConfig.of(context);
-    return LinearLayout(
-      width: double.infinity,
-      height: double.infinity,
+    print('share screen: ${_shareStream != null}');
+    return StackLayout(
       children: [
-          Expanded(
-            child: MeetingView(
-              config: config,
-              items: children,
-              itemBackground: Colors.black.withAlpha(50),
-              itemSpace: 5,
-              frameBuilder: (context, layer, item) {
-                return item;
+        LinearLayout(
+          width: double.infinity,
+          height: double.infinity,
+          children: [
+            Expanded(
+              child: MeetingView(
+                config: config,
+                items: children,
+                itemBackground: Colors.black.withAlpha(50),
+                itemSpace: 5,
+                frameBuilder: (context, layer, item) {
+                  return item;
+                },
+              ),
+            ),
+            MeetingControls(
+              activeColor: AppColors.secondary,
+              inactiveColor: AppColors.secondary.withAlpha(25),
+              activeIconColor: Colors.white,
+              inactiveIconColor: AppColors.secondary,
+              isCameraOn: isCameraOn,
+              isFrontCamera: widget.info.isFrontCamera,
+              isMuted: isMute,
+              isRiseHand: isRiseHand,
+              isSilent: widget.info.isSilent,
+              onCameraOn: onCameraOn,
+              onMute: onMute,
+              //onMore: _onMore,
+              onMore: (value){
+                _shareStream == null ? _setScreenShareStream() : _recoverCameraStream();
               },
+              onRiseHand: onRiseHand,
+              onSilent: onSilent,
+              onSwitchCamera: onSwitchCamera,
+              onCancel: (context) => Navigator.pop(context),
+              cancelProperty: const ButtonProperty(
+                tint: Colors.red,
+                background: Colors.transparent,
+                size: 40,
+                padding: 0,
+                icon: Icons.call_end_rounded,
+                splashColor: Colors.transparent,
+              ),
             ),
-          ),
-          MeetingControls(
-            activeColor: AppColors.secondary,
-            inactiveColor: AppColors.secondary.withAlpha(25),
-            activeIconColor: Colors.white,
-            inactiveIconColor: AppColors.secondary,
-            isCameraOn: isCameraOn,
-            isFrontCamera: widget.info.isFrontCamera,
-            isMuted: isMute,
-            isRiseHand: isRiseHand,
-            isSilent: widget.info.isSilent,
-            onCameraOn: onCameraOn,
-            onMute: onMute,
-            onMore: onMore,
-            onRiseHand: onRiseHand,
-            onSilent: onSilent,
-            onSwitchCamera: onSwitchCamera,
-            onCancel: (context) => Navigator.pop(context),
-            cancelProperty: const ButtonProperty(
-              tint: Colors.red,
-              background: Colors.transparent,
-              size: 40,
-              padding: 0,
-              icon: Icons.call_end_rounded,
-              splashColor: Colors.transparent,
-            ),
-          ),
-        ],
+          ],
+        ),
+        TextView(
+          text: 'Screen sharing!!! ',
+          visibility: _shareStream != null,
+          textColor: Colors.red,
+          positionType: ViewPositionType.topEnd,
+        ),
+      ],
     );
   }
 
@@ -475,10 +518,10 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
 
   void _disposeLocalRenderer() {
     _localRenderer.dispose();
-    _localStream?.getTracks().forEach((element) {
-      element.stop();
-    });
+    _localStream?.getTracks().forEach((element) { element.stop(); });
+    _shareStream?.getTracks().forEach((element) { element.stop(); });
     _localStream?.dispose();
+    _shareStream?.dispose();
   }
 
   void _disposeSubs() {
