@@ -342,10 +342,7 @@ class MeetingFragmentState extends State<MeetingFragment>
   }
 
   void _offerAnswerHostUser() {
-    _hostSubs = controller.handler
-        .getMeetingReference(widget.info.id)
-        .snapshots()
-        .listen((event) {
+    _hostSubs = controller.handler.getMeetingReference(widget.info.id).snapshots().listen((event) {
       final mp = event.data();
       if (mp != null && mp is Map<String, dynamic>) {
         for (final item in mp.entries) {
@@ -356,12 +353,11 @@ class MeetingFragmentState extends State<MeetingFragment>
             _addedUser.add(curItem);
             _widgetMap[curItem] = RemoteContributor(
               key: newKey,
-              type: AuthHelper.uid.compareTo(curItem) > 0
-                  ? ContributorType.outgoing
-                  : ContributorType.incoming,
+              type: AuthHelper.uid.compareTo(curItem) > 0 ? ContributorType.outgoing : ContributorType.incoming,
               uid: curItem,
               meetingId: widget.info.id,
-              local: _localStream!,
+              localStream: _localStream!,
+              shareStream: _shareStream,
             );
           }
         }

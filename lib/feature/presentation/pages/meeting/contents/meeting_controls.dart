@@ -59,6 +59,17 @@ class _MeetingControlsState extends State<MeetingControls> {
   late bool isSilent = widget.isSilent;
   late bool isScreenShared = widget.isScreenShared;
 
+  @override
+  void didUpdateWidget(covariant MeetingControls oldWidget) {
+    isCameraOn = widget.isCameraOn;
+    isFrontCamera = widget.isFrontCamera;
+    isMuted = widget.isMuted;
+    isRiseHand = widget.isRiseHand;
+    isSilent = widget.isSilent;
+    isScreenShared = widget.isScreenShared;
+    super.didUpdateWidget(oldWidget);
+  }
+
   void onCameraOn() => widget.onCameraOn?.call(isCameraOn);
 
   void onMute() => widget.onMute?.call(isMuted);

@@ -11,15 +11,17 @@ import '../../../../index.dart';
 class RemoteContributor extends StatefulWidget {
   final String uid;
   final String meetingId;
-  final MediaStream local;
+  final MediaStream localStream;
   final ContributorType type;
+  final MediaStream? shareStream;
 
   const RemoteContributor({
     super.key,
     required this.uid,
     required this.meetingId,
-    required this.local,
+    required this.localStream,
     required this.type,
+    this.shareStream,
   });
 
   @override
@@ -119,7 +121,7 @@ class RemoteContributorState extends State<RemoteContributor> {
 
     final pc = await createPeerConnection(config);
 
-    pc.addStream(widget.local);
+    pc.addStream(widget.localStream);
 
     pc.onIceCandidate = (e) {
       if (e.candidate != null) {
@@ -138,6 +140,7 @@ class RemoteContributorState extends State<RemoteContributor> {
 
   Future<void> _initPeerConnection() async {
     _peerConnection = await _createPeerConnection();
+    if(widget.shareStream != null){ replaceVideoStream(widget.shareStream!); }
   }
 
   Future<void> _setRemoteDescription({
