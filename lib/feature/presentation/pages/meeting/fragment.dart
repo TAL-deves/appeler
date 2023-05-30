@@ -10,8 +10,8 @@ import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+
 import '../../../../index.dart';
-import 'dart:io';
 
 @pragma('vm:entry-point')
 void startCallback() {
@@ -25,7 +25,8 @@ class MyTaskHandler extends TaskHandler {
   @override
   Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
     _sendPort = sendPort;
-    final customData = await FlutterForegroundTask.getData<String>(key: 'customData');
+    final customData =
+        await FlutterForegroundTask.getData<String>(key: 'customData');
     WidgetsFlutterBinding.ensureInitialized();
     DartPluginRegistrant.ensureInitialized();
     print('customData: $customData');
@@ -73,7 +74,8 @@ class MeetingFragment extends StatefulWidget {
   State<MeetingFragment> createState() => MeetingFragmentState();
 }
 
-class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObserver{
+class MeetingFragmentState extends State<MeetingFragment>
+    with WidgetsBindingObserver {
   late final controller = context.read<MeetingController>();
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMute = widget.info.isMuted;
@@ -99,33 +101,38 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
     'video': kIsWeb
         ? {'facingMode': 'user'}
         : {
-      'width': '320',
-      'height': '240',
-      'frameRate': '30',
-      'facingMode': 'user',
-      'optional': [],
-    }
+            'width': '320',
+            'height': '240',
+            'frameRate': '30',
+            'facingMode': 'user',
+            'optional': [],
+          }
   };
 
-  void _replaceVideoStreamOnRemotes(MediaStream stream){
-    for(final item in _keyMap.values){
+  void _replaceVideoStreamOnRemotes(MediaStream stream) {
+    for (final item in _keyMap.values) {
       final curItemState = item.currentState;
       curItemState?.replaceVideoStream(stream);
     }
   }
 
-  void _setScreenShareStream() async{
-    try{
+  void _setScreenShareStream() async {
+    try {
       _shareStream = await _getShareStream;
-      setState(() { _replaceVideoStreamOnRemotes(_shareStream!); });
+      setState(() {
+        _replaceVideoStreamOnRemotes(_shareStream!);
+      });
+    } catch (e) {
+      setState(() {});
     }
-    catch(e){ print(e); }
   }
 
-  void _recoverCameraStream() async{
+  void _recoverCameraStream() async {
     setState(() {
       _replaceVideoStreamOnRemotes(_localStream!);
-      _shareStream?.getTracks().forEach((element) { element.stop(); });
+      _shareStream?.getTracks().forEach((element) {
+        element.stop();
+      });
       _shareStream?.dispose();
       _shareStream = null;
     });
@@ -137,7 +144,9 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
 
   Future<MediaStream> get _getUserMediaStream async {
     final mediaDevices = navigator.mediaDevices;
-    final stream = await (isShareScreen ? mediaDevices.getDisplayMedia(_streamConfig) : mediaDevices.getUserMedia(_streamConfig));
+    final stream = await (isShareScreen
+        ? mediaDevices.getDisplayMedia(_streamConfig)
+        : mediaDevices.getUserMedia(_streamConfig));
     return stream;
   }
 
@@ -161,7 +170,8 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
       await FlutterForegroundTask.requestIgnoreBatteryOptimization();
     }
 
-    final NotificationPermission notificationPermissionStatus = await FlutterForegroundTask.checkNotificationPermission();
+    final NotificationPermission notificationPermissionStatus =
+        await FlutterForegroundTask.checkNotificationPermission();
 
     if (notificationPermissionStatus != NotificationPermission.granted) {
       await FlutterForegroundTask.requestNotificationPermission();
@@ -175,7 +185,7 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
         channelId: 'notification_channel_id',
         channelName: 'Foreground Notification',
         channelDescription:
-        'This notification appears when the foreground service is running.',
+            'This notification appears when the foreground service is running.',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         iconData: const NotificationIconData(
@@ -326,6 +336,11 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
     _changeStatus(key: 'handUp');
   }
 
+  void onScreenShare(bool value) {
+    value ? _setScreenShareStream() : _recoverCameraStream();
+    setState(() {});
+  }
+
   void _offerAnswerHostUser() {
     _hostSubs = controller.handler
         .getMeetingReference(widget.info.id)
@@ -469,12 +484,11 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
               isMuted: isMute,
               isRiseHand: isRiseHand,
               isSilent: widget.info.isSilent,
+              isScreenShared: _shareStream != null,
               onCameraOn: onCameraOn,
               onMute: onMute,
-              //onMore: _onMore,
-              onMore: (value){
-                _shareStream == null ? _setScreenShareStream() : _recoverCameraStream();
-              },
+              onMore: onMore,
+              onScreenShare: onScreenShare,
               onRiseHand: onRiseHand,
               onSilent: onSilent,
               onSwitchCamera: onSwitchCamera,
@@ -517,8 +531,12 @@ class MeetingFragmentState extends State<MeetingFragment> with WidgetsBindingObs
 
   void _disposeLocalRenderer() {
     _localRenderer.dispose();
-    _localStream?.getTracks().forEach((element) { element.stop(); });
-    _shareStream?.getTracks().forEach((element) { element.stop(); });
+    _localStream?.getTracks().forEach((element) {
+      element.stop();
+    });
+    _shareStream?.getTracks().forEach((element) {
+      element.stop();
+    });
     _localStream?.dispose();
     _shareStream?.dispose();
   }

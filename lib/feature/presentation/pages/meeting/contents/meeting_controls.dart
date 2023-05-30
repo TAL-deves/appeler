@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/widgets.dart';
 
-typedef OnControlResponse = void Function(bool);
+typedef OnControlResponse = Function(bool);
 
 class MeetingControls extends StatefulWidget {
   final Color? activeColor, activeIconColor;
@@ -11,6 +11,7 @@ class MeetingControls extends StatefulWidget {
   final bool isCameraOn;
   final bool isFrontCamera;
   final bool isMuted;
+  final bool isScreenShared;
   final bool isRiseHand;
   final bool isSilent;
 
@@ -18,6 +19,7 @@ class MeetingControls extends StatefulWidget {
   final OnControlResponse? onMore;
   final OnControlResponse? onMute;
   final OnControlResponse? onRiseHand;
+  final OnControlResponse? onScreenShare;
   final OnControlResponse? onSilent;
   final OnControlResponse? onSwitchCamera;
   final OnViewClickListener? onCancel;
@@ -32,11 +34,13 @@ class MeetingControls extends StatefulWidget {
     this.isFrontCamera = true,
     this.isMuted = false,
     this.isRiseHand = false,
+    this.isScreenShared = false,
     this.isSilent = false,
     this.onCameraOn,
     this.onMore,
     this.onMute,
     this.onRiseHand,
+    this.onScreenShare,
     this.onSilent,
     this.onSwitchCamera,
     this.onCancel,
@@ -53,6 +57,7 @@ class _MeetingControlsState extends State<MeetingControls> {
   late bool isMuted = widget.isMuted;
   late bool isRiseHand = widget.isRiseHand;
   late bool isSilent = widget.isSilent;
+  late bool isScreenShared = widget.isScreenShared;
 
   void onCameraOn() => widget.onCameraOn?.call(isCameraOn);
 
@@ -61,6 +66,8 @@ class _MeetingControlsState extends State<MeetingControls> {
   void onMore() => widget.onMore?.call(true);
 
   void onRiseHand() => widget.onRiseHand?.call(isRiseHand);
+
+  void onScreenShare() => widget.onScreenShare?.call(isScreenShared);
 
   void onSilent() => widget.onSilent?.call(isSilent);
 
@@ -113,6 +120,18 @@ class _MeetingControlsState extends State<MeetingControls> {
           pressedColor: widget.cancelProperty.splashColor,
         ),
         IconView(
+          icon: isScreenShared
+              ? Icons.screen_share_outlined
+              : Icons.stop_screen_share_outlined,
+          tint: isScreenShared ? activeIC : inactiveIC,
+          background: isScreenShared ? activeBG : inactiveBG,
+          onClick: (context) {
+            isScreenShared = !isScreenShared;
+            setState(onScreenShare);
+          },
+        ),
+        IconView(
+          visibility: false,
           icon: Icons.back_hand_outlined,
           tint: isRiseHand ? activeIC : inactiveIC,
           background: isRiseHand ? activeBG : inactiveBG,
@@ -122,6 +141,7 @@ class _MeetingControlsState extends State<MeetingControls> {
           },
         ),
         IconView(
+          visibility: true,
           icon: Icons.more_vert,
           tint: inactiveIC,
           background: inactiveBG,

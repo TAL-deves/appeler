@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'index.dart';
-import 'dart:io';
 
 @pragma('vm:entry-point')
 void startCallback() {
@@ -22,7 +22,8 @@ class MyTaskHandler extends TaskHandler {
   @override
   Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
     _sendPort = sendPort;
-    final customData = await FlutterForegroundTask.getData<String>(key: 'customData');
+    final customData =
+        await FlutterForegroundTask.getData<String>(key: 'customData');
     print('customData: $customData');
   }
 
@@ -100,7 +101,8 @@ class _ApplicationState extends State<Application> {
       await FlutterForegroundTask.requestIgnoreBatteryOptimization();
     }
 
-    final NotificationPermission notificationPermissionStatus = await FlutterForegroundTask.checkNotificationPermission();
+    final NotificationPermission notificationPermissionStatus =
+        await FlutterForegroundTask.checkNotificationPermission();
 
     if (notificationPermissionStatus != NotificationPermission.granted) {
       await FlutterForegroundTask.requestNotificationPermission();
@@ -114,7 +116,7 @@ class _ApplicationState extends State<Application> {
         channelId: 'notification_channel_id',
         channelName: 'Foreground Notification',
         channelDescription:
-        'This notification appears when the foreground service is running.',
+            'This notification appears when the foreground service is running.',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         iconData: const NotificationIconData(
@@ -214,7 +216,7 @@ class _ApplicationState extends State<Application> {
     // _stopForegroundTask();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
