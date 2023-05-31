@@ -52,7 +52,8 @@ class MyTaskHandler extends TaskHandler {
 
   @override
   void onNotificationPressed() {
-    FlutterForegroundTask.launchApp("/resume-route");
+    //FlutterForegroundTask.launchApp("/resume-route");
+    FlutterForegroundTask.launchApp(SplashActivity.route);
     _sendPort?.send('onNotificationPressed');
   }
 }
