@@ -56,13 +56,13 @@ class _PrepareFragmentState extends State<PrepareFragment> {
                 isMuted = value;
               },
             ),
-            const SizedBox(height: 24),
-            ShareScreenButtonForPrepareBody(
-              onPressed: (){
-                setState(() { shareScreenEnabled = !shareScreenEnabled; });
-              },
-              isEnabled: shareScreenEnabled,
-            ),
+            //const SizedBox(height: 24),
+            // ShareScreenButtonForPrepareBody(
+            //   onPressed: (){
+            //     setState(() { shareScreenEnabled = !shareScreenEnabled; });
+            //   },
+            //   isEnabled: shareScreenEnabled,
+            // ),
           ],
         ),
         LinearLayout(
