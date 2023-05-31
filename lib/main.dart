@@ -199,34 +199,38 @@ class _ApplicationState extends State<Application> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   await _requestPermissionForAndroid();
-    //   _initForegroundTask();
-    //   if (await FlutterForegroundTask.isRunningService) {
-    //     final newReceivePort = FlutterForegroundTask.receivePort;
-    //     _registerReceivePort(newReceivePort);
-    //   }
-    // });
-    // _startForegroundTask();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!kIsWeb && Platform.isAndroid) {
+        await _requestPermissionForAndroid();
+        _initForegroundTask();
+        if (await FlutterForegroundTask.isRunningService) {
+          final newReceivePort = FlutterForegroundTask.receivePort;
+          _registerReceivePort(newReceivePort);
+        }
+        _startForegroundTask();
+      }
+    });
   }
 
   @override
   void dispose() {
-    // _closeReceivePort();
-    // _stopForegroundTask();
+    _closeReceivePort();
+    _stopForegroundTask();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: AppInfo.name,
-      theme: ThemeData(
-        primarySwatch: AppColors.primary,
+    return WithForegroundTask(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: AppInfo.name,
+        theme: ThemeData(
+          primarySwatch: AppColors.primary,
+        ),
+        initialRoute: SplashActivity.route,
+        onGenerateRoute: AppRouter.I.generate,
       ),
-      initialRoute: SplashActivity.route,
-      onGenerateRoute: AppRouter.I.generate,
     );
   }
 }

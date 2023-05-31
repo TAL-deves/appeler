@@ -45,7 +45,7 @@ class RemoteContributorState extends State<RemoteContributor> {
           ? 'callieCandidate'
           : 'callerCandidate');
 
-  MediaStream? _remoteStream, _localStream;
+  MediaStream? _remoteStream;
   late RTCPeerConnection _peerConnection;
 
   StreamSubscription? _curRoomSubs, _candidateSubs;
@@ -66,13 +66,6 @@ class RemoteContributorState extends State<RemoteContributor> {
         }
       }}
     );
-  }
-
-  Future<void> _disposeLocalStream() async {
-    _localStream?.getTracks().forEach((element) {
-      element.stop();
-    });
-    _localStream?.dispose();
   }
 
   void _setRemoteCandidate() {
@@ -109,7 +102,8 @@ class RemoteContributorState extends State<RemoteContributor> {
 
   Future<RTCPeerConnection> _createPeerConnection() async {
     final config = <String, dynamic>{
-      "sdpSemantics": "plan-b",
+      //"sdpSemantics": "plan-b",
+      //"sdpSemantics": "unified-plan",
       'iceServers': [
         {
           "urls": "turn:34.143.165.178:3478?transport=udp",
@@ -121,7 +115,10 @@ class RemoteContributorState extends State<RemoteContributor> {
 
     final pc = await createPeerConnection(config);
 
-    pc.addStream(widget.localStream);
+    //pc.addStream(widget.localStream);
+    widget.localStream.getTracks().forEach((track) {
+      pc.addTrack(track, widget.localStream);
+    });
 
     pc.onIceCandidate = (e) {
       if (e.candidate != null) {
@@ -131,8 +128,7 @@ class RemoteContributorState extends State<RemoteContributor> {
 
     pc.onAddStream = (stream) {
       setState(() {
-        _remoteRenderer.srcObject = stream;
-        _remoteStream = stream;
+        _remoteRenderer.srcObject = _remoteStream = stream;
       });
     };
     return pc;
@@ -205,7 +201,6 @@ class RemoteContributorState extends State<RemoteContributor> {
   }
 
   void _clearPeerConnection() async {
-    _disposeLocalStream();
     await _peerConnection.close();
     //_peerConnection.dispose();
   }

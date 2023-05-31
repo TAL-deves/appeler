@@ -1,66 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-
 import '../../../../index.dart';
-
-@pragma('vm:entry-point')
-void startCallback() {
-  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
-}
-
-class MyTaskHandler extends TaskHandler {
-  SendPort? _sendPort;
-  int _eventCount = 0;
-
-  @override
-  Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
-    _sendPort = sendPort;
-    final customData =
-        await FlutterForegroundTask.getData<String>(key: 'customData');
-    WidgetsFlutterBinding.ensureInitialized();
-    DartPluginRegistrant.ensureInitialized();
-    print('customData: $customData');
-  }
-
-  @override
-  Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
-    FlutterForegroundTask.updateService(
-      notificationTitle: 'Foreground Service',
-      notificationText: 'Service event: $_eventCount',
-    );
-
-    sendPort?.send(_eventCount);
-
-    _eventCount++;
-  }
-
-  @override
-  Future<void> onDestroy(DateTime timestamp, SendPort? sendPort) async {
-    // You can use the clearAllData function to clear all the stored data.
-    await FlutterForegroundTask.clearAllData();
-  }
-
-  @override
-  void onButtonPressed(String id) {
-    print('onButtonPressed >> $id');
-  }
-
-  @override
-  void onNotificationPressed() {
-    FlutterForegroundTask.launchApp("/resume-route");
-    _sendPort?.send('onNotificationPressed');
-  }
-}
 
 class MeetingFragment extends StatefulWidget {
   final MeetingInfo info;
@@ -74,8 +19,7 @@ class MeetingFragment extends StatefulWidget {
   State<MeetingFragment> createState() => MeetingFragmentState();
 }
 
-class MeetingFragmentState extends State<MeetingFragment>
-    with WidgetsBindingObserver {
+class MeetingFragmentState extends State<MeetingFragment>  {
   late final controller = context.read<MeetingController>();
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMute = widget.info.isMuted;
@@ -144,145 +88,14 @@ class MeetingFragmentState extends State<MeetingFragment>
 
   Future<MediaStream> get _getUserMediaStream async {
     final mediaDevices = navigator.mediaDevices;
-    final stream = await (isShareScreen
-        ? mediaDevices.getDisplayMedia(_streamConfig)
-        : mediaDevices.getUserMedia(_streamConfig));
+    final stream = await (isShareScreen ? mediaDevices.getDisplayMedia(_streamConfig) : mediaDevices.getUserMedia(_streamConfig));
     return stream;
-  }
-
-  ReceivePort? _receivePort;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('App state is: $state');
-  }
-
-  Future<void> _requestPermissionForAndroid() async {
-    if (!Platform.isAndroid) {
-      return;
-    }
-
-    if (!await FlutterForegroundTask.canDrawOverlays) {
-      await FlutterForegroundTask.openSystemAlertWindowSettings();
-    }
-
-    if (!await FlutterForegroundTask.isIgnoringBatteryOptimizations) {
-      await FlutterForegroundTask.requestIgnoreBatteryOptimization();
-    }
-
-    final NotificationPermission notificationPermissionStatus =
-        await FlutterForegroundTask.checkNotificationPermission();
-
-    if (notificationPermissionStatus != NotificationPermission.granted) {
-      await FlutterForegroundTask.requestNotificationPermission();
-    }
-  }
-
-  void _initForegroundTask() {
-    FlutterForegroundTask.init(
-      androidNotificationOptions: AndroidNotificationOptions(
-        id: 500,
-        channelId: 'notification_channel_id',
-        channelName: 'Foreground Notification',
-        channelDescription:
-            'This notification appears when the foreground service is running.',
-        channelImportance: NotificationChannelImportance.LOW,
-        priority: NotificationPriority.LOW,
-        iconData: const NotificationIconData(
-          resType: ResourceType.mipmap,
-          resPrefix: ResourcePrefix.ic,
-          name: 'launcher',
-          backgroundColor: Colors.orange,
-        ),
-        buttons: [
-          const NotificationButton(id: 'sendButton', text: 'Send'),
-          const NotificationButton(id: 'testButton', text: 'Test'),
-        ],
-      ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
-      ),
-      foregroundTaskOptions: const ForegroundTaskOptions(
-        interval: 5000,
-        isOnceEvent: false,
-        autoRunOnBoot: true,
-        allowWakeLock: true,
-        allowWifiLock: true,
-      ),
-    );
-  }
-
-  Future<bool> _startForegroundTask() async {
-    await FlutterForegroundTask.saveData(key: 'customData', value: 'hello');
-    final ReceivePort? receivePort = FlutterForegroundTask.receivePort;
-    final bool isRegistered = _registerReceivePort(receivePort);
-    if (!isRegistered) {
-      print('Failed to register receivePort!');
-      return false;
-    }
-
-    if (await FlutterForegroundTask.isRunningService) {
-      return FlutterForegroundTask.restartService();
-    } else {
-      return FlutterForegroundTask.startService(
-        notificationTitle: 'Foreground Service is running',
-        notificationText: 'Tap to return to the app',
-        callback: startCallback,
-      );
-    }
-  }
-
-  Future<bool> _stopForegroundTask() {
-    return FlutterForegroundTask.stopService();
-  }
-
-  bool _registerReceivePort(ReceivePort? newReceivePort) {
-    if (newReceivePort == null) {
-      return false;
-    }
-
-    _closeReceivePort();
-
-    _receivePort = newReceivePort;
-    _receivePort?.listen((data) {
-      if (data is int) {
-        print('eventCount: $data');
-      } else if (data is String) {
-        if (data == 'onNotificationPressed') {
-          //Navigator.of(context).pushNamed('/resume-route');
-        }
-      } else if (data is DateTime) {
-        print('timestamp: ${data.toString()}');
-      }
-    });
-
-    return _receivePort != null;
-  }
-
-  void _closeReceivePort() {
-    _receivePort?.close();
-    _receivePort = null;
   }
 
   @override
   void initState() {
-    print('meeting fragment is called');
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!kIsWeb && Platform.isAndroid) {
-        await _requestPermissionForAndroid();
-        _initForegroundTask();
-        if (await FlutterForegroundTask.isRunningService) {
-          final newReceivePort = FlutterForegroundTask.receivePort;
-          _registerReceivePort(newReceivePort);
-        }
-        _startForegroundTask();
-      }
-      _initLocalRenderer();
-    });
-    //_initLocalRenderer();
+    _initLocalRenderer();
   }
 
   void _initLocalRenderer() async {
@@ -454,7 +267,6 @@ class MeetingFragmentState extends State<MeetingFragment>
   @override
   Widget build(BuildContext context) {
     config = SizeConfig.of(context);
-    print('share screen: ${_shareStream != null}');
     return StackLayout(
       children: [
         LinearLayout(
@@ -521,9 +333,6 @@ class MeetingFragmentState extends State<MeetingFragment>
     _disposeSubs();
     _removeStatus();
     _disposeLocalRenderer();
-    _closeReceivePort();
-    _stopForegroundTask();
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
