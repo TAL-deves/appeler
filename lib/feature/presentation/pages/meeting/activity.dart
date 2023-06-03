@@ -59,6 +59,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
             width: double.infinity,
             children: [
               IconView(
+                padding: 8,
                 positionType: ViewPositionType.centerStart,
                 icon: Icons.message_outlined,
                 tint: AppColors.primary,
@@ -85,6 +86,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
                 crossGravity: CrossAxisAlignment.center,
                 children: [
                   IconView(
+                    padding: 8,
                     icon: isSilent
                         ? Icons.volume_off_outlined
                         : Icons.volume_up_outlined,
@@ -95,6 +97,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
                     },
                   ),
                   IconView(
+                    padding: 8,
                     icon: isFrontCamera
                         ? Icons.camera_front_outlined
                         : Icons.camera_rear_outlined,

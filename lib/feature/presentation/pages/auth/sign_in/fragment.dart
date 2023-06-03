@@ -64,20 +64,20 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
           controller: password,
           margin: EdgeInsets.zero,
         ),
-        AppTextButton(
-          width: double.infinity,
-          textAlign: TextAlign.end,
-          fontWeight: FontWeight.bold,
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 8,
-          ),
-          text: "Forget password?",
-          onPressed: () => widget.onForgetPassword.call(AuthInfo(
-            email: email.text,
-            password: password.text,
-          )),
-        ),
+        // AppTextButton(
+        //   width: double.infinity,
+        //   textAlign: TextAlign.end,
+        //   fontWeight: FontWeight.bold,
+        //   padding: const EdgeInsets.symmetric(
+        //     vertical: 12,
+        //     horizontal: 8,
+        //   ),
+        //   text: "Forget password?",
+        //   onPressed: () => widget.onForgetPassword.call(AuthInfo(
+        //     email: email.text,
+        //     password: password.text,
+        //   )),
+        // ),
         BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
           builder: (context, state) {
             return StackLayout(
@@ -92,7 +92,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
                     child: CircularProgressIndicator(),
                   )
                 else
-                  Button(
+                  AppButton(
                     text: "Sign In",
                     borderRadius: 25,
                     primary: AppColors.primary,
@@ -111,6 +111,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
         OAuthButton(
           text: "Login With Google",
           background: AppColors.primary,
+          icon: AppIcons.google,
           onClick: (context) => widget.onSignInWithGoogle.call(
             AuthInfo(
               email: email.text,
@@ -121,6 +122,7 @@ class _AuthSignInFragmentState extends State<AuthSignInFragment> {
         OAuthButton(
           text: "Login With Facebook",
           background: AppColors.secondary,
+          icon: AppIcons.facebook,
           onClick: (context) => widget.onSignInWithFacebook.call(
             AuthInfo(
               email: email.text,

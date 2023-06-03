@@ -74,10 +74,12 @@ class _HomeFragmentState extends State<HomeFragment> {
               ),
             ),
             Button(
+              ripple: 10,
+              width: 120,
               text: buttonName,
               borderRadius: 25,
-              margin: const EdgeInsets.only(top: 24),
-              onPressed: () {
+              marginTop: 24,
+              onClick: (context) {
                 if (index == 0 || index == 1) {
                   if (code.text.isNotEmpty) {
                     Navigator.pushNamed(

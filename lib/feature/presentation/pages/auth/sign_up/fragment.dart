@@ -109,7 +109,7 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
                     child: CircularProgressIndicator(),
                   )
                 else
-                  Button(
+                  AppButton(
                     text: "Sign up",
                     borderRadius: 25,
                     primary: AppColors.primary,
@@ -129,6 +129,7 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
         OAuthButton(
           text: "Login With Google",
           background: AppColors.primary,
+          icon: AppIcons.google,
           onClick: (context) => widget.onSignInWithGoogle.call(
             AuthInfo(
               email: email.text,
@@ -139,6 +140,7 @@ class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
         OAuthButton(
           text: "Login With Facebook",
           background: AppColors.secondary,
+          icon: AppIcons.facebook,
           onClick: (context) => widget.onSignInWithFacebook.call(
             AuthInfo(
               email: email.text,

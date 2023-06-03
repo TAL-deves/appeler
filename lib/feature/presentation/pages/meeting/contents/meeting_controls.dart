@@ -99,6 +99,7 @@ class _MeetingControlsState extends State<MeetingControls> {
       paddingVertical: 12,
       children: [
         IconView(
+          padding: 8,
           icon: isMuted ? Icons.mic_off : Icons.mic,
           tint: isMuted ? activeIC : inactiveIC,
           background: isMuted ? activeBG : inactiveBG,
@@ -108,6 +109,7 @@ class _MeetingControlsState extends State<MeetingControls> {
           },
         ),
         IconView(
+          padding: 8,
           icon: isCameraOn
               ? Icons.videocam_outlined
               : Icons.videocam_off_outlined,
@@ -125,10 +127,11 @@ class _MeetingControlsState extends State<MeetingControls> {
           tint: widget.cancelProperty.tint,
           background: widget.cancelProperty.background,
           onClick: widget.onCancel,
-          splashColor: widget.cancelProperty.splashColor,
+          rippleColor: widget.cancelProperty.splashColor,
           pressedColor: widget.cancelProperty.splashColor,
         ),
         IconView(
+          padding: 8,
           icon: isScreenShared
               ? Icons.screen_share_outlined
               : Icons.stop_screen_share_outlined,
@@ -139,18 +142,20 @@ class _MeetingControlsState extends State<MeetingControls> {
             setState(onScreenShare);
           },
         ),
-        // IconView(
-        //   visibility: false,
-        //   icon: Icons.back_hand_outlined,
-        //   tint: isRiseHand ? activeIC : inactiveIC,
-        //   background: isRiseHand ? activeBG : inactiveBG,
-        //   onClick: (context) {
-        //     isRiseHand = !isRiseHand;
-        //     setState(onRiseHand);
-        //   },
-        // ),
         IconView(
-          visibility: true,
+          padding: 8,
+          visibility: ViewVisibility.gone,
+          icon: Icons.back_hand_outlined,
+          tint: isRiseHand ? activeIC : inactiveIC,
+          background: isRiseHand ? activeBG : inactiveBG,
+          onClick: (context) {
+            isRiseHand = !isRiseHand;
+            setState(onRiseHand);
+          },
+        ),
+        IconView(
+          padding: 8,
+          visibility: ViewVisibility.visible,
           icon: Icons.more_vert,
           tint: inactiveIC,
           background: inactiveBG,

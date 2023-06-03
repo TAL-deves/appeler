@@ -62,7 +62,7 @@ class _AuthForgotPasswordFragmentState
             hintCode: "+880",
             hintNumber: "Enter phone number",
           ),
-          Button(
+          AppButton(
             margin: const EdgeInsets.symmetric(vertical: 24),
             text: "Find",
             borderRadius: 12,

@@ -77,12 +77,14 @@ class _PrepareFragmentState extends State<PrepareFragment> {
                 subject: "Let's go to meeting ... ",
               ),
             ),
-            AppIconButton(
+            Button(
               width: 150,
               borderRadius: 50,
               text: "Join",
-              icon: Icons.videocam_outlined,
-              margin: const EdgeInsets.only(top: 40),
+              textSize: 16,
+              marginTop: 40,
+              ripple: 10,
+              iconAlignment: IconAlignment.start,
               onClick: (context) => widget.onPrepare(
                 context,
                 widget.info.attach(

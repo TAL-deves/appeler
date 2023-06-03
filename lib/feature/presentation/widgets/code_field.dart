@@ -69,7 +69,9 @@ class MeetingIdField extends StatelessWidget {
           ),
         ),
         IconView(
-          visibility: icon != null && iconVisible,
+          visibility: icon != null && iconVisible
+              ? ViewVisibility.visible
+              : ViewVisibility.gone,
           padding: 8,
           background: Colors.transparent,
           borderRadius: 8,

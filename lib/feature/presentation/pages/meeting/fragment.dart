@@ -19,7 +19,7 @@ class MeetingFragment extends StatefulWidget {
   State<MeetingFragment> createState() => MeetingFragmentState();
 }
 
-class MeetingFragmentState extends State<MeetingFragment>  {
+class MeetingFragmentState extends State<MeetingFragment> {
   late final controller = context.read<MeetingController>();
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMute = widget.info.isMuted;
@@ -88,7 +88,9 @@ class MeetingFragmentState extends State<MeetingFragment>  {
 
   Future<MediaStream> get _getUserMediaStream async {
     final mediaDevices = navigator.mediaDevices;
-    final stream = await (isShareScreen ? mediaDevices.getDisplayMedia(_streamConfig) : mediaDevices.getUserMedia(_streamConfig));
+    final stream = await (isShareScreen
+        ? mediaDevices.getDisplayMedia(_streamConfig)
+        : mediaDevices.getUserMedia(_streamConfig));
     return stream;
   }
 
@@ -142,9 +144,7 @@ class MeetingFragmentState extends State<MeetingFragment>  {
     }
   }
 
-  void onMore(BuildContext context) {
-
-  }
+  void onMore(BuildContext context) {}
 
   void onRiseHand(bool value) {
     isRiseHand = value;
@@ -157,7 +157,10 @@ class MeetingFragmentState extends State<MeetingFragment>  {
   }
 
   void _offerAnswerHostUser() {
-    _hostSubs = controller.handler.getMeetingReference(widget.info.id).snapshots().listen((event) {
+    _hostSubs = controller.handler
+        .getMeetingReference(widget.info.id)
+        .snapshots()
+        .listen((event) {
       final mp = event.data();
       if (mp != null && mp is Map<String, dynamic>) {
         for (final item in mp.entries) {
@@ -168,7 +171,9 @@ class MeetingFragmentState extends State<MeetingFragment>  {
             _addedUser.add(curItem);
             _widgetMap[curItem] = RemoteContributor(
               key: newKey,
-              type: AuthHelper.uid.compareTo(curItem) > 0 ? ContributorType.outgoing : ContributorType.incoming,
+              type: AuthHelper.uid.compareTo(curItem) > 0
+                  ? ContributorType.outgoing
+                  : ContributorType.incoming,
               uid: curItem,
               meetingId: widget.info.id,
               localStream: _localStream!,
@@ -316,7 +321,9 @@ class MeetingFragmentState extends State<MeetingFragment>  {
         ),
         TextView(
           text: 'Screen sharing!!! ',
-          visibility: _shareStream != null,
+          visibility: _shareStream != null
+              ? ViewVisibility.visible
+              : ViewVisibility.gone,
           textColor: Colors.red,
           positionType: ViewPositionType.topEnd,
         ),

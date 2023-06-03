@@ -4,7 +4,7 @@ import 'package:flutter_andomie/widgets.dart';
 class OAuthButton extends StatelessWidget {
   final String text;
   final Color? background;
-  final String? icon;
+  final dynamic icon;
   final OnViewClickListener? onClick;
 
   const OAuthButton({
@@ -17,24 +17,24 @@ class OAuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StackLayout(
+    return Button(
       background: background,
       gravity: Alignment.center,
       borderRadiusBR: 25,
       borderRadiusTL: 25,
       paddingHorizontal: 24,
-      paddingVertical: 14,
+      paddingVertical: 12,
+      iconSize: 24,
       marginTop: 24,
       onClick: onClick,
-      children: [
-        RawTextView(
-          text: text,
-          textSize: 16,
-          textColor: Colors.white,
-          fontWeight: FontWeight.w500,
-          textAlign: TextAlign.center,
-        ),
-      ],
+      text: text,
+      textSize: 16,
+      textColor: Colors.white,
+      fontWeight: FontWeight.w500,
+      icon: icon,
+      ripple: 10,
+      iconColorEnabled: false,
+      iconAlignment: IconAlignment.start,
     );
   }
 }

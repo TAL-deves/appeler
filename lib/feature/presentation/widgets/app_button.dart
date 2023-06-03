@@ -23,6 +23,7 @@ class AppIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Button();
     return StackLayout(
       width: width,
       margin: 16,
@@ -44,7 +45,8 @@ class AppIconButton extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
         IconView(
-          visibility: iconVisible,
+          visibility:
+              iconVisible ? ViewVisibility.visible : ViewVisibility.gone,
           icon: icon,
           padding: 0,
           background: Colors.transparent,

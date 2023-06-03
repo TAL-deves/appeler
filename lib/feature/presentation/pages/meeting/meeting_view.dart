@@ -325,66 +325,6 @@ class _FrameLayerFifth<T> extends StatelessWidget {
         ),
       ],
     );
-    return Flex(
-      direction: controller.y,
-      children: [
-        _FrameBuilder(
-          controller: controller,
-          item: controller.items[0],
-          flexible: true,
-        ),
-        SizedBox(
-          width: controller.spaceX,
-          height: controller.spaceY,
-        ),
-        Expanded(
-          child: Flex(
-            direction: controller.x,
-            children: [
-              _FrameBuilder(
-                controller: controller,
-                flexible: true,
-                item: controller.items[1],
-              ),
-              SizedBox(
-                width: controller.spaceY,
-                height: controller.spaceX,
-              ),
-              _FrameBuilder(
-                controller: controller,
-                flexible: true,
-                item: controller.items[2],
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: controller.spaceX,
-          height: controller.spaceY,
-        ),
-        Expanded(
-          child: Flex(
-            direction: controller.x,
-            children: [
-              _FrameBuilder(
-                controller: controller,
-                flexible: true,
-                item: controller.items[3],
-              ),
-              SizedBox(
-                width: controller.spaceY,
-                height: controller.spaceX,
-              ),
-              _FrameBuilder(
-                controller: controller,
-                flexible: true,
-                item: controller.items[4],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }
 

@@ -24,20 +24,24 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
       width: double.infinity,
       gravity: Alignment.center,
       layoutGravity: LayoutGravity.center,
+      paddingTop: 80,
       children: [
         LinearLayout(
           orientation: Axis.horizontal,
           paddingHorizontal: 24,
-          paddingTop: 60,
           children: [
-            _Button(
+            AppCommonButton(
               text: "SIGN IN",
               background: AppColors.secondary,
+              flex: 1,
+              tweenCornerMode: true,
               onClick: widget.onSignIn,
             ),
-            _Button(
+            AppCommonButton(
               text: "SIGN UP",
               background: AppColors.primary,
+              flex: 1,
+              tweenCornerMode: true,
               onClick: widget.onSignUp,
             ),
           ],
@@ -53,7 +57,9 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
           paddingVertical: 12,
           borderRadius: 25,
           margin: 24,
+          height: 40,
           marginBottom: 60,
+          ripple: 10,
           onClick: widget.onJoinMeeting,
         ),
       ],
@@ -195,38 +201,6 @@ class _SlideViewItem extends StatelessWidget {
           lineSpacingExtra: 8,
         ),
       ],
-    );
-  }
-}
-
-class _Button extends StatelessWidget {
-  final Color? background;
-  final String text;
-  final OnViewClickListener onClick;
-
-  const _Button({
-    Key? key,
-    this.background,
-    required this.text,
-    required this.onClick,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextView(
-      background: background,
-      flex: 1,
-      width: 40,
-      height: 40,
-      borderRadiusTL: 50,
-      borderRadiusBR: 50,
-      gravity: Alignment.center,
-      text: text,
-      textColor: Colors.white,
-      textAlign: TextAlign.center,
-      textSize: 16,
-      fontWeight: FontWeight.w500,
-      onClick: onClick,
     );
   }
 }

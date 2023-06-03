@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class Button extends StatefulWidget {
+class AppButton extends StatefulWidget {
   final String text;
   final Color? primary;
   final double? width, height;
@@ -12,7 +12,7 @@ class Button extends StatefulWidget {
   final Function()? onPressed;
   final Future<bool> Function()? onExecute;
 
-  const Button({
+  const AppButton({
     Key? key,
     required this.text,
     this.primary,
@@ -27,10 +27,10 @@ class Button extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Button> createState() => _ButtonState();
+  State<AppButton> createState() => _AppButtonState();
 }
 
-class _ButtonState extends State<Button> {
+class _AppButtonState extends State<AppButton> {
   late bool isLoaded = true;
 
   late Color primary = widget.primary ?? Theme.of(context).primaryColor;

@@ -14,13 +14,13 @@ class ToolbarView extends YMRView<ToolbarController> {
   });
 
   @override
-  ToolbarController attachController() {
+  ToolbarController initController() {
     return ToolbarController();
   }
 
   @override
-  ToolbarController initController(ToolbarController controller) {
-    return controller.attach(this);
+  ToolbarController attachController(ToolbarController controller) {
+    return controller.fromToolbar(this);
   }
 
   @override
@@ -46,11 +46,11 @@ class ToolbarView extends YMRView<ToolbarController> {
 }
 
 class ToolbarController extends ViewController {
-  @override
-  ToolbarController attach(
+
+  ToolbarController fromToolbar(
     YMRView<ViewController> view,
   ) {
-    super.attach(view);
+    super.fromView(view);
     return this;
   }
 }
