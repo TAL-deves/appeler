@@ -50,6 +50,7 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
           items: SlideItem.items,
         ),
         TextView(
+          visibility: ViewVisibility.gone,
           text: "Join a Meeting",
           background: AppColors.primary,
           textColor: Colors.white,
