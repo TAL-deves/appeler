@@ -855,6 +855,7 @@ class FrameViewController<T> {
   FrameLayer get layer => FrameLayer.from(itemSize);
 
   bool get isX {
+    return true;
     return size.width < size.height;
   }
 

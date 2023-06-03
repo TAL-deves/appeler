@@ -57,7 +57,7 @@ class AppScreen extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints(
-            maxWidth: 600,
+            maxWidth: 500,
           ),
           child: ScreenView(
             key: key,

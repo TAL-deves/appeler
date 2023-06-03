@@ -142,17 +142,17 @@ class _MeetingControlsState extends State<MeetingControls> {
             setState(onScreenShare);
           },
         ),
-        IconView(
-          padding: 8,
-          visibility: ViewVisibility.gone,
-          icon: Icons.back_hand_outlined,
-          tint: isRiseHand ? activeIC : inactiveIC,
-          background: isRiseHand ? activeBG : inactiveBG,
-          onClick: (context) {
-            isRiseHand = !isRiseHand;
-            setState(onRiseHand);
-          },
-        ),
+        // IconView(
+        //   padding: 8,
+        //   visibility: ViewVisibility.gone,
+        //   icon: Icons.back_hand_outlined,
+        //   tint: isRiseHand ? activeIC : inactiveIC,
+        //   background: isRiseHand ? activeBG : inactiveBG,
+        //   onClick: (context) {
+        //     isRiseHand = !isRiseHand;
+        //     setState(onRiseHand);
+        //   },
+        // ),
         IconView(
           padding: 8,
           visibility: ViewVisibility.visible,
