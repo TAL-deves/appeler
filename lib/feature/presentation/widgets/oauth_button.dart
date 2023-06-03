@@ -19,12 +19,13 @@ class OAuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Button(
       background: background,
-      gravity: Alignment.center,
+      width: double.infinity,
       borderRadiusBR: 25,
       borderRadiusTL: 25,
-      paddingHorizontal: 24,
-      paddingVertical: 12,
-      iconSize: 24,
+      paddingHorizontal: 50,
+      height: 50,
+      paddingVertical: 0,
+      iconSize: 28,
       marginTop: 24,
       onClick: onClick,
       text: text,
@@ -33,6 +34,7 @@ class OAuthButton extends StatelessWidget {
       fontWeight: FontWeight.w500,
       icon: icon,
       ripple: 10,
+      centerText: true,
       iconColorEnabled: false,
       iconAlignment: IconAlignment.start,
     );
