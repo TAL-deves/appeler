@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
-import 'package:flutter_andomie/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../index.dart';
+import '../../../widgets/responsive_layout.dart';
 
-class AuthSignUpFragment extends StatefulWidget {
+class AuthSignUpFragment extends StatelessWidget {
   final AuthSignInHandler onSignIn;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
@@ -20,135 +18,20 @@ class AuthSignUpFragment extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AuthSignUpFragment> createState() => _AuthSignUpFragmentState();
-}
-
-class _AuthSignUpFragmentState extends State<AuthSignUpFragment> {
-  late EmailEditingController email;
-  late PhoneEditingController phone;
-  late PasswordEditingController password;
-
-  @override
-  void initState() {
-    email = EmailEditingController();
-    phone = PhoneEditingController();
-    password = PasswordEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    email.dispose();
-    password.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return LinearLayout(
-      scrollable: true,
-      orientation: Axis.vertical,
-      crossGravity: CrossAxisAlignment.center,
-      paddingTop: 80,
-      paddingHorizontal: 32,
-      paddingBottom: 24,
-      children: [
-        const AppLogo(),
-        const SizedBox(height: 24),
-        // const TextView(
-        //   width: double.infinity,
-        //   text: "Create a new account",
-        //   textAlign: TextAlign.start,
-        //   textColor: Colors.black,
-        //   fontWeight: FontWeight.bold,
-        //   textSize: 24,
-        //   marginVertical: 24,
-        // ),
-        EmailField(
-          hint: "Enter your email",
-          controller: email,
-        ),
-        PhoneField(
-          controller: phone,
-          textCode: "+880",
-          hintCode: "+880",
-          hintNumber: "Enter phone number",
-        ),
-        PasswordField(
-          hint: "Enter your password",
-          controller: password,
-          margin: EdgeInsets.zero,
-        ),
-        CreateAccountTextView(
-          width: double.infinity,
-          textAlign: TextAlign.end,
-          padding: const EdgeInsets.all(12),
-          text: "Already have an account?  ",
-          buttonText: "Login here",
-          textColor: AppColors.primary,
-          textWeight: FontWeight.w500,
-          onPressed: () => widget.onSignIn(
-            AuthInfo(
-              email: email.text,
-              password: password.text,
-              phone: phone.number.numberWithCode,
-            ),
-          ),
-        ),
-        BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
-          builder: (context, state) {
-            return StackLayout(
-              width: double.infinity,
-              marginVertical: 24,
-              height: 65,
-              children: [
-                if (state.isLoading)
-                  const SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: CircularProgressIndicator(),
-                  )
-                else
-                  AppButton(
-                    text: "Sign up",
-                    borderRadius: 25,
-                    primary: AppColors.primary,
-                    onExecute: () => widget.onSignUp.call(
-                      AuthInfo(
-                        email: email.text,
-                        password: password.text,
-                        phone: phone.number.numberWithCode,
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          },
-        ),
-        const OrText(),
-        OAuthButton(
-          text: "Login With Google",
-          background: AppColors.primary,
-          icon: AppIcons.google,
-          onClick: (context) => widget.onSignInWithGoogle.call(
-            AuthInfo(
-              email: email.text,
-              password: password.text,
-            ),
-          ),
-        ),
-        OAuthButton(
-          text: "Login With Facebook",
-          background: AppColors.secondary,
-          icon: AppIcons.facebook,
-          onClick: (context) => widget.onSignInWithFacebook.call(
-            AuthInfo(
-              email: email.text,
-              password: password.text,
-            ),
-          ),
-        ),
-      ],
+    return ResponsiveLayout(
+      mobile: AuthSignUpMobileBody(
+        onSignIn: onSignIn,
+        onSignInWithGoogle: onSignInWithGoogle,
+        onSignInWithFacebook: onSignInWithFacebook,
+        onSignUp: onSignUp,
+      ),
+      desktop: AuthSignUpDesktopBody(
+        onSignIn: onSignIn,
+        onSignInWithGoogle: onSignInWithGoogle,
+        onSignInWithFacebook: onSignInWithFacebook,
+        onSignUp: onSignUp,
+      ),
     );
   }
 }

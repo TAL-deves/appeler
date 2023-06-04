@@ -153,7 +153,7 @@ class SlideItem {
       title:
           "Instant Video Conferences with your colleagues, friends and family",
       body: "Start or join a video conference meetings",
-      image: WelcomeContents.img_1,
+      image: WelcomeContents.img_2,
     ),
     SlideItem(
       title:
@@ -192,6 +192,8 @@ class _SlideViewItem extends StatelessWidget {
           image: item.image,
           scaleType: BoxFit.contain,
           marginVertical: 40,
+          widthMax: 300,
+          heightMax: 300,
         ),
         TextView(
           text: item.body,

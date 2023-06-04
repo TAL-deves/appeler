@@ -21,14 +21,14 @@ class AppScreen extends StatelessWidget {
   final double? titleSize;
   final TextStyle titleStyle;
   final FontWeight? titleWeight;
-  final Widget? body;
+  final Widget body;
   final List<Widget>? actions;
   final OnViewBuilder? toolbar;
   final OnViewBuilder? onLeadingBuilder;
 
   const AppScreen({
     Key? key,
-    this.autoLeading = true,
+    this.autoLeading,
     this.background,
     this.backgroundImage = "",
     this.toolbarColor = Colors.transparent,
@@ -44,7 +44,7 @@ class AppScreen extends StatelessWidget {
     this.titleSize = 20,
     this.titleStyle = const TextStyle(),
     this.titleWeight,
-    this.body,
+    required this.body,
     this.actions,
     this.toolbar,
     this.onLeadingBuilder,
@@ -56,15 +56,15 @@ class AppScreen extends StatelessWidget {
       body: Center(
         child: Container(
           alignment: Alignment.center,
-          constraints: const BoxConstraints(
-            maxWidth: 500,
-          ),
+          // constraints: const BoxConstraints(
+          //   maxWidth: 500,
+          // ),
           child: ScreenView(
             key: key,
             authShowLeading: autoLeading ?? !kIsWeb,
             actions: actions,
             background: background ?? Colors.white,
-            backgroundImage: AppContents.backgroundCover,
+            //backgroundImage: AppContents.backgroundCover,
             behindAppbar: true,
             behindBody: true,
             resizeToAvoidBottomInset: true,
@@ -84,7 +84,26 @@ class AppScreen extends StatelessWidget {
             toolbarHeight: toolbarHeight,
             onLeadingBuilder: onLeadingBuilder,
             onTitleBuilder: toolbar,
-            body: body,
+            body: Stack(
+              alignment: Alignment.center,
+              children: [
+                const ImageView(
+                  image: AppContents.backgroundCover1,
+                  positionType: ViewPositionType.topStart,
+                  width: 120,
+                  scaleType: BoxFit.fill,
+                  height: 120,
+                ),
+                const ImageView(
+                  image: AppContents.backgroundCover2,
+                  positionType: ViewPositionType.bottomEnd,
+                  width: 120,
+                  scaleType: BoxFit.fill,
+                  height: 120,
+                ),
+                body,
+              ],
+            ),
           ),
         ),
       ),

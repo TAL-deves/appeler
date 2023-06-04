@@ -3,19 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../index.dart';
 
-class HomeBody extends StatefulWidget {
+class HomeFragmentBuilder extends StatefulWidget {
   final HomeBodyType type;
 
-  const HomeBody({
+  const HomeFragmentBuilder({
     Key? key,
     required this.type,
   }) : super(key: key);
 
   @override
-  State<HomeBody> createState() => _HomeBodyState();
+  State<HomeFragmentBuilder> createState() => _HomeFragmentBuilderState();
 }
 
-class _HomeBodyState extends State<HomeBody> {
+class _HomeFragmentBuilderState extends State<HomeFragmentBuilder> {
   late HomeController controller;
 
   @override

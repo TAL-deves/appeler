@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -122,6 +123,96 @@ class TrianglePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class PolygonPainter extends CustomPainter {
+  final double radius;
+  final int sides;
+  final Color color;
+
+  const PolygonPainter({
+    required this.radius,
+    required this.sides,
+    required this.color,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double centerX = size.width / 2;
+    final double centerY = size.height / 2;
+
+    final double angle = (2 * 3.14159) / sides;
+    final double halfAngle = angle / 2;
+
+    final Path path = Path();
+
+    double x = centerX + radius * cos(-halfAngle);
+    double y = centerY + radius * sin(-halfAngle);
+    path.moveTo(x, y);
+
+    for (int i = 0; i < sides; i++) {
+      x = centerX + radius * cos(angle * i - halfAngle);
+      y = centerY + radius * sin(angle * i - halfAngle);
+      path.lineTo(x, y);
+    }
+
+    path.close();
+
+    final Paint paint = Paint()..color = color;
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class ChorkiPainter extends CustomPainter {
+  final double radius;
+  final int numPoints;
+  final Color color;
+
+  const ChorkiPainter({
+    required this.radius,
+    this.numPoints = 5,
+    this.color = Colors.orange,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double centerX = size.width / 2;
+    final double centerY = size.height / 2;
+
+    final double angle = (2 * 3.14159) / numPoints;
+    final double halfAngle = angle / 2;
+
+    final Path path = Path();
+
+    double x = centerX + radius * cos(-halfAngle);
+    double y = centerY + radius * sin(-halfAngle);
+    path.moveTo(x, y);
+
+    for (int i = 0; i < numPoints; i++) {
+      x = centerX + radius * cos(angle * i - halfAngle);
+      y = centerY + radius * sin(angle * i - halfAngle);
+      path.lineTo(x, y);
+
+      x = centerX + radius / 2 * cos(angle * i + halfAngle);
+      y = centerY + radius / 2 * sin(angle * i + halfAngle);
+      path.lineTo(x, y);
+    }
+
+    path.close();
+
+    final Paint paint = Paint()..color = color;
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
 }

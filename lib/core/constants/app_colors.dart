@@ -5,5 +5,8 @@ class AppColors {
 
   static AppColor primary = AppColor.fromCode(0xff2c4d60);
   static AppColor secondary = AppColor.fromCode(0xff7cadbb);
-  static AppColor ternary = AppColor.fromCode(0xff808080);
+  static AppColor ternary = AppColor.fromHex(
+    "#808080",
+    tint200: "#d9d9d9",
+  );
 }

@@ -1,3 +1,4 @@
+import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../index.dart';
@@ -13,21 +14,28 @@ class WelcomeActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
-      body: WelcomeFragment(
-        onSignIn: (context) => Navigator.pushNamed(
-          context,
-          AuthActivity.route,
-          arguments: AuthFragmentType.signIn,
-        ),
-        onSignUp: (context) => Navigator.pushNamed(
-          context,
-          AuthActivity.route,
-          arguments: AuthFragmentType.signUp,
-        ),
-        onJoinMeeting: (context) => Navigator.pushNamed(
-          context,
-          JoinActivity.route,
-          arguments: AuthFragmentType.signIn,
+      body: ResponsiveLayout(
+        mobile: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 500,
+          ),
+          child: WelcomeFragment(
+            onSignIn: (context) => Navigator.pushNamed(
+              context,
+              AuthActivity.route,
+              arguments: AuthFragmentType.signIn,
+            ),
+            onSignUp: (context) => Navigator.pushNamed(
+              context,
+              AuthActivity.route,
+              arguments: AuthFragmentType.signUp,
+            ),
+            onJoinMeeting: (context) => Navigator.pushNamed(
+              context,
+              JoinActivity.route,
+              arguments: AuthFragmentType.signIn,
+            ),
+          ),
         ),
       ),
     );

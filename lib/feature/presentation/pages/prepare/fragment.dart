@@ -37,6 +37,7 @@ class _PrepareFragmentState extends State<PrepareFragment> {
       layoutGravity: LayoutGravity.center,
       background: Colors.white10,
       paddingTop: 120,
+      widthMax: 420,
       padding: 40,
       children: [
         LinearLayout(

@@ -22,7 +22,6 @@ class AuthActivity extends StatelessWidget {
         child: BlocConsumer<AuthController, AuthResponse<AuthInfo>>(
           listener: (context, state) {
             if (state.isError || state.isMessage) {
-              print('error msg is: ${state.error}');
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.isMessage ? state.message : state.error),

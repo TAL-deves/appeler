@@ -1,5 +1,6 @@
 library home;
 
 export 'activity.dart';
-export 'body.dart';
+export 'builder.dart';
+export 'components/index.dart';
 export 'fragment.dart';
