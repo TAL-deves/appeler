@@ -428,85 +428,83 @@ class _FrameLayerSeventh<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flex(
-      direction: controller.y,
+      direction: controller.x,
       children: [
-        _FrameBuilder(
-          controller: controller,
-          flexible: true,
-          item: controller.items[0],
-        ),
-        SizedBox(
-          width: controller.spaceX,
-          height: controller.spaceY,
-        ),
         Expanded(
           child: Flex(
-            direction: controller.x,
+            direction: controller.y,
             children: [
               _FrameBuilder(
                 controller: controller,
+                item: controller.items[0],
                 flexible: true,
+              ),
+              SizedBox(
+                width: controller.spaceX,
+                height: controller.spaceY,
+              ),
+              _FrameBuilder(
+                controller: controller,
                 item: controller.items[1],
+                flexible: true,
               ),
               SizedBox(
-                width: controller.spaceY,
-                height: controller.spaceX,
+                width: controller.spaceX,
+                height: controller.spaceY,
               ),
               _FrameBuilder(
                 controller: controller,
-                flexible: true,
                 item: controller.items[2],
+                flexible: true,
               ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: controller.spaceX,
-          height: controller.spaceY,
-        ),
-        Expanded(
-          child: Flex(
-            direction: controller.x,
-            children: [
+              SizedBox(
+                width: controller.spaceX,
+                height: controller.spaceY,
+              ),
               _FrameBuilder(
                 controller: controller,
-                flexible: true,
                 item: controller.items[3],
-              ),
-              SizedBox(
-                width: controller.spaceY,
-                height: controller.spaceX,
-              ),
-              _FrameBuilder(
-                controller: controller,
                 flexible: true,
-                item: controller.items[4],
               ),
             ],
           ),
         ),
         SizedBox(
-          width: controller.spaceX,
-          height: controller.spaceY,
+          width: controller.spaceY,
+          height: controller.spaceX,
         ),
         Expanded(
           child: Flex(
-            direction: controller.x,
+            direction: controller.y,
             children: [
+              const Spacer(),
               _FrameBuilder(
+                flex: 2,
                 controller: controller,
+                item: controller.items[4],
                 flexible: true,
-                item: controller.items[5],
               ),
               SizedBox(
-                width: controller.spaceY,
-                height: controller.spaceX,
+                width: controller.spaceX,
+                height: controller.spaceY,
               ),
               _FrameBuilder(
+                flex: 2,
                 controller: controller,
+                item: controller.items[5],
                 flexible: true,
-                item: controller.items[6],
               ),
+              SizedBox(
+                width: controller.spaceX,
+                height: controller.spaceY,
+              ),
+              _FrameBuilder(
+                flex: 2,
+                controller: controller,
+                item: controller.items[6],
+                flexible: true,
+              ),
+              const Spacer(),
             ],
           ),
         ),
@@ -791,9 +789,14 @@ class _FrameBuilder<T> extends StatelessWidget {
         ? Expanded(
             flex: flex,
             child: Container(
+              clipBehavior: Clip.antiAlias,
               width: double.infinity,
               height: resizable ? null : double.infinity,
-              color: controller.itemBackground,
+              decoration: BoxDecoration(
+                color: controller.itemBackground,
+                borderRadius:
+                    controller.itemSize > 1 ? BorderRadius.circular(25) : null,
+              ),
               child: Center(
                 child: controller.frameBuilder?.call(
                   context,
@@ -855,7 +858,6 @@ class FrameViewController<T> {
   FrameLayer get layer => FrameLayer.from(itemSize);
 
   bool get isX {
-    return true;
     return size.width < size.height;
   }
 

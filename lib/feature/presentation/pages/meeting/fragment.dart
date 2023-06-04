@@ -1,10 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+
 import '../../../../index.dart';
 
 class MeetingFragment extends StatefulWidget {
@@ -279,14 +281,17 @@ class MeetingFragmentState extends State<MeetingFragment> {
           height: double.infinity,
           children: [
             Expanded(
-              child: MeetingView(
-                config: config,
-                items: children,
-                itemBackground: Colors.black.withAlpha(50),
-                itemSpace: 5,
-                frameBuilder: (context, layer, item) {
-                  return item;
-                },
+              child: Container(
+                padding: itemCount > 1 ? const EdgeInsets.all(16) : null,
+                child: MeetingView(
+                  config: config,
+                  items: children,
+                  itemBackground: Colors.black.withAlpha(50),
+                  itemSpace: 16,
+                  frameBuilder: (context, layer, item) {
+                    return item;
+                  },
+                ),
               ),
             ),
             MeetingControls(
@@ -320,7 +325,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
           ],
         ),
         TextView(
-          text: 'Screen sharing!!! ',
+          text: 'Screen sharing!!! pIFPeVD97u5PcN9iGLpg',
           visibility: _shareStream != null
               ? ViewVisibility.visible
               : ViewVisibility.gone,
