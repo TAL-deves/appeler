@@ -215,8 +215,8 @@ class _ApplicationState extends State<Application> {
 
   @override
   void dispose() {
-    _closeReceivePort();
     _stopForegroundTask();
+    _closeReceivePort();
     super.dispose();
   }
 
