@@ -86,8 +86,17 @@ class Application extends StatefulWidget {
   State<Application> createState() => _ApplicationState();
 }
 
-class _ApplicationState extends State<Application> {
+class _ApplicationState extends State<Application> with WidgetsBindingObserver{
   ReceivePort? _receivePort;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('state is: $state');
+    if(state == AppLifecycleState.detached){
+      _stopForegroundTask();
+      _closeReceivePort();
+    }
+  }
 
   Future<void> _requestPermissionForAndroid() async {
     if (!Platform.isAndroid) {
@@ -200,6 +209,7 @@ class _ApplicationState extends State<Application> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!kIsWeb && Platform.isAndroid) {
         await _requestPermissionForAndroid();
@@ -213,10 +223,13 @@ class _ApplicationState extends State<Application> {
     });
   }
 
+
   @override
   void dispose() {
-    _stopForegroundTask();
-    _closeReceivePort();
+    print('dispose is called');
+    //_stopForegroundTask();
+    //_closeReceivePort();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
