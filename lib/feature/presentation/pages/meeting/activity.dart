@@ -54,77 +54,80 @@ class _MeetingActivityState extends State<MeetingActivity> {
       ],
       child: AppScreen(
         autoLeading: false,
-        body: LinearLayout(
-          orientation: Axis.vertical,
-          width: double.infinity,
-          widthMax: 1400,
-          children: [
-            StackLayout(
-              width: double.infinity,
-              height: kToolbarHeight,
-              children: [
-                IconView(
-                  padding: 8,
-                  positionType: ViewPositionType.centerStart,
-                  icon: Icons.message_outlined,
-                  tint: AppColors.primary,
-                  background: Colors.transparent,
-                  visibility: kIsWeb ? ViewVisibility.gone : null,
-                ),
-                LinearLayout(
-                  positionType: ViewPositionType.center,
-                  layoutGravity: LayoutGravity.center,
-                  children: [
-                    RawIconView(
-                      icon: AppInfo.logo,
-                      tint: AppColors.primary,
-                      size: 24,
-                    ),
-                    const TextView(
-                      text: AppInfo.name,
-                      textColor: Colors.black,
-                    ),
-                  ],
-                ),
-                LinearLayout(
-                  visibility: kIsWeb ? ViewVisibility.gone : null,
-                  positionType: ViewPositionType.centerEnd,
-                  orientation: Axis.horizontal,
-                  crossGravity: CrossAxisAlignment.center,
-                  children: [
-                    IconView(
-                      padding: 8,
-                      icon: isSilent
-                          ? Icons.volume_off_outlined
-                          : Icons.volume_up_outlined,
-                      tint: AppColors.primary,
-                      onClick: (context) {
-                        isSilent = !isSilent;
-                        setState(silent);
-                      },
-                    ),
-                    IconView(
-                      padding: 8,
-                      icon: isFrontCamera
-                          ? Icons.camera_front_outlined
-                          : Icons.camera_rear_outlined,
-                      tint: AppColors.primary,
-                      onClick: (context) {
-                        isFrontCamera = !isFrontCamera;
-                        setState(switchCamera);
-                      },
-                    )
-                  ],
-                )
-              ],
-            ),
-            Expanded(
-              child: MeetingFragment(
-                key: globalKey,
-                info: widget.data,
+        toolbarHeight: 0,
+        body: SafeArea(
+          child: LinearLayout(
+            orientation: Axis.vertical,
+            width: double.infinity,
+            widthMax: 1400,
+            children: [
+              StackLayout(
+                width: double.infinity,
+                height: kToolbarHeight,
+                children: [
+                  IconView(
+                    padding: 8,
+                    positionType: ViewPositionType.centerStart,
+                    icon: Icons.message_outlined,
+                    tint: AppColors.primary,
+                    background: Colors.transparent,
+                    visibility: kIsWeb ? ViewVisibility.gone : null,
+                  ),
+                  LinearLayout(
+                    positionType: ViewPositionType.center,
+                    layoutGravity: LayoutGravity.center,
+                    children: [
+                      RawIconView(
+                        icon: AppInfo.logo,
+                        tint: AppColors.primary,
+                        size: 24,
+                      ),
+                      const TextView(
+                        text: AppInfo.name,
+                        textColor: Colors.black,
+                      ),
+                    ],
+                  ),
+                  LinearLayout(
+                    visibility: kIsWeb ? ViewVisibility.gone : null,
+                    positionType: ViewPositionType.centerEnd,
+                    orientation: Axis.horizontal,
+                    crossGravity: CrossAxisAlignment.center,
+                    children: [
+                      IconView(
+                        padding: 8,
+                        icon: isSilent
+                            ? Icons.volume_off_outlined
+                            : Icons.volume_up_outlined,
+                        tint: AppColors.primary,
+                        onClick: (context) {
+                          isSilent = !isSilent;
+                          setState(silent);
+                        },
+                      ),
+                      IconView(
+                        padding: 8,
+                        icon: isFrontCamera
+                            ? Icons.camera_front_outlined
+                            : Icons.camera_rear_outlined,
+                        tint: AppColors.primary,
+                        onClick: (context) {
+                          isFrontCamera = !isFrontCamera;
+                          setState(switchCamera);
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
-            ),
-          ],
+              Expanded(
+                child: MeetingFragment(
+                  key: globalKey,
+                  info: widget.data,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -35,7 +35,7 @@ class AppCommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Button(
       absorbMode: true,
-      height: 40,
+      heightMin: 40,
       width: width,
       flex: flex,
       background: background,

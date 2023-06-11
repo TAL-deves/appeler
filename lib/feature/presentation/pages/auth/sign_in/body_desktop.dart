@@ -177,8 +177,8 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
           crossGravity: CrossAxisAlignment.center,
           mainGravity: MainAxisAlignment.center,
           gravity: Alignment.center,
-          children: [
-            const AppLogo(),
+          children: const [
+            AppLogo(),
           ],
         ),
       ],
