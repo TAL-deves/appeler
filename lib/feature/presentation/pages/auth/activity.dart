@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
 class AuthActivity extends StatelessWidget {
-  static const String route = "auth";
+  static const String route = "/auth";
   static const String title = "Auth";
   final AuthFragmentType? type;
+  final bool? isFromWelcome;
 
   const AuthActivity({
     Key? key,
+    required this.isFromWelcome,
     required this.type,
   }) : super(key: key);
 
@@ -29,16 +32,15 @@ class AuthActivity extends StatelessWidget {
               );
             }
             if (state.isAuthenticated) {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
+              context.pushReplacement(
                 HomeActivity.route,
-                (route) => false,
-                arguments: state.data,
+                extra: state.data,
               );
             }
           },
           builder: (context, state) {
-            return AuthBody(
+            return AuthFragment(
+              isFromWelcome: isFromWelcome ?? false,
               type: type ?? AuthFragmentType.signIn,
             );
           },

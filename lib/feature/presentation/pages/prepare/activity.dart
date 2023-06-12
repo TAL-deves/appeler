@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -55,10 +56,9 @@ class _PrepareActivityState extends State<PrepareActivity> {
           ),
           onPrepare: (context, info) {
             joined = true;
-            Navigator.pushReplacementNamed(
-              context,
-              MeetingActivity.route,
-              arguments: {
+            context.push(
+              MeetingActivity.route.withSlash,
+              extra: {
                 "data": info,
                 "HomeController": context.read<HomeController>(),
               },

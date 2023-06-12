@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
 class HomeActivity extends StatelessWidget {
-  static const String route = "home";
+  static const String route = "/";
   static const String title = "Home";
 
   const HomeActivity({Key? key}) : super(key: key);
@@ -19,11 +20,7 @@ class HomeActivity extends StatelessWidget {
       child: BlocConsumer<HomeController, AuthResponse<AuthInfo>>(
         listener: (context, state) {
           if (!state.isAuthenticated) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              AuthActivity.route,
-              (route) => false,
-            );
+            context.pushReplacement(AuthActivity.route);
           }
         },
         builder: (context, state) {

@@ -10,54 +10,6 @@ import 'package:wakelock/wakelock.dart';
 
 import 'index.dart';
 
-@pragma('vm:entry-point')
-void startCallback() {
-  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
-}
-
-class MyTaskHandler extends TaskHandler {
-  SendPort? _sendPort;
-  int _eventCount = 0;
-
-  @override
-  Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
-    _sendPort = sendPort;
-    final customData =
-        await FlutterForegroundTask.getData<String>(key: 'customData');
-    print('customData: $customData');
-  }
-
-  @override
-  Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
-    FlutterForegroundTask.updateService(
-      notificationTitle: 'Foreground Service',
-      notificationText: 'Service event: $_eventCount',
-    );
-
-    sendPort?.send(_eventCount);
-
-    _eventCount++;
-  }
-
-  @override
-  Future<void> onDestroy(DateTime timestamp, SendPort? sendPort) async {
-    // You can use the clearAllData function to clear all the stored data.
-    await FlutterForegroundTask.clearAllData();
-  }
-
-  @override
-  void onButtonPressed(String id) {
-    print('onButtonPressed >> $id');
-  }
-
-  @override
-  void onNotificationPressed() {
-    //FlutterForegroundTask.launchApp("/resume-route");
-    FlutterForegroundTask.launchApp(SplashActivity.route);
-    _sendPort?.send('onNotificationPressed');
-  }
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Wakelock.enable();
@@ -236,16 +188,65 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     return WithForegroundTask(
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: AppInfo.name,
         theme: ThemeData(
           primarySwatch: AppColors.primary,
         ),
-        initialRoute: SplashActivity.route,
-        onGenerateRoute: AppRouter.I.generate,
+        routerConfig: AppRouter.I.router,
+        // initialRoute: SplashActivity.route,
+        // onGenerateRoute: AppRouter.I.generate,
       ),
     );
+  }
+}
+
+@pragma('vm:entry-point')
+void startCallback() {
+  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
+}
+
+class MyTaskHandler extends TaskHandler {
+  SendPort? _sendPort;
+  int _eventCount = 0;
+
+  @override
+  Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
+    _sendPort = sendPort;
+    final customData =
+    await FlutterForegroundTask.getData<String>(key: 'customData');
+    print('customData: $customData');
+  }
+
+  @override
+  Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
+    FlutterForegroundTask.updateService(
+      notificationTitle: 'Foreground Service',
+      notificationText: 'Service event: $_eventCount',
+    );
+
+    sendPort?.send(_eventCount);
+
+    _eventCount++;
+  }
+
+  @override
+  Future<void> onDestroy(DateTime timestamp, SendPort? sendPort) async {
+    // You can use the clearAllData function to clear all the stored data.
+    await FlutterForegroundTask.clearAllData();
+  }
+
+  @override
+  void onButtonPressed(String id) {
+    print('onButtonPressed >> $id');
+  }
+
+  @override
+  void onNotificationPressed() {
+    //FlutterForegroundTask.launchApp("/resume-route");
+    FlutterForegroundTask.launchApp(SplashActivity.route);
+    _sendPort?.send('onNotificationPressed');
   }
 }
 

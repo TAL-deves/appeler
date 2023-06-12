@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -70,10 +71,9 @@ class _JoinActivityState extends State<JoinActivity> {
                   onClick: (context) {
                     var roomId = codeController.text;
                     if (roomId.isNotEmpty) {
-                      Navigator.pushNamed(
-                        context,
-                        PrepareActivity.route,
-                        arguments: {
+                      context.push(
+                        PrepareActivity.route.withSlash,
+                        extra: {
                           "meeting_id": roomId,
                           "HomeController": context.read<HomeController>(),
                         },

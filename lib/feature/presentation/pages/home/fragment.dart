@@ -3,6 +3,7 @@ import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -71,31 +72,19 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onScheduleMeet(BuildContext context) {}
 
-  void onJoin(BuildContext context) {
-    Navigator.pushNamed(
-      context,
-      PrepareActivity.route,
-      arguments: {
-        "meeting_id": code.text,
-        "HomeController": widget.controller,
-      },
-    );
-  }
-
-  void onLogout(BuildContext context) {
-    controller.signOut().then((value) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AuthActivity.route,
-        (route) => false,
-        arguments: AuthFragmentType.signIn,
+  void onJoin(BuildContext context) => context.push(
+        PrepareActivity.route.withSlash,
+        extra: {
+          "meeting_id": code.text,
+          "HomeController": widget.controller,
+        },
       );
-    });
-  }
 
-  void onCopyOrShare(dynamic value) async {
-    await ClipboardHelper.setText(
-      value,
-    );
-  }
+  void onLogout(BuildContext context) => controller.signOut().then((value) {
+        context.push(AuthActivity.route);
+      });
+
+  void onCopyOrShare(dynamic value) async => await ClipboardHelper.setText(
+        value,
+      );
 }

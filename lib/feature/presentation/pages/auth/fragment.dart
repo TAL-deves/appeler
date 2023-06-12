@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -11,10 +12,12 @@ typedef AuthSignInHandler = Function(AuthInfo data);
 typedef AuthSignUpHandler = Function(AuthInfo data);
 
 class AuthFragment extends StatefulWidget {
+  final bool isFromWelcome;
   final AuthFragmentType type;
 
   const AuthFragment({
     Key? key,
+    required this.isFromWelcome,
     required this.type,
   }) : super(key: key);
 
@@ -39,15 +42,13 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignIn: controller.signIn,
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
-          onCreateAccount: (data) => Navigator.pushNamed(
-            context,
+          onCreateAccount: (data) => context.push(
             AuthActivity.route,
-            arguments: AuthFragmentType.signUp,
+            extra: {"type": AuthFragmentType.signUp},
           ),
-          onForgetPassword: (data) => Navigator.pushNamed(
-            context,
+          onForgetPassword: (data) => context.push(
             AuthActivity.route,
-            arguments: AuthFragmentType.forgotPassword,
+            extra: {"type": AuthFragmentType.forgotPassword},
           ),
         );
       case AuthFragmentType.signUp:
@@ -55,7 +56,13 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignUp: controller.signUp,
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
-          onSignIn: (data) => Navigator.pop(context, data),
+          onSignIn: (data) {
+            if (widget.isFromWelcome) {
+              context.push(AuthActivity.route);
+            } else {
+              Navigator.pop(context);
+            }
+          },
         );
       case AuthFragmentType.forgotPassword:
         return AuthForgotPasswordFragment(

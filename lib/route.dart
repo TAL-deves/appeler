@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'index.dart';
 
@@ -7,86 +8,84 @@ class AppRouter {
 
   static AppRouter get I => const AppRouter._();
 
-  Route<T> generate<T>(RouteSettings settings) {
-    final route = settings.name;
-    final data = settings.arguments;
-    switch (route) {
-      case SplashActivity.route:
-        return _splash(data);
-      case WelcomeActivity.route:
-        return _welcome(data);
-      case AuthActivity.route:
-        return _auth(data);
-      case HomeActivity.route:
-        return _home(data);
-      case MeetingActivity.route:
-        return _meeting(data);
-      case JoinActivity.route:
-        return _join(data);
-      case PrepareActivity.route:
-        return _prepare(data);
-      default:
-        return _error(data);
-    }
-  }
+  GoRouter get router => GoRouter(
+        initialLocation: SplashActivity.route,
+        errorBuilder: (context, state) => const ErrorScreen(),
+        routes: <RouteBase>[
+          GoRoute(
+            path: SplashActivity.route,
+            builder: (context, state) {
+              return const SplashActivity();
+            },
+          ),
+          GoRoute(
+            path: AuthActivity.route,
+            builder: (context, state) {
+              var data = state.extra;
+              return AuthActivity(
+                isFromWelcome: data.getValue<bool>("isFromWelcome"),
+                type: data.getValue<AuthFragmentType>("type"),
+              );
+            },
+          ),
+          GoRoute(
+            path: WelcomeActivity.route,
+            builder: (context, state) {
+              return const WelcomeActivity();
+            },
+          ),
+          GoRoute(
+            path: AboutActivity.route,
+            builder: (context, state) {
+              var data = state.extra;
+              return AboutActivity(
+                type: data.getValue<AboutFragmentType>("type"),
+              );
+            },
+          ),
+          GoRoute(
+            path: HomeActivity.route,
+            builder: (context, state) {
+              return const HomeActivity();
+            },
+            routes: <RouteBase>[
+              GoRoute(
+                path: MeetingActivity.route,
+                builder: (context, state) {
+                  var data = state.extra;
+                  return MeetingActivity(
+                    data: data.getValue("data"),
+                    homeController: data.getValue("HomeController"),
+                  );
+                },
+              ),
+              GoRoute(
+                path: JoinActivity.route,
+                builder: (context, state) {
+                  var data = state.extra;
+                  return JoinActivity(
+                    homeController: data.getValue("HomeController"),
+                  );
+                },
+              ),
+              GoRoute(
+                path: PrepareActivity.route,
+                builder: (context, state) {
+                  var data = state.extra;
+                  return PrepareActivity(
+                    meetingId: data.getValue("meeting_id"),
+                    homeController: data.getValue("HomeController"),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      );
+}
 
-  Route<T> _splash<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => const SplashActivity(),
-    );
-  }
-
-  Route<T> _welcome<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => const WelcomeActivity(),
-    );
-  }
-
-  Route<T> _auth<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => AuthActivity(
-        type: data is AuthFragmentType ? data : null,
-      ),
-    );
-  }
-
-  Route<T> _home<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => const HomeActivity(),
-    );
-  }
-
-  Route<T> _meeting<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => MeetingActivity(
-        data: data.getValue("data"),
-        homeController: data.getValue("HomeController"),
-      ),
-    );
-  }
-
-  Route<T> _join<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => JoinActivity(
-        homeController: data.getValue("HomeController"),
-      ),
-    );
-  }
-
-  Route<T> _prepare<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => PrepareActivity(
-        meetingId: data.getValue("meeting_id"),
-        homeController: data.getValue("HomeController"),
-      ),
-    );
-  }
-
-  Route<T> _error<T>(Object? data) {
-    return MaterialPageRoute(
-      builder: (context) => const ErrorScreen(),
-    );
-  }
+extension AppRouterPathExtension on String {
+  String get withSlash => "/$this";
 }
 
 class ErrorScreen extends StatelessWidget {

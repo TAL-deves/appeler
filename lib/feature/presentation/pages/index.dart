@@ -1,5 +1,6 @@
 library pages;
 
+export 'abouts/index.dart';
 export 'auth/index.dart';
 export 'home/index.dart';
 export 'join/index.dart';

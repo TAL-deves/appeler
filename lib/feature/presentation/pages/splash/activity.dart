@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
 class SplashActivity extends StatelessWidget {
   static const String title = "Splash";
-  static const String route = "splash";
+  static const String route = "/splash";
 
   const SplashActivity({
     Key? key,
@@ -23,21 +24,20 @@ class SplashActivity extends StatelessWidget {
         subtitle: AppInfo.description,
         logo: AppInfo.logo,
         logoColor: AppColors.primary,
-        onRoute: (context) {
-          locator<AuthHandler>().isSignIn().then((value){
-            if(value) { Navigator.pushReplacementNamed(context, HomeActivity.route, arguments: AuthHelper.uid,); }
-            else { Navigator.pushReplacementNamed(context, WelcomeActivity.route); }
+        onRoute: (c) {
+          locator<AuthHandler>().isSignIn().then((value) {
+            if (value) {
+              context.pushReplacement(
+                HomeActivity.route,
+                extra: AuthHelper.uid,
+              );
+            } else {
+              context.pushReplacement(
+                WelcomeActivity.route,
+                extra: AuthHelper.uid,
+              );
+            }
           });
-          // return AuthHelper.isLoggedIn
-          //     ? Navigator.pushReplacementNamed(
-          //         context,
-          //         HomeActivity.route,
-          //         arguments: AuthHelper.uid,
-          //       )
-          //     : Navigator.pushReplacementNamed(
-          //         context,
-          //         WelcomeActivity.route,
-          //       );
         },
       ),
     );
