@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/widgets.dart';
+import 'package:flutter_androssy/widgets.dart';
 
 import '../../index.dart';
 
@@ -68,21 +68,23 @@ class _MeetingCameraState extends State<MeetingCamera> {
             positionType: ViewPositionType.flexBottom,
             orientation: Axis.horizontal,
             children: [
-              ImageButton(
+              IconView(
                 icon: isCameraOn ? Icons.videocam : Icons.videocam_off_outlined,
                 background: Colors.white24,
                 tint: Colors.white,
-                onClick: () {
+                padding: 8,
+                onClick: (context) {
                   isCameraOn = !isCameraOn;
                   widget.onCameraStateChange.call(isCameraOn);
                   setState(() {});
                 },
               ),
-              ImageButton(
+              IconView(
                 icon: isMuted ? Icons.mic_off : Icons.mic,
                 background: Colors.white24,
                 tint: Colors.white,
-                onClick: () {
+                padding: 8,
+                onClick: (context) {
                   isMuted = !isMuted;
                   widget.onMicroStateChange.call(isMuted);
                   setState(() {});

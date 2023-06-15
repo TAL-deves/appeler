@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/widgets.dart';
+import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../index.dart';
 
@@ -20,13 +20,12 @@ class AboutActivity extends StatelessWidget {
       body: SafeArea(
         child: LinearLayout(
           children: [
-            TextView(
-              height: kToolbarHeight,
-              textSize: 20,
-              gravity: Alignment.center,
-              textColor: Colors.black,
-              text: "Privacy Policy"
-            ),
+            const TextView(
+                height: kToolbarHeight,
+                textSize: 20,
+                gravity: Alignment.center,
+                textColor: Colors.black,
+                text: "Privacy Policy"),
             Expanded(
               child: AboutFragmentBuilder(
                 isFromWelcome: false,

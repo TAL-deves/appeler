@@ -62,6 +62,8 @@ class AppSplashView extends StatefulWidget {
 }
 
 class _AppSplashViewState extends State<AppSplashView> {
+  late Timer _timer;
+
   @override
   void initState() {
     if (widget.onExecute != null) {
@@ -69,12 +71,17 @@ class _AppSplashViewState extends State<AppSplashView> {
           ?.call()
           .whenComplete(() => widget.onRoute?.call(context));
     } else {
-      Timer(Duration(milliseconds: widget.duration),
+      _timer = Timer(Duration(milliseconds: widget.duration),
           () => widget.onRoute?.call(context));
     }
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(

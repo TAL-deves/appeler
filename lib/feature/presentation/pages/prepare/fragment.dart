@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/widgets.dart';
+import 'package:flutter_androssy/widgets.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../index.dart';

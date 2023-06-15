@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/widgets.dart';
 
-class AppButton extends StatefulWidget {
+class AppButton extends StatelessWidget {
   final String text;
   final Color? primary;
   final double? width, height;
@@ -27,60 +28,20 @@ class AppButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AppButton> createState() => _AppButtonState();
-}
-
-class _AppButtonState extends State<AppButton> {
-  late bool isLoaded = true;
-
-  late Color primary = widget.primary ?? Theme.of(context).primaryColor;
-
-  @override
   Widget build(BuildContext context) {
-    final color = isLoaded ? Colors.white : Colors.black.withOpacity(0.4);
-    final background = isLoaded ? primary : primary.withOpacity(0.1);
-
-    return GestureDetector(
-      onTap: isLoaded ? _onClick : null,
-      child: Container(
-        margin: widget.margin ?? const EdgeInsets.symmetric(vertical: 8),
-        clipBehavior: Clip.antiAlias,
-        width: widget.width ?? double.infinity,
-        height: widget.height,
-        padding: widget.padding,
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: Text(
-            widget.text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: color,
-              fontSize: 18,
-            ),
-          ),
-        ),
+    return SizedBox(
+      width: width,
+      height: height,
+      child: FutureButton(
+        text: text,
+        backgroundState: (state) => primary,
+        padding: padding,
+        margin: margin,
+        borderRadius: borderRadius ?? 0,
+        enabled: enabled,
+        onClick: onPressed,
+        onExecute: onExecute,
       ),
     );
-  }
-
-  void _onClick() async {
-    loading;
-    if (widget.onExecute != null) {
-      await widget.onExecute?.call();
-    } else {
-      widget.onPressed?.call();
-    }
-    loaded;
-  }
-
-  get loading => setState(() => isLoaded = false);
-
-  get loaded {
-    const duration = Duration(milliseconds: 250);
-    Timer(duration, () => setState(() => isLoaded = true));
   }
 }
