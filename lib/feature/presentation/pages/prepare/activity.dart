@@ -12,7 +12,7 @@ class PrepareActivity extends StatefulWidget {
   static const String title = "Prepare";
 
   final HomeController? homeController;
-  final String meetingId;
+  final String? meetingId;
 
   const PrepareActivity({
     Key? key,
@@ -25,14 +25,15 @@ class PrepareActivity extends StatefulWidget {
 }
 
 class _PrepareActivityState extends State<PrepareActivity> {
+  late String? meetingId = widget.meetingId;
   late bool isSilent = false;
   late bool isFrontCamera = true;
   var joined = false;
 
   @override
   void dispose() {
-    if (!joined) {
-      locator<MeetingHandler>().removeStatus(widget.meetingId);
+    if (!joined && widget.meetingId != null) {
+      locator<MeetingHandler>().removeStatus(widget.meetingId!);
     }
     super.dispose();
   }
@@ -50,13 +51,13 @@ class _PrepareActivityState extends State<PrepareActivity> {
         titleCenter: true,
         body: PrepareFragment(
           info: MeetingInfo(
-            id: widget.meetingId,
+            id: meetingId ?? "",
             isSilent: isSilent,
             cameraType: isFrontCamera ? CameraType.front : CameraType.back,
           ),
-          onPrepare: (context, info) {
+          onPrepare: (context, info) async {
             joined = true;
-            context.push(
+            context.pushReplacement(
               MeetingActivity.route.withSlash,
               extra: {
                 "data": info,

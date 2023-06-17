@@ -6,6 +6,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -312,7 +313,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
               onRiseHand: onRiseHand,
               onSilent: onSilent,
               onSwitchCamera: onSwitchCamera,
-              onCancel: (context) => Navigator.pop(context),
+              onCancel: (context) => context.pop(),
               cancelProperty: const ButtonProperty(
                 tint: Colors.red,
                 background: Colors.transparent,

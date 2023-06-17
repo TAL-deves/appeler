@@ -9,7 +9,7 @@ class MeetingActivity extends StatefulWidget {
   static const String route = "meeting";
   static const String title = "Meeting";
 
-  final MeetingInfo data;
+  final MeetingInfo? data;
   final HomeController? homeController;
 
   const MeetingActivity({
@@ -23,9 +23,10 @@ class MeetingActivity extends StatefulWidget {
 }
 
 class _MeetingActivityState extends State<MeetingActivity> {
-  late bool isSilent = widget.data.isSilent;
-  late bool isFrontCamera = widget.data.isFrontCamera;
-  late bool isScreenShare = widget.data.isShareScreen;
+  late MeetingInfo info = widget.data ?? MeetingInfo(id: "");
+  late bool isSilent = info.isSilent;
+  late bool isFrontCamera = info.isFrontCamera;
+  late bool isScreenShare = info.isShareScreen;
 
   final globalKey = GlobalKey<MeetingFragmentState>();
 
@@ -123,7 +124,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
               Expanded(
                 child: MeetingFragment(
                   key: globalKey,
-                  info: widget.data,
+                  info: info,
                 ),
               ),
             ],
