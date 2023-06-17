@@ -8,6 +8,7 @@ class HomeFragmentDesktop extends StatefulWidget {
   final TextEditingController codeController;
   final OnViewClickListener onCreateMeet, onJoinMeet, onScheduleMeet, onJoin, onLogout;
   final OnViewChangeListener onCopyOrShare;
+  final ButtonController joinButton;
 
   const HomeFragmentDesktop({
     Key? key,
@@ -19,6 +20,7 @@ class HomeFragmentDesktop extends StatefulWidget {
     required this.onJoin,
     required this.onCopyOrShare,
     required this.onLogout,
+    required this.joinButton,
   }) : super(key: key);
 
   @override
@@ -57,6 +59,7 @@ class _HomeFragmentDesktopState extends State<HomeFragmentDesktop> {
         ),
         MeetingIdWithButtons(
           controller: controller,
+          joinButton: widget.joinButton,
           codeController: codeController,
           onJoin: widget.onJoin,
           onCopyOrShare: widget.onCopyOrShare,

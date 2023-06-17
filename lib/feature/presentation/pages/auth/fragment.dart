@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -42,13 +41,13 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignIn: controller.signIn,
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
-          onCreateAccount: (data) => context.push(
+          onCreateAccount: (data) => AppNavigator.of(context).go(
             AuthActivity.route,
-            extra: {"type": AuthFragmentType.signUp},
+            pathParams: {"name": "sign_up"},
           ),
-          onForgetPassword: (data) => context.push(
+          onForgetPassword: (data) => AppNavigator.of(context).go(
             AuthActivity.route,
-            extra: {"type": AuthFragmentType.forgotPassword},
+            pathParams: {"name": "forgot_password"},
           ),
         );
       case AuthFragmentType.signUp:
@@ -57,11 +56,10 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
           onSignIn: (data) {
-            if (widget.isFromWelcome) {
-              context.push(AuthActivity.route);
-            } else {
-              Navigator.pop(context);
-            }
+            AppNavigator.of(context).go(
+              AuthActivity.route,
+              pathParams: {"name": "sign_in"},
+            );
           },
         );
       case AuthFragmentType.forgotPassword:

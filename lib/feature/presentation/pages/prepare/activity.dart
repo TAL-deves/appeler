@@ -57,7 +57,7 @@ class _PrepareActivityState extends State<PrepareActivity> {
           ),
           onPrepare: (context, info) async {
             joined = true;
-            context.pushReplacement(
+            AppNavigator.of(context).goHome(
               MeetingActivity.route.withSlash,
               extra: {
                 "data": info,

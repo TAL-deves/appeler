@@ -12,6 +12,7 @@ class HomeFragmentMobile extends StatefulWidget {
       onJoin,
       onLogout;
   final OnViewChangeListener onCopyOrShare;
+  final ButtonController joinButton;
 
   const HomeFragmentMobile({
     Key? key,
@@ -23,6 +24,7 @@ class HomeFragmentMobile extends StatefulWidget {
     required this.onJoin,
     required this.onLogout,
     required this.onCopyOrShare,
+    required this.joinButton,
   }) : super(key: key);
 
   @override
@@ -59,6 +61,7 @@ class _HomeFragmentMobileState extends State<HomeFragmentMobile> {
           ],
         ),
         MeetingIdWithButtons(
+          joinButton: widget.joinButton,
           controller: controller,
           codeController: codeController,
           onJoin: widget.onJoin,

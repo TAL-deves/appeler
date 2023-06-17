@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../../index.dart';
@@ -9,6 +10,7 @@ class MeetingIdWithButtons extends StatefulWidget {
   final TextEditingController codeController;
   final OnViewClickListener onJoin, onLogout;
   final OnViewChangeListener onCopyOrShare;
+  final ButtonController joinButton;
 
   const MeetingIdWithButtons({
     super.key,
@@ -17,6 +19,7 @@ class MeetingIdWithButtons extends StatefulWidget {
     required this.onJoin,
     required this.onLogout,
     required this.onCopyOrShare,
+    required this.joinButton,
   });
 
   @override
@@ -40,11 +43,13 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
           onCopyOrShare: widget.onCopyOrShare,
         ),
         Button(
+          controller: widget.joinButton,
           ripple: 10,
           width: 120,
           text: buttonName,
           borderRadius: 25,
           marginTop: 24,
+          enabled: widget.codeController.text.isValid,
           onClick: (context) {
             if (index == 0 || index == 1) {
               if (widget.codeController.text.isNotEmpty) {

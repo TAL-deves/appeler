@@ -3,7 +3,7 @@ import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../index.dart';
 
@@ -22,6 +22,7 @@ class HomeFragment extends StatefulWidget {
 class _HomeFragmentState extends State<HomeFragment> {
   late HomeController controller;
   late TextEditingController code;
+  late ButtonController joinButton;
   late int index = 0;
   String? oldRoomId;
 
@@ -29,7 +30,17 @@ class _HomeFragmentState extends State<HomeFragment> {
   void initState() {
     controller = widget.controller;
     code = TextEditingController();
+    joinButton = ButtonController();
+    code.addListener(() {
+      joinButton.setEnabled(code.text.isValid);
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    code.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,6 +48,7 @@ class _HomeFragmentState extends State<HomeFragment> {
     return ResponsiveLayout(
       mobile: HomeFragmentMobile(
         controller: widget.controller,
+        joinButton: joinButton,
         codeController: code,
         onCreateMeet: onCreateMeetingId,
         onJoinMeet: onJoinMeet,
@@ -47,6 +59,7 @@ class _HomeFragmentState extends State<HomeFragment> {
       ),
       desktop: HomeFragmentDesktop(
         controller: widget.controller,
+        joinButton: joinButton,
         codeController: code,
         onCreateMeet: onCreateMeetingId,
         onJoinMeet: onJoinMeet,
@@ -72,17 +85,19 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onScheduleMeet(BuildContext context) {}
 
-  void onJoin(BuildContext context) => context.push(
-        PrepareActivity.route.withSlash,
-        extra: {
-          "meeting_id": code.text,
-          "HomeController": widget.controller,
-        },
-      );
+  void onJoin(BuildContext context) {
+    AppNavigator.of(context).go(
+      PrepareActivity.route.withSlash,
+      extra: {
+        "meeting_id": code.text,
+        "HomeController": widget.controller,
+      },
+    );
+    code.text = "";
+    joinButton.setEnabled(code.text.isValid);
+  }
 
-  void onLogout(BuildContext context) => controller.signOut().then((value) {
-        context.push(AuthActivity.route);
-      });
+  void onLogout(BuildContext context) => controller.signOut();
 
   void onCopyOrShare(dynamic value) async => await ClipboardHelper.setText(
         value,

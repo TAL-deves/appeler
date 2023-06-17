@@ -20,7 +20,10 @@ class HomeActivity extends StatelessWidget {
       child: BlocConsumer<HomeController, AuthResponse<AuthInfo>>(
         listener: (context, state) {
           if (!state.isAuthenticated) {
-            context.pushReplacement(AuthActivity.route);
+            AppNavigator.of(context).goHome(
+              AuthActivity.route,
+              pathParams: {"name": "sign_in"},
+            );
           }
         },
         builder: (context, state) {

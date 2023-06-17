@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:go_router/go_router.dart';
 
 import 'index.dart';
@@ -19,12 +20,16 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: AuthActivity.route,
+            name: AuthActivity.route,
+            path: '${AuthActivity.route}/:name',
             builder: (context, state) {
-              var data = state.extra;
+              var type = state.pathParameters.getValue<String>("name");
+              var back = state.queryParameters.getValue<String>("back");
               return AuthActivity(
-                isFromWelcome: data.getValue<bool>("isFromWelcome"),
-                type: data.getValue<AuthFragmentType>("type"),
+                isFromWelcome: back.equals("true"),
+                type: type.equals("sign_up")
+                    ? AuthFragmentType.signUp
+                    : AuthFragmentType.signIn,
               );
             },
           ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -32,7 +31,7 @@ class AuthActivity extends StatelessWidget {
               );
             }
             if (state.isAuthenticated) {
-              context.pushReplacement(
+              AppNavigator.of(context).goHome(
                 HomeActivity.route,
                 extra: state.data,
               );

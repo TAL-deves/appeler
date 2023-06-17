@@ -1,7 +1,6 @@
 import 'package:flutter_andomie/core.dart';
 
 import '../../../index.dart';
-import '../../domain/handlers/meeting.dart';
 
 class HomeController extends DefaultAuthController {
   final MeetingHandler roomHandler;
@@ -13,7 +12,7 @@ class HomeController extends DefaultAuthController {
   });
 
   String? generateRoom(String? oldRoomId) {
-    if(oldRoomId != null){
+    if (oldRoomId != null) {
       roomHandler.root.doc(oldRoomId).delete();
     }
     final newDoc = roomHandler.root.doc();

@@ -313,7 +313,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
               onRiseHand: onRiseHand,
               onSilent: onSilent,
               onSwitchCamera: onSwitchCamera,
-              onCancel: (context) => context.pop(),
+              onCancel: (context) => AppNavigator.of(context).goBack(),
               cancelProperty: const ButtonProperty(
                 tint: Colors.red,
                 background: Colors.transparent,

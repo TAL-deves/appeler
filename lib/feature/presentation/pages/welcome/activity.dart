@@ -1,6 +1,5 @@
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -21,15 +20,18 @@ class WelcomeActivity extends StatelessWidget {
             maxWidth: 500,
           ),
           child: WelcomeFragment(
-            onSignIn: (context) => context.push(AuthActivity.route),
-            onSignUp: (context) => context.push(
+            onSignIn: (context) => AppNavigator.of(context).go(
               AuthActivity.route,
-              extra: {
-                "isFromWelcome": true,
-                "type": AuthFragmentType.signUp,
-              },
+              pathParams: {"name": "sign_in"},
             ),
-            onJoinMeeting: (context) => context.push(JoinActivity.route),
+            onSignUp: (context) => AppNavigator.of(context).go(
+              AuthActivity.route,
+              pathParams: {"name": "sign_up"},
+              queryParams: {"back": "true"},
+            ),
+            onJoinMeeting: (context) => AppNavigator.of(context).go(
+              JoinActivity.route,
+            ),
           ),
         ),
       ),

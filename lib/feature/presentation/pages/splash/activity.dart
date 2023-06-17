@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -24,15 +23,15 @@ class SplashActivity extends StatelessWidget {
         subtitle: AppInfo.description,
         logo: AppInfo.logo,
         logoColor: AppColors.primary,
-        onRoute: (c) {
+        onRoute: (context) {
           locator<AuthHandler>().isSignIn().then((value) {
             if (value) {
-              context.pushReplacement(
+              AppNavigator.of(context).goHome(
                 HomeActivity.route,
                 extra: AuthHelper.uid,
               );
             } else {
-              context.pushReplacement(
+              AppNavigator.of(context).goHome(
                 WelcomeActivity.route,
                 extra: AuthHelper.uid,
               );
