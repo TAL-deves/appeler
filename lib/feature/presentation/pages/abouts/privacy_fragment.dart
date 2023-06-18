@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../../index.dart';
 
@@ -10,10 +9,9 @@ class AboutPrivacyFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LinearLayout(
-      scrollable: true,
-      children: [
-        AppDetailsView(
+    return Expanded(
+      child: SingleChildScrollView(
+        child: AppDetailsView(
           title: PrivacyContent.none.title,
           body: PrivacyContent.none.body,
           paragraphs: PrivacyContent.values
@@ -24,7 +22,7 @@ class AboutPrivacyFragment extends StatelessWidget {
           justifyMode: true,
           margin: const EdgeInsets.symmetric(vertical: 12),
         ),
-      ],
+      ),
     );
   }
 }

@@ -21,14 +21,13 @@ class AppDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = SizeConfig.of(context);
     return Container(
       padding: padding ??
-          EdgeInsets.only(
-            left: config.px(16),
-            right: config.px(16),
-            top: config.px(16),
-            bottom: config.px(35),
+          const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: 35,
           ),
       child: Column(
         children: [
@@ -36,17 +35,17 @@ class AppDetailsView extends StatelessWidget {
             Text(
               body ?? "",
               textAlign: TextAlign.justify,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
-                fontSize: config.px(14),
+                fontSize: 14,
                 fontWeight: FontWeight.normal,
               ),
             ),
           if ((paragraphs ?? []).isNotEmpty)
             DottedTexts(
               paragraphs: paragraphs ?? [],
-              style: ParagraphStyle(
-                textSize: config.px(14),
+              style: const ParagraphStyle(
+                textSize: 14,
                 textColor: Colors.black,
               ),
             ),
