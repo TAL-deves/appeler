@@ -21,7 +21,6 @@ class SplashActivity extends StatelessWidget {
         titleAllCaps: true,
         titleExtraSize: 2,
         titleSize: 24,
-        duration: 2000000000,
         titleColor: AppColors.secondary,
         subtitle: AppInfo.description,
         logo: AppInfo.logo,
