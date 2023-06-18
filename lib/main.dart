@@ -6,9 +6,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:url_strategy/url_strategy.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'index.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +30,7 @@ Future<void> main() async {
   await diInit();
   FirebaseFirestore.instance.settings =
       const Settings(persistenceEnabled: false);
+  setPathUrlStrategy();
   runApp(const Application());
 }
 
