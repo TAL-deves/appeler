@@ -120,17 +120,17 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
             ),
           ),
         ),
-        OAuthButton(
-          text: "Login With Facebook",
-          background: AppColors.secondary,
-          icon: AppIcons.facebook,
-          onClick: (context) => widget.onSignInWithFacebook.call(
-            AuthInfo(
-              email: email.text,
-              password: password.text,
-            ),
-          ),
-        ),
+        // OAuthButton(
+        //   text: "Login With Facebook",
+        //   background: AppColors.secondary,
+        //   icon: AppIcons.facebook,
+        //   onClick: (context) => widget.onSignInWithFacebook.call(
+        //     AuthInfo(
+        //       email: email.text,
+        //       password: password.text,
+        //     ),
+        //   ),
+        // ),
         CreateAccountTextView(
           width: double.infinity,
           textAlign: TextAlign.center,

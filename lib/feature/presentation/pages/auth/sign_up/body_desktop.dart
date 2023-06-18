@@ -157,17 +157,17 @@ class _AuthSignUpDesktopBodyState extends State<AuthSignUpDesktopBody> {
                     ),
                   ),
                 ),
-                OAuthButton(
-                  text: "Login With Facebook",
-                  background: AppColors.secondary,
-                  icon: AppIcons.facebook,
-                  onClick: (context) => widget.onSignInWithFacebook.call(
-                    AuthInfo(
-                      email: email.text,
-                      password: password.text,
-                    ),
-                  ),
-                ),
+                // OAuthButton(
+                //   text: "Login With Facebook",
+                //   background: AppColors.secondary,
+                //   icon: AppIcons.facebook,
+                //   onClick: (context) => widget.onSignInWithFacebook.call(
+                //     AuthInfo(
+                //       email: email.text,
+                //       password: password.text,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ],

@@ -2,7 +2,7 @@ enum PrivacyContent {
   none(
     title: "Privacy Policy",
     body:
-        "We, Appeler is owned and powered by Tech Analytical Limited, registered under the Bangladesh Companies Act (Act XVIII) of 1994 (hereafter referred to as \"Company\"), with the incorporation number C-182091/2022, are dedicated to protecting your privacy with regard to the protection of your personal information. To make sure you can use our services, we might get your information and occasionally share it. This notice explains our information policies and the choices you have regarding the collection and use of your information in an effort to further protect your privacy. To make sure that everyone using the website, https://mindschoolbd.com/ (hence \"the website\") and the \"Appeler\" (subsequently \"the Application\") is aware of the privacy policy that regulates their use, by entering onto the website or application, you are indicating that you have read and agreed to the terms and conditions outlined in this Privacy Policy. You must not use the Website or App unless you accept our Privacy Policy, which governs the gathering and use of your personal information. If you have any concerns or questions regarding this privacy statement, you may email our Customer Support at support@mindschoolbd.com.",
+        "We, Appeler is owned and powered by Tech Analytical Limited, registered under the Bangladesh Companies Act (Act XVIII) of 1994 (hereafter referred to as \"Company\"), with the incorporation number C-182091/2022, are dedicated to protecting your privacy with regard to the protection of your personal information. To make sure you can use our services, we might get your information and occasionally share it. This notice explains our information policies and the choices you have regarding the collection and use of your information in an effort to further protect your privacy. To make sure that everyone using the website, https://appeler.techanalyticaltd.com/ (hence \"the website\") and the \"Appeler\" (subsequently \"the Application\") is aware of the privacy policy that regulates their use, by entering onto the website or application, you are indicating that you have read and agreed to the terms and conditions outlined in this Privacy Policy. You must not use the Website or App unless you accept our Privacy Policy, which governs the gathering and use of your personal information. If you have any concerns or questions regarding this privacy statement, you may email our Customer Support at info@techanalyticaltd.com.",
   ),
   overview(
     title: "Overview",
@@ -77,7 +77,7 @@ enum PrivacyContent {
   feedbackAndComplaints(
     title: "Feedback and Complaints",
     body:
-        "If you have an unresolved issue by our customer service team, or if you want to report an unresolved issue, please write to our customer service at support@mindschool.com.",
+        "If you have an unresolved issue by our customer service team, or if you want to report an unresolved issue, please write to our customer service at info@techanalyticaltd.com.",
   ),
   noticeOfAmendmentsOfTermsAndConditionsAndPrivacyPolicy(
     title: "Notice of Amendments to Terms & Conditions and Privacy Policy",
