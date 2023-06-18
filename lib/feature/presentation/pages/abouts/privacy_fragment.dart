@@ -11,7 +11,7 @@ class AboutPrivacyFragment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: SingleChildScrollView(
-        child: AppDetailsView(
+        child: ContentView(
           title: PrivacyContent.none.title,
           body: PrivacyContent.none.body,
           paragraphs: PrivacyContent.values

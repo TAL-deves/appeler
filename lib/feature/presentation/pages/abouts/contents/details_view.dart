@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/utils.dart';
 
-class AppDetailsView extends StatelessWidget {
+class ContentView extends StatelessWidget {
   final String title;
   final String? body;
   final List<Paragraph>? paragraphs;
@@ -9,7 +8,7 @@ class AppDetailsView extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
 
-  const AppDetailsView({
+  const ContentView({
     Key? key,
     required this.title,
     this.body,
@@ -42,38 +41,15 @@ class AppDetailsView extends StatelessWidget {
               ),
             ),
           if ((paragraphs ?? []).isNotEmpty)
-            DottedTexts(
+            _DottedTexts(
               paragraphs: paragraphs ?? [],
-              style: const ParagraphStyle(
+              style: const _ParagraphStyle(
                 textSize: 14,
                 textColor: Colors.black,
               ),
             ),
         ],
       ),
-    );
-  }
-}
-
-class DottedTexts extends StatelessWidget {
-  final ParagraphStyle style;
-  final List<Paragraph> paragraphs;
-
-  const DottedTexts({
-    Key? key,
-    required this.paragraphs,
-    this.style = const ParagraphStyle(),
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: paragraphs.map((e) {
-        return ParagraphView(
-          paragraph: e,
-          style: style,
-        );
-      }).toList(),
     );
   }
 }
@@ -88,14 +64,37 @@ class Paragraph {
   });
 }
 
-class ParagraphView extends StatelessWidget {
-  final Paragraph paragraph;
-  final ParagraphStyle style;
+class _DottedTexts extends StatelessWidget {
+  final _ParagraphStyle style;
+  final List<Paragraph> paragraphs;
 
-  const ParagraphView({
+  const _DottedTexts({
+    Key? key,
+    required this.paragraphs,
+    this.style = const _ParagraphStyle(),
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: paragraphs.map((e) {
+        return _ParagraphView(
+          paragraph: e,
+          style: style,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _ParagraphView extends StatelessWidget {
+  final Paragraph paragraph;
+  final _ParagraphStyle style;
+
+  const _ParagraphView({
     Key? key,
     required this.paragraph,
-    this.style = const ParagraphStyle(),
+    this.style = const _ParagraphStyle(),
   }) : super(key: key);
 
   @override
@@ -107,7 +106,7 @@ class ParagraphView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          DottedTextView(
+          _DottedTextView(
             text: paragraph.title,
             textSize: style.textSize,
             textStyle: FontWeight.bold,
@@ -132,23 +131,23 @@ class ParagraphView extends StatelessWidget {
   }
 }
 
-class ParagraphStyle {
+class _ParagraphStyle {
   final Color textColor;
   final double textSize;
 
-  const ParagraphStyle({
+  const _ParagraphStyle({
     this.textColor = Colors.black,
     this.textSize = 14,
   });
 }
 
-class DottedTextView extends StatelessWidget {
+class _DottedTextView extends StatelessWidget {
   final String text;
   final double textSize;
   final FontWeight? textStyle;
   final TextAlign? textAlign;
 
-  const DottedTextView({
+  const _DottedTextView({
     Key? key,
     required this.text,
     this.textSize = 14,
