@@ -45,6 +45,7 @@ dependencies:
   fluttertoast: ^8.2.2
   google_sign_in: ^6.1.4
   url_strategy: ^0.2.0
+  package_info_plus: ^3.1.2
 
 #flutter_tools:
 #  web-server:
