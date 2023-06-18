@@ -22,6 +22,7 @@ class AppSplashView extends StatefulWidget {
   final Color? logoColor;
   final EdgeInsetsGeometry? logoPadding;
   final double? logoSize;
+  final Widget? bottom;
 
   final Future Function()? onExecute;
   final Function(BuildContext context)? onRoute;
@@ -55,6 +56,7 @@ class AppSplashView extends StatefulWidget {
     this.logoColor,
     this.logoPadding,
     this.logoSize,
+    this.bottom,
   }) : super(key: key);
 
   @override
@@ -82,72 +84,84 @@ class _AppSplashViewState extends State<AppSplashView> {
     _timer.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Spacer(flex: widget.flex.top),
-        Container(
-          padding: widget.contentPadding,
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  child: widget.custom ??
-                      Column(
-                        children: [
-                          Container(
-                            margin: widget.logoPadding,
-                            child: Image.asset(
-                              widget.logo ?? "",
-                              width: widget.logoSize ?? 70,
-                              height: widget.logoSize ?? 70,
-                              color: widget.logoColor,
-                            ),
-                          ),
-                          Container(
-                            margin: widget.titlePadding ??
-                                const EdgeInsets.only(top: 16),
-                            child: Text(
-                              widget.titleAllCaps
-                                  ? (widget.title ?? "").toUpperCase()
-                                  : widget.title ?? "",
-                              textAlign: TextAlign.center,
-                              style: widget.titleStyle.copyWith(
-                                color: widget.titleColor,
-                                fontSize: widget.titleSize,
-                                fontWeight: widget.titleWeight,
-                                letterSpacing: widget.titleExtraSize,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: widget.subtitleMargin ??
-                                const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
+        Column(
+          children: [
+            Spacer(flex: widget.flex.top),
+            Container(
+              padding: widget.contentPadding,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: widget.custom ??
+                          Column(
+                            children: [
+                              Container(
+                                margin: widget.logoPadding,
+                                child: Image.asset(
+                                  widget.logo ?? "",
+                                  width: widget.logoSize ?? 70,
+                                  height: widget.logoSize ?? 70,
+                                  color: widget.logoColor,
                                 ),
-                            child: Text(
-                              widget.subtitle ?? "",
-                              textAlign: TextAlign.center,
-                              style: (widget.subtitleStyle ?? widget.titleStyle)
-                                  .copyWith(
-                                color: widget.subtitleColor,
-                                fontSize: widget.subtitleSize ??
-                                    ((widget.titleSize ?? 1) * 0.5),
-                                fontWeight: widget.subtitleWeight,
-                                letterSpacing: widget.subtitleExtraSize,
                               ),
-                            ),
+                              Container(
+                                margin: widget.titlePadding ??
+                                    const EdgeInsets.only(top: 16),
+                                child: Text(
+                                  widget.titleAllCaps
+                                      ? (widget.title ?? "").toUpperCase()
+                                      : widget.title ?? "",
+                                  textAlign: TextAlign.center,
+                                  style: widget.titleStyle.copyWith(
+                                    color: widget.titleColor,
+                                    fontSize: widget.titleSize,
+                                    fontWeight: widget.titleWeight,
+                                    letterSpacing: widget.titleExtraSize,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: widget.subtitleMargin ??
+                                    const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                child: Text(
+                                  widget.subtitle ?? "",
+                                  textAlign: TextAlign.center,
+                                  style: (widget.subtitleStyle ??
+                                          widget.titleStyle)
+                                      .copyWith(
+                                    color: widget.subtitleColor,
+                                    fontSize: widget.subtitleSize ??
+                                        ((widget.titleSize ?? 1) * 0.5),
+                                    fontWeight: widget.subtitleWeight,
+                                    letterSpacing: widget.subtitleExtraSize,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Spacer(flex: widget.flex.bottom),
+          ],
         ),
-        Spacer(flex: widget.flex.bottom),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: widget.bottom ?? const SizedBox(),
+        ),
       ],
     );
   }

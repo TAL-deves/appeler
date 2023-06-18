@@ -5,6 +5,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'index.dart';
@@ -18,6 +19,8 @@ Future<void> diInit() async {
   final biometricAuth = LocalAuthentication();
   final database = FirebaseFirestore.instance;
   final realtime = FirebaseDatabase.instance;
+  locator.registerSingletonAsync<PackageInfo>(
+      () async => await PackageInfo.fromPlatform());
   locator.registerLazySingleton<SharedPreferences>(() => local);
   locator.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);
   locator.registerLazySingleton<FacebookAuth>(() => facebookAuth);
