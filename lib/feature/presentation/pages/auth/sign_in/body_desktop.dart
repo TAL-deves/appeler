@@ -7,6 +7,7 @@ import '../../../../../index.dart';
 
 class AuthSignInDesktopBody extends StatefulWidget {
   final AuthSignInHandler onSignIn;
+  final AuthSignInHandler onSignInWithApple;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
   final AuthForgotHandler onForgetPassword;
@@ -15,6 +16,7 @@ class AuthSignInDesktopBody extends StatefulWidget {
   const AuthSignInDesktopBody({
     Key? key,
     required this.onSignIn,
+    required this.onSignInWithApple,
     required this.onSignInWithGoogle,
     required this.onSignInWithFacebook,
     required this.onForgetPassword,
@@ -150,6 +152,17 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
                 //     ),
                 //   ),
                 // ),
+                OAuthButton(
+                  text: "Login With Apple",
+                  background: AppColors.secondary,
+                  icon: AppIcons.apple,
+                  onClick: (context) => widget.onSignInWithApple.call(
+                    AuthInfo(
+                      email: email.text,
+                      password: password.text,
+                    ),
+                  ),
+                ),
                 CreateAccountTextView(
                   width: double.infinity,
                   textAlign: TextAlign.center,

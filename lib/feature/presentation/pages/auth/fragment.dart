@@ -39,6 +39,7 @@ class _AuthFragmentState extends State<AuthFragment> {
       case AuthFragmentType.signIn:
         return AuthSignInFragment(
           onSignIn: controller.signIn,
+          onSignInWithApple: controller.signInWithApple,
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
           onCreateAccount: (data) => AppNavigator.of(context).go(
@@ -53,6 +54,7 @@ class _AuthFragmentState extends State<AuthFragment> {
       case AuthFragmentType.signUp:
         return AuthSignUpFragment(
           onSignUp: controller.signUp,
+          onSignInWithApple: controller.signInWithApple,
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
           onSignIn: (data) {
