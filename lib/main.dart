@@ -12,6 +12,7 @@ import 'package:wakelock/wakelock.dart';
 import 'index.dart';
 
 
+//ios bug fixed
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Wakelock.enable();
