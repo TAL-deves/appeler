@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
@@ -135,7 +136,7 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
         //     ),
         //   ),
         // ),
-        if (Platform.isIOS)
+        if (!kIsWeb && Platform.isIOS)
           OAuthButton(
             text: "Login With Apple",
             background: AppColors.secondary,

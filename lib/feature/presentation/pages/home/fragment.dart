@@ -4,6 +4,7 @@ import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../index.dart';
 
@@ -99,7 +100,12 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onLogout(BuildContext context) => controller.signOut();
 
-  void onCopyOrShare(dynamic value) async => await ClipboardHelper.setText(
+  void onCopyOrShare(dynamic value) async {
+    if (value is String && value.isNotEmpty) {
+      await ClipboardHelper.setText(
         value,
       );
+      Fluttertoast.showToast(msg: "Copied code");
+    }
+  }
 }

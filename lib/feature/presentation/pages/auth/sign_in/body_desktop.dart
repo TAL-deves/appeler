@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
@@ -152,17 +155,18 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
                 //     ),
                 //   ),
                 // ),
-                OAuthButton(
-                  text: "Login With Apple",
-                  background: AppColors.secondary,
-                  icon: AppIcons.apple,
-                  onClick: (context) => widget.onSignInWithApple.call(
-                    AuthInfo(
-                      email: email.text,
-                      password: password.text,
+                if (!kIsWeb && Platform.isIOS)
+                  OAuthButton(
+                    text: "Login With Apple",
+                    background: AppColors.secondary,
+                    icon: AppIcons.apple,
+                    onClick: (context) => widget.onSignInWithApple.call(
+                      AuthInfo(
+                        email: email.text,
+                        password: password.text,
+                      ),
                     ),
                   ),
-                ),
                 CreateAccountTextView(
                   width: double.infinity,
                   textAlign: TextAlign.center,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 import '../../../index.dart';
 
-class MeetingIdField extends StatelessWidget {
+class MeetingIdField extends StatefulWidget {
   final String? initialValue;
   final String hint;
   final dynamic icon;
@@ -22,16 +23,39 @@ class MeetingIdField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<MeetingIdField> createState() => _MeetingIdFieldState();
+}
+
+class _MeetingIdFieldState extends State<MeetingIdField> {
+  late IconViewController icon = IconViewController();
+
+  @override
+  void initState() {
+    if (widget.initialValue != null) {
+      widget.controller.text = widget.initialValue!;
+    }
+    widget.controller.addListener(() {
+      setState(() {
+        icon.setVisibility(
+          widget.controller.text.isValid
+              ? ViewVisibility.visible
+              : ViewVisibility.gone,
+        );
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (initialValue != null) controller.text = initialValue!;
     return Stack(
       alignment: Alignment.center,
       children: [
         TextField(
-          controller: controller,
+          controller: widget.controller,
           decoration: InputDecoration(
             alignLabelWithHint: true,
-            hintText: hint,
+            hintText: widget.hint,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 24,
               vertical: 12,
@@ -69,16 +93,20 @@ class MeetingIdField extends StatelessWidget {
           ),
         ),
         IconView(
-          visibility: icon != null && iconVisible
+          controller: icon,
+          visibility: widget.icon != null &&
+                  widget.iconVisible &&
+                  widget.controller.text.isNotEmpty
               ? ViewVisibility.visible
               : ViewVisibility.gone,
           padding: 8,
           background: Colors.transparent,
           borderRadius: 8,
           position: const ViewPosition(right: 4),
-          icon: icon ?? Icons.copy_all,
+          icon: widget.icon ?? Icons.copy_all,
           tint: Colors.grey.withAlpha(200),
-          onClick: (context) => onCopyOrShare?.call(controller.text),
+          onClick: (context) =>
+              widget.onCopyOrShare?.call(widget.controller.text),
         ),
       ],
     );
