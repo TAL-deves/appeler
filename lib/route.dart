@@ -1,3 +1,4 @@
+import 'package:appeler/feature/presentation/pages/meeting_participant/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:go_router/go_router.dart';
@@ -61,6 +62,15 @@ class AppRouter {
                   return MeetingActivity(
                     data: data.getValue("data"),
                     homeController: data.getValue("HomeController"),
+                  );
+                },
+              ),
+              GoRoute(
+                path: MeetingParticipantActivity.route,
+                builder: (context, state) {
+                  var data = state.extra;
+                  return MeetingParticipantActivity(
+                    meetingController: data.getValue("MeetingController"),
                   );
                 },
               ),

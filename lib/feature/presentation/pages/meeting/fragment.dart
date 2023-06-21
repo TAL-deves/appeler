@@ -7,6 +7,8 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../index.dart';
 
@@ -147,7 +149,51 @@ class MeetingFragmentState extends State<MeetingFragment> {
     }
   }
 
-  void onMore(BuildContext context) {}
+  void onMore(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return LinearLayout(
+          children: [
+            const TextView(
+              text: "Choose options",
+              paddingVertical: 24,
+              paddingHorizontal: 24,
+              textAlign: TextAlign.center,
+              textColor: Colors.grey,
+              textSize: 16,
+            ),
+            const Divider(
+              height: 12,
+            ),
+            TileButton(
+              text: "Code copy",
+              icon: Icons.copy,
+              onClick: (context) {
+                onCodeCopy(context);
+                Navigator.pop(context);
+              },
+            ),
+            TileButton(
+              text: "Code share",
+              icon: Icons.share,
+              onClick: (context) {
+                onCodeShare(context);
+                Navigator.pop(context);
+              },
+            ),
+            TileButton(
+              text: "Show participants",
+              onClick: (context) {
+                onShowParticipant(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void onRiseHand(bool value) {
     isRiseHand = value;
@@ -157,6 +203,28 @@ class MeetingFragmentState extends State<MeetingFragment> {
   void onScreenShare(bool value) {
     value ? _setScreenShareStream() : _recoverCameraStream();
     setState(() {});
+  }
+
+  void onCodeCopy(BuildContext context) async {
+    if (widget.info.id.isValid) {
+      await ClipboardHelper.setText(widget.info.id);
+      Fluttertoast.showToast(msg: "Copied code");
+    }
+  }
+
+  void onCodeShare(BuildContext context) async {
+    if (widget.info.id.isValid) {
+      await Share.share(widget.info.id, subject: "Let's go to meeting ... ");
+    }
+  }
+
+  void onShowParticipant(BuildContext context) {
+    AppNavigator.of(context).go(
+      MeetingParticipantActivity.route.withSlash,
+      extra: {
+        "MeetingController": controller,
+      },
+    );
   }
 
   void _offerAnswerHostUser() {

@@ -53,7 +53,7 @@ class _ContributorCardState extends State<ContributorCard> {
               scaleType: BoxFit.cover,
             ),
             TextView(
-              text: item?.name ?? item?.email ?? "",
+              text: item?.name ?? item?.email ?? "Unknown",
               textOverflow: TextOverflow.ellipsis,
               textSize: 14,
               textColor: Colors.black.withOpacity(0.8),

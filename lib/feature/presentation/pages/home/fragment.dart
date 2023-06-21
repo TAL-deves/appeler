@@ -1,5 +1,6 @@
 import 'package:appeler/feature/presentation/pages/home/fragment_desktop.dart';
 import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
+import 'package:appeler/feature/presentation/pages/meeting_participant/activity.dart';
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
@@ -82,7 +83,11 @@ class _HomeFragmentState extends State<HomeFragment> {
     }
   }
 
-  void onJoinMeet(BuildContext context) {}
+  void onJoinMeet(BuildContext context) {
+    AppNavigator.of(context).go(
+      MeetingParticipantActivity.route.withSlash,
+    );
+  }
 
   void onScheduleMeet(BuildContext context) {}
 
