@@ -226,7 +226,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
   void onCodeCopy(BuildContext context) async {
     if (widget.info.id.isValid) {
       await ClipboardHelper.setText(widget.info.id);
-      Fluttertoast.showToast(msg: "Code Copied!");
+      Fluttertoast.showToast(msg: "Copied the ${widget.info.id}!");
     }
   }
 
