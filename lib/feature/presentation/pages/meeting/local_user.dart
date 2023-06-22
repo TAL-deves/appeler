@@ -41,6 +41,10 @@ class _ContributorCardState extends State<ContributorCard> {
         widget.uid,
       ),
       userView: (context, item) {
+        var photo = item?.photo ??
+            "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png";
+        var name = item?.name ?? item?.email ?? "Unknown";
+
         return LinearLayout(
           layoutGravity: LayoutGravity.center,
           children: [
@@ -48,12 +52,13 @@ class _ContributorCardState extends State<ContributorCard> {
               width: 80,
               height: 80,
               shape: ViewShape.circular,
-              image: item?.photo ??
-                  "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
+              image: photo.isValid
+                  ? photo
+                  : "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
               scaleType: BoxFit.cover,
             ),
             TextView(
-              text: item?.name ?? item?.email ?? "Unknown",
+              text: name.isValid ? name : item?.email ?? "Unknown",
               textOverflow: TextOverflow.ellipsis,
               textSize: 14,
               textColor: Colors.black.withOpacity(0.8),

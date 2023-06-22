@@ -1,6 +1,6 @@
-import 'package:appeler/feature/presentation/pages/meeting_participant/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'index.dart';
@@ -66,21 +66,32 @@ class AppRouter {
                 },
               ),
               GoRoute(
-                path: MeetingParticipantActivity.route,
-                builder: (context, state) {
-                  var data = state.extra;
-                  return MeetingParticipantActivity(
-                    meetingController: data.getValue("MeetingController"),
-                  );
-                },
-              ),
-              GoRoute(
                 path: JoinActivity.route,
                 builder: (context, state) {
                   var data = state.extra;
                   return JoinActivity(
                     homeController: data.getValue("HomeController"),
                   );
+                },
+              ),
+              GoRoute(
+                path: MeetingParticipantActivity.route,
+                builder: (context, state) {
+                  var data = state.extra;
+                  var controller =
+                  data.getValue<MeetingController>("MeetingController");
+                  var id = data.getValue<String>("meeting_id");
+                  if (controller != null) {
+                    return BlocProvider.value(
+                      value: controller,
+                      child: MeetingParticipantActivity(meetingId: id),
+                    );
+                  } else {
+                    return BlocProvider(
+                      create: (context) => locator<MeetingController>(),
+                      child: MeetingParticipantActivity(meetingId: id),
+                    );
+                  }
                 },
               ),
               GoRoute(

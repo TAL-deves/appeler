@@ -7,6 +7,7 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+
 import '../../../../index.dart';
 
 class RemoteContributor extends StatefulWidget {
@@ -31,7 +32,8 @@ class RemoteContributor extends StatefulWidget {
 
 class RemoteContributorState extends State<RemoteContributor> {
   final _chatRooms = FirebaseFirestore.instance.collection('chat-rooms');
-  final _curUser = FirebaseFirestore.instance.collection('users').doc(AuthHelper.uid);
+  final _curUser =
+      FirebaseFirestore.instance.collection('users').doc(AuthHelper.uid);
 
   late final _curRoom = _chatRooms.doc(widget.type == ContributorType.outgoing
       ? '${AuthHelper.uid}+${widget.uid}'
@@ -55,18 +57,18 @@ class RemoteContributorState extends State<RemoteContributor> {
 
   var totalCandidate = 0;
 
-  void replaceVideoStream(MediaStream foreignStream){
-    _peerConnection.getSenders().then((value){
+  void replaceVideoStream(MediaStream foreignStream) {
+    _peerConnection.getSenders().then((value) {
       for (final element in value) {
-        if(element.track?.kind == 'video'){
-          element.replaceTrack(foreignStream.getVideoTracks()[0]).then((value){
+        if (element.track?.kind == 'video') {
+          element.replaceTrack(foreignStream.getVideoTracks()[0]).then((value) {
             print('Track replaced !');
-          }).catchError((error){
+          }).catchError((error) {
             print(error);
           });
         }
-      }}
-    );
+      }
+    });
   }
 
   void _setRemoteCandidate() {
@@ -137,7 +139,9 @@ class RemoteContributorState extends State<RemoteContributor> {
 
   Future<void> _initPeerConnection() async {
     _peerConnection = await _createPeerConnection();
-    if(widget.shareStream != null){ replaceVideoStream(widget.shareStream!); }
+    if (widget.shareStream != null) {
+      replaceVideoStream(widget.shareStream!);
+    }
   }
 
   Future<void> _setRemoteDescription({
@@ -153,7 +157,8 @@ class RemoteContributorState extends State<RemoteContributor> {
     _curRoom.set({'offer': offer.toMap()});
     _curRoomSubs = _curRoom.snapshots().listen((snapshot) async {
       final sdpMap = snapshot.data()?['answer'];
-      if (await _peerConnection.getRemoteDescription() == null && sdpMap != null) {
+      if (await _peerConnection.getRemoteDescription() == null &&
+          sdpMap != null) {
         await _setRemoteDescription(sdpMap: sdpMap);
       }
     });
@@ -162,7 +167,8 @@ class RemoteContributorState extends State<RemoteContributor> {
   void _createAnswer() async {
     _curRoomSubs = _curRoom.snapshots().listen((snapshot) async {
       final sdpMap = snapshot.data()?['offer'];
-      if (await _peerConnection.getRemoteDescription() == null && sdpMap != null) {
+      if (await _peerConnection.getRemoteDescription() == null &&
+          sdpMap != null) {
         await _setRemoteDescription(sdpMap: sdpMap);
         final answer = await _peerConnection.createAnswer();
         await _peerConnection.setLocalDescription(answer);
@@ -240,6 +246,9 @@ class RemoteContributorState extends State<RemoteContributor> {
         widget.uid,
       ),
       userView: (context, item) {
+        var photo = item?.photo ??
+            "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png";
+        var name = item?.name ?? item?.email ?? "Unknown";
         return LinearLayout(
           layoutGravity: LayoutGravity.center,
           children: [
@@ -247,13 +256,14 @@ class RemoteContributorState extends State<RemoteContributor> {
               width: 80,
               height: 80,
               shape: ViewShape.circular,
-              image: item?.photo ??
-                  "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
+              image: photo.isValid
+                  ? photo
+                  : "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
               scaleType: BoxFit.cover,
             ),
             TextView(
               paddingHorizontal: 16,
-              text: item?.name ?? item?.email ?? "Unknown",
+              text: name.isValid ? name : item?.email ?? "Unknown",
               textOverflow: TextOverflow.ellipsis,
               textSize: 14,
               textColor: Colors.black.withOpacity(0.8),

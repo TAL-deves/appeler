@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -154,14 +155,27 @@ class MeetingFragmentState extends State<MeetingFragment> {
       context: context,
       builder: (context) {
         return LinearLayout(
+          paddingVertical: 24,
           children: [
-            const TextView(
-              text: "Choose options",
-              paddingVertical: 24,
+            LinearLayout(
               paddingHorizontal: 24,
-              textAlign: TextAlign.center,
-              textColor: Colors.grey,
-              textSize: 16,
+              orientation: Axis.horizontal,
+              mainGravity: MainAxisAlignment.center,
+              paddingBottom: 8,
+              children: [
+                const TextView(
+                  flex: 1,
+                  text: "Choose options",
+                  textAlign: TextAlign.start,
+                  textColor: Colors.grey,
+                  textSize: 16,
+                ),
+                IconView(
+                  padding: 4,
+                  icon: Icons.clear,
+                  onClick: (context) => Navigator.pop(context),
+                ),
+              ],
             ),
             const Divider(
               height: 12,
@@ -201,14 +215,18 @@ class MeetingFragmentState extends State<MeetingFragment> {
   }
 
   void onScreenShare(bool value) {
-    value ? _setScreenShareStream() : _recoverCameraStream();
+    if (!kIsWeb && Platform.isIOS) {
+      Fluttertoast.showToast(msg: "Screen share isn't process in iOS device!");
+    } else {
+      value ? _setScreenShareStream() : _recoverCameraStream();
+    }
     setState(() {});
   }
 
   void onCodeCopy(BuildContext context) async {
     if (widget.info.id.isValid) {
       await ClipboardHelper.setText(widget.info.id);
-      Fluttertoast.showToast(msg: "Copied code");
+      Fluttertoast.showToast(msg: "Code Copied!");
     }
   }
 
@@ -219,12 +237,17 @@ class MeetingFragmentState extends State<MeetingFragment> {
   }
 
   void onShowParticipant(BuildContext context) {
-    AppNavigator.of(context).go(
-      MeetingParticipantActivity.route.withSlash,
-      extra: {
-        "MeetingController": controller,
-      },
-    );
+    if (kIsWeb) {
+      Fluttertoast.showToast(msg: "Web not supported!");
+    } else {
+      AppNavigator.of(context).go(
+        MeetingParticipantActivity.route.withSlash,
+        extra: {
+          "MeetingController": controller,
+          "meeting_id": widget.info.id,
+        },
+      );
+    }
   }
 
   void _offerAnswerHostUser() {

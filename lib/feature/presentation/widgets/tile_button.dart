@@ -20,8 +20,8 @@ class TileButton extends StatelessWidget {
       orientation: Axis.horizontal,
       onClick: onClick,
       ripple: 5,
+      height: 50,
       paddingHorizontal: 24,
-      paddingVertical: 16,
       layoutGravity: LayoutGravity.center,
       crossGravity: CrossAxisAlignment.center,
       children: [
@@ -36,7 +36,7 @@ class TileButton extends StatelessWidget {
         if (icon != null)
           IconView(
             icon: icon,
-            padding: 8,
+            padding: 4,
             borderRadius: 0,
           ),
       ],
