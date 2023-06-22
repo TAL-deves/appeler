@@ -5,12 +5,16 @@ import 'package:flutter_androssy/widgets.dart';
 class TileButton extends StatelessWidget {
   final String text;
   final dynamic icon;
+  final double iconSize;
+  final Color? tint;
   final OnViewClickListener? onClick;
 
   const TileButton({
     super.key,
     this.text = "",
     this.icon,
+    this.iconSize = 24,
+    this.tint,
     this.onClick,
   });
 
@@ -38,6 +42,8 @@ class TileButton extends StatelessWidget {
             icon: icon,
             padding: 4,
             borderRadius: 0,
+            size: iconSize,
+            tint: tint,
           ),
       ],
     );

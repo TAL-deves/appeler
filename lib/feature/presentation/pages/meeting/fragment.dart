@@ -185,7 +185,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
               icon: Icons.copy,
               onClick: (context) {
                 onCodeCopy(context);
-                Navigator.pop(context);
+                //Navigator.pop(context);
               },
             ),
             TileButton(
@@ -193,10 +193,13 @@ class MeetingFragmentState extends State<MeetingFragment> {
               icon: Icons.share,
               onClick: (context) {
                 onCodeShare(context);
-                Navigator.pop(context);
+                //Navigator.pop(context);
               },
             ),
             TileButton(
+              icon: Icons.arrow_forward_ios_sharp,
+              iconSize: 18,
+              tint: Colors.grey,
               text: "Show participants",
               onClick: (context) {
                 onShowParticipant(context);
@@ -226,7 +229,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
   void onCodeCopy(BuildContext context) async {
     if (widget.info.id.isValid) {
       await ClipboardHelper.setText(widget.info.id);
-      Fluttertoast.showToast(msg: "Code Copied!");
+      Fluttertoast.showToast(msg: "Copied the ${widget.info.id}!");
     }
   }
 
