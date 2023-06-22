@@ -5,6 +5,7 @@ import '../../../widgets/responsive_layout.dart';
 
 class AuthSignUpFragment extends StatelessWidget {
   final AuthSignInHandler onSignIn;
+  final AuthSignInHandler onSignInWithApple;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
   final AuthSignUpHandler onSignUp;
@@ -12,6 +13,7 @@ class AuthSignUpFragment extends StatelessWidget {
   const AuthSignUpFragment({
     Key? key,
     required this.onSignIn,
+    required this.onSignInWithApple,
     required this.onSignInWithGoogle,
     required this.onSignInWithFacebook,
     required this.onSignUp,
@@ -22,12 +24,14 @@ class AuthSignUpFragment extends StatelessWidget {
     return ResponsiveLayout(
       mobile: AuthSignUpMobileBody(
         onSignIn: onSignIn,
+        onSignInWithApple: onSignInWithApple,
         onSignInWithGoogle: onSignInWithGoogle,
         onSignInWithFacebook: onSignInWithFacebook,
         onSignUp: onSignUp,
       ),
       desktop: AuthSignUpDesktopBody(
         onSignIn: onSignIn,
+        onSignInWithApple: onSignInWithApple,
         onSignInWithGoogle: onSignInWithGoogle,
         onSignInWithFacebook: onSignInWithFacebook,
         onSignUp: onSignUp,

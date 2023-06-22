@@ -14,6 +14,7 @@ class WelcomeActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
+      toolbarHeight: 0,
       body: ResponsiveLayout(
         mobile: Container(
           constraints: const BoxConstraints(

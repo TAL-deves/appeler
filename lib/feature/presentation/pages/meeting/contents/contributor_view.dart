@@ -27,91 +27,96 @@ class ContributorView<T extends Contributor> extends StatelessWidget {
       margin: margin,
       background: background,
       borderRadius: borderRadius,
-      builder: (context, value) {
-        var item = value ?? ContributorImpl();
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            item.isCameraOn
-                ? renderView
-                : userView?.call(context, item as T) ??
-                const ImageView(
-                  width: 80,
-                  height: 80,
-                  shape: ViewShape.circular,
-                  image:
-                  "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
-                  scaleType: BoxFit.cover,
-                ),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                if (item.isRiseHand)
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                      margin: const EdgeInsets.all(8),
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.white24,
-                        shape: BoxShape.circle,
+      builder: (context, item) {
+        return item is T
+            ? Stack(
+                alignment: Alignment.center,
+                children: [
+                  item.isCameraOn
+                      ? renderView
+                      : userView?.call(context, item) ??
+                          ImageView(
+                            width: 80,
+                            height: 80,
+                            shape: ViewShape.circular,
+                            image: item.photo ??
+                                "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
+                            scaleType: BoxFit.cover,
+                          ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (item.isRiseHand)
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          child: Container(
+                            margin: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.white24,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.back_hand_outlined,
+                              size: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.white24,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            item.isMuted ? Icons.mic_off : Icons.mic,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.back_hand_outlined,
-                        size: 18,
-                        color: Colors.white,
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.white24,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.more_vert,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.white24,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      item.isMuted ? Icons.mic_off : Icons.mic,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.white24,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.more_vert,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      }
+                ],
+              )
+            : const SizedBox();
+      },
     );
   }
 }
 
-abstract class Contributor extends Entity {
+class Contributor extends Entity {
   final bool? cameraOn;
   final bool? muted;
   final bool? riseHand;
   final bool? shareScreen;
+  final String? email;
+  final String? name;
+  final String? photo;
+  final String? phone;
 
   Contributor({
     super.id,
@@ -120,6 +125,10 @@ abstract class Contributor extends Entity {
     this.muted,
     this.riseHand,
     this.shareScreen,
+    this.email,
+    this.name,
+    this.photo,
+    this.phone,
   });
 
   bool get isCameraOn => cameraOn ?? false;
@@ -128,5 +137,3 @@ abstract class Contributor extends Entity {
 
   bool get isRiseHand => riseHand ?? false;
 }
-
-class ContributorImpl extends Contributor {}

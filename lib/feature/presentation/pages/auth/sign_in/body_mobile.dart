@@ -1,12 +1,17 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../../index.dart';
 
 class AuthSignInMobileBody extends StatefulWidget {
   final AuthSignInHandler onSignIn;
+  final AuthSignInHandler onSignInWithApple;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
   final AuthForgotHandler onForgetPassword;
@@ -15,6 +20,7 @@ class AuthSignInMobileBody extends StatefulWidget {
   const AuthSignInMobileBody({
     Key? key,
     required this.onSignIn,
+    required this.onSignInWithApple,
     required this.onSignInWithGoogle,
     required this.onSignInWithFacebook,
     required this.onForgetPassword,
@@ -131,6 +137,18 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
         //     ),
         //   ),
         // ),
+        if (!kIsWeb && Platform.isIOS)
+          OAuthButton(
+            text: "Login With Apple",
+            background: AppColors.secondary,
+            icon: AppIcons.apple,
+            onClick: (context) => widget.onSignInWithApple.call(
+              AuthInfo(
+                email: email.text,
+                password: password.text,
+              ),
+            ),
+          ),
         CreateAccountTextView(
           width: double.infinity,
           textAlign: TextAlign.center,
@@ -145,6 +163,15 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
             email: email.text,
             password: password.text,
           )),
+        ),
+        TextView(
+          marginTop: 24,
+          marginBottom: 24,
+          textAlign: TextAlign.center,
+          textColor: Colors.grey,
+          textSize: 12,
+          text:
+          'Powered by Tech Analytica Limited || Version ${locator<PackageInfo>().version}',
         ),
       ],
     );

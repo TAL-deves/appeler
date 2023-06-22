@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   app_color: ^0.0.2
-  flutter_andomie: ^0.3.8
+  flutter_andomie: ^0.4.0-alpha1
   flutter_androssy: ^0.0.5
   cupertino_icons: ^1.0.2
   cloud_firestore: ^4.7.0

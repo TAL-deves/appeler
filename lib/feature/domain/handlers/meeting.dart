@@ -42,13 +42,18 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
   }
 
   void setStatus({
-    required String id,
+    required String meetingId,
     required bool isMute,
     required bool isRiseHand,
     required bool isCameraOn,
     required bool isFrontCamera,
+    String? uid,
+    String? email,
+    String? name,
+    String? photo,
+    String? phone,
   }) {
-    var ref = root.doc(id);
+    var ref = root.doc(meetingId);
     ref.get().then((value) {
       final data = value.data();
       if (data != null && data is Map<String, dynamic>) {
@@ -57,6 +62,12 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
           'handUp': isRiseHand,
           'isCameraOn': isCameraOn,
           'isFrontCamera': isFrontCamera,
+          'meetingId': meetingId,
+          'uid': uid,
+          'email': email,
+          'name': name,
+          'photo': photo,
+          'phone': phone,
         };
         ref.set(data);
       }
@@ -64,13 +75,18 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
   }
 
   void changeStatus({
-    required String id,
+    required String meetingId,
     required bool isMute,
     required bool isRiseHand,
     required bool isCameraOn,
     required bool isFrontCamera,
+    String? uid,
+    String? email,
+    String? name,
+    String? photo,
+    String? phone,
   }) {
-    var ref = root.doc(id);
+    var ref = root.doc(meetingId);
     ref.get().then((value) {
       final data = value.data();
       if (data != null && data is Map<String, dynamic>) {
@@ -79,6 +95,12 @@ class MeetingHandler extends DataHandlerImpl<Meeting> {
           'handUp': isRiseHand,
           'isCameraOn': isCameraOn,
           'isFrontCamera': isFrontCamera,
+          'meetingId': meetingId,
+          'uid': uid,
+          'email': email,
+          'name': name,
+          'photo': photo,
+          'phone': phone,
         };
         ref.update(data);
       }

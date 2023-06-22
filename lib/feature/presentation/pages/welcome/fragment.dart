@@ -24,7 +24,7 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
       width: double.infinity,
       gravity: Alignment.center,
       layoutGravity: LayoutGravity.center,
-      paddingTop: 80,
+      paddingTop: 100,
       children: [
         LinearLayout(
           orientation: Axis.horizontal,

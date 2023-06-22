@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -39,6 +40,30 @@ class _ContributorCardState extends State<ContributorCard> {
         widget.meetingId,
         widget.uid,
       ),
+      userView: (context, item) {
+        return LinearLayout(
+          layoutGravity: LayoutGravity.center,
+          children: [
+            ImageView(
+              width: 80,
+              height: 80,
+              shape: ViewShape.circular,
+              image: item?.photo ??
+                  "https://assets.materialup.com/uploads/b78ca002-cd6c-4f84-befb-c09dd9261025/preview.png",
+              scaleType: BoxFit.cover,
+            ),
+            TextView(
+              text: item?.name ?? item?.email ?? "Unknown",
+              textOverflow: TextOverflow.ellipsis,
+              textSize: 14,
+              textColor: Colors.black.withOpacity(0.8),
+              fontWeight: FontWeight.bold,
+              marginTop: 8,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        );
+      },
     );
   }
 }

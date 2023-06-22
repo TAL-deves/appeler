@@ -5,6 +5,7 @@ import '../../../../../index.dart';
 
 class AuthSignInFragment extends StatelessWidget {
   final AuthSignInHandler onSignIn;
+  final AuthSignInHandler onSignInWithApple;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
   final AuthForgotHandler onForgetPassword;
@@ -13,6 +14,7 @@ class AuthSignInFragment extends StatelessWidget {
   const AuthSignInFragment({
     Key? key,
     required this.onSignIn,
+    required this.onSignInWithApple,
     required this.onSignInWithGoogle,
     required this.onSignInWithFacebook,
     required this.onForgetPassword,
@@ -24,6 +26,7 @@ class AuthSignInFragment extends StatelessWidget {
     return ResponsiveLayout(
       mobile: AuthSignInMobileBody(
         onSignIn: onSignIn,
+        onSignInWithApple: onSignInWithApple,
         onSignInWithGoogle: onSignInWithGoogle,
         onSignInWithFacebook: onSignInWithFacebook,
         onCreateAccount: onCreateAccount,
@@ -31,6 +34,7 @@ class AuthSignInFragment extends StatelessWidget {
       ),
       desktop: AuthSignInDesktopBody(
         onSignIn: onSignIn,
+        onSignInWithApple: onSignInWithApple,
         onSignInWithGoogle: onSignInWithGoogle,
         onSignInWithFacebook: onSignInWithFacebook,
         onCreateAccount: onCreateAccount,
