@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../../index.dart';
 
@@ -166,6 +167,15 @@ class _AuthSignUpMobileBodyState extends State<AuthSignUpMobileBody> {
               ),
             ),
           ),
+        TextView(
+          marginTop: 40,
+          marginBottom: 24,
+          textAlign: TextAlign.center,
+          textColor: Colors.grey,
+          textSize: 12,
+          text:
+              'Powered by Tech Analytica Limited || Version ${locator<PackageInfo>().version}',
+        ),
       ],
     );
   }
