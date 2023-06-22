@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   app_color: ^0.0.2
-  flutter_andomie: ^0.3.8
+  flutter_andomie: ^0.4.0-alpha1
   flutter_androssy: ^0.0.5
   cupertino_icons: ^1.0.2
   cloud_firestore: ^4.7.0
@@ -26,7 +26,6 @@ dependencies:
   encrypt: ^5.0.1
   dio: ^5.1.1
   firebase_messaging: ^14.4.1
-  sign_in_with_apple: ^5.0.0-dev.1
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   upgrader: ^6.3.0
