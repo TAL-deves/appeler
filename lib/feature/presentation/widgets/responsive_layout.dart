@@ -25,7 +25,6 @@ class ResponsiveLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build is calling');
     final size = MediaQuery.of(context).size;
     final cx = size.width;
     final cy = size.height;
