@@ -52,7 +52,9 @@ class AppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('app screen is called');
     return Scaffold(
+      //resizeToAvoidBottomInset: false,
       body: Center(
         child: Container(
           alignment: Alignment.center,

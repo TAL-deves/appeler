@@ -25,23 +25,39 @@ class ResponsiveLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final cx = initialSize?.width ?? constraints.maxWidth;
-        final cy = initialSize?.height ?? constraints.maxHeight;
-        if (config.isMobile(cx, cy)) {
-          return mobile;
-        } else if (config.isTab(cx, cy)) {
-          return tab ?? mobile;
-        } else if (config.isLaptop(cx, cy)) {
-          return laptop ?? desktop ?? mobile;
-        } else if (config.isDesktop(cx, cy)) {
-          return desktop ?? mobile;
-        } else {
-          return other ?? desktop ?? mobile;
-        }
-      },
-    );
+    print('build is calling');
+    final size = MediaQuery.of(context).size;
+    final cx = size.width;
+    final cy = size.height;
+    if (config.isMobile(cx, cy)) {
+      return mobile;
+    } else if (config.isTab(cx, cy)) {
+      return tab ?? mobile;
+    } else if (config.isLaptop(cx, cy)) {
+      return laptop ?? desktop ?? mobile;
+    } else if (config.isDesktop(cx, cy)) {
+      return desktop ?? mobile;
+    } else {
+      return other ?? desktop ?? mobile;
+    }
+    // return LayoutBuilder(
+    //   builder: (context, constraints) {
+    //     print('layout builder is calling');
+    //     final cx = initialSize?.width ?? constraints.maxWidth;
+    //     final cy = initialSize?.height ?? constraints.maxHeight;
+    //     if (config.isMobile(cx, cy)) {
+    //       return mobile;
+    //     } else if (config.isTab(cx, cy)) {
+    //       return tab ?? mobile;
+    //     } else if (config.isLaptop(cx, cy)) {
+    //       return laptop ?? desktop ?? mobile;
+    //     } else if (config.isDesktop(cx, cy)) {
+    //       return desktop ?? mobile;
+    //     } else {
+    //       return other ?? desktop ?? mobile;
+    //     }
+    //   },
+    // );
   }
 }
 
