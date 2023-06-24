@@ -1,6 +1,5 @@
 import 'package:appeler/feature/presentation/pages/home/fragment_desktop.dart';
 import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
-import 'package:appeler/feature/presentation/pages/meeting_participant/activity.dart';
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';

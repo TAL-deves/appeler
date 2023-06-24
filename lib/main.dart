@@ -88,13 +88,13 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver{
         iconData: const NotificationIconData(
           resType: ResourceType.mipmap,
           resPrefix: ResourcePrefix.ic,
-          name: 'launcher',
-          backgroundColor: Colors.orange,
+          name: 'launcher_icon',
+          //backgroundColor: Colors.orange,
         ),
-        buttons: [
-          const NotificationButton(id: 'sendButton', text: 'Send'),
-          const NotificationButton(id: 'testButton', text: 'Test'),
-        ],
+        // buttons: [
+        //   const NotificationButton(id: 'sendButton', text: 'Send'),
+        //   const NotificationButton(id: 'testButton', text: 'Test'),
+        // ],
       ),
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: true,
@@ -144,7 +144,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver{
     _receivePort = newReceivePort;
     _receivePort?.listen((data) {
       if (data is int) {
-        print('eventCount: $data');
+        //print('eventCount: $data');
       } else if (data is String) {
         if (data == 'onNotificationPressed') {
           //Navigator.of(context).pushNamed('/resume-route');
@@ -226,13 +226,13 @@ class MyTaskHandler extends TaskHandler {
   @override
   Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
     FlutterForegroundTask.updateService(
-      notificationTitle: 'Foreground Service',
-      notificationText: 'Service event: $_eventCount',
+      notificationTitle: 'Appeler is running',
+      //notificationText: 'Service event: $_eventCount',
     );
 
     sendPort?.send(_eventCount);
 
-    _eventCount++;
+    //_eventCount++;
   }
 
   @override

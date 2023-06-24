@@ -103,7 +103,7 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
                     text: "Sign In",
                     borderRadius: 25,
                     primary: AppColors.primary,
-                    onExecute: () => widget.onSignIn.call(
+                    onPressed: () => widget.onSignIn.call(
                       AuthInfo(
                         email: email.text,
                         password: password.text,

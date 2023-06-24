@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
 import '../../../../index.dart';
 
 class HomeActivity extends StatelessWidget {
@@ -19,7 +17,7 @@ class HomeActivity extends StatelessWidget {
       ],
       child: BlocConsumer<HomeController, AuthResponse<AuthInfo>>(
         listener: (context, state) {
-          if (!state.isAuthenticated) {
+          if (state.isUnauthenticated) {
             AppNavigator.of(context).goHome(
               AuthActivity.route,
               pathParams: {"name": "sign_in"},
