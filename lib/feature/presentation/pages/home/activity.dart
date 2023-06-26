@@ -22,7 +22,7 @@ class HomeActivity extends StatelessWidget {
           toast(state.error, Colors.redAccent.withAlpha(200));
         }
         if (state.isUnauthenticated) {
-          Future.delayed(const Duration(seconds: 2)).then((value) {
+          Future.delayed(const Duration(seconds: 5)).then((value) {
             AppNavigator.of(context).goHome(
               AuthActivity.route,
               pathParams: {"name": "sign_in"},
