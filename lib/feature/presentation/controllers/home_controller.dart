@@ -33,7 +33,7 @@ class HomeController extends DefaultAuthController {
         await userHandler.delete(createUid?.call(user.uid) ?? user.uid);
         await signOut();
         Fluttertoast.showToast(
-          msg: "Account has been deleted successfully!",
+          msg: "User account successfully deleted!",
           backgroundColor: AppColors.primary,
           textColor: Colors.white,
           toastLength: Toast.LENGTH_LONG,
