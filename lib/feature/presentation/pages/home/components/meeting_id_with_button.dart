@@ -8,7 +8,7 @@ class MeetingIdWithButtons extends StatefulWidget {
   final HomeController controller;
 
   final TextEditingController codeController;
-  final OnViewClickListener onJoin, onLogout;
+  final OnViewClickListener onJoin, onLogout, onDeleteAccount;
   final OnViewChangeListener onCopyOrShare;
   final ButtonController joinButton;
 
@@ -19,6 +19,7 @@ class MeetingIdWithButtons extends StatefulWidget {
     required this.onJoin,
     required this.onLogout,
     required this.onCopyOrShare,
+    required this.onDeleteAccount,
     required this.joinButton,
   });
 
@@ -45,8 +46,9 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
         Button(
           controller: widget.joinButton,
           ripple: 10,
-          width: 120,
+          width: double.infinity,
           text: buttonName,
+          fontWeight: FontWeight.bold,
           borderRadius: 25,
           marginTop: 24,
           enabled: widget.codeController.text.isValid,
@@ -62,9 +64,75 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
           text: "Logout",
           borderRadius: 25,
           marginTop: 24,
-          onClick: widget.onLogout,
+          onClick: (context) => onAlertDialog(
+            context: context,
+            title: "Logout",
+            description: "Are you sure you want to logout from your account?",
+            onAction: widget.onLogout,
+          ),
+        ),
+        TextView(
+          text: "Delete Account",
+          borderRadius: 25,
+          marginTop: 24,
+          textColor: Colors.redAccent,
+          onClick: (context) => onAlertDialog(
+            context: context,
+            title: "Delete Account",
+            description: "Are you sure you want to delete your account?",
+            onAction: widget.onDeleteAccount,
+          ),
         ),
       ],
+    );
+  }
+
+  void onAlertDialog({
+    required BuildContext context,
+    required String title,
+    required String description,
+    OnViewClickListener? onAction,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(title),
+          content: Text(description),
+          actions: [
+            TextView(
+              widthMin: 80,
+              textAlign: TextAlign.center,
+              ripple: 5,
+              text: "Cancel",
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderRadius: 8,
+              textColor: AppColors.primary,
+              background: AppColors.primary.withAlpha(50),
+              onClick: (context) => Navigator.pop(context),
+            ),
+            TextView(
+              textAlign: TextAlign.center,
+              widthMin: 80,
+              ripple: 5,
+              text: "OK",
+              textColor: Colors.white,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderRadius: 8,
+              background: AppColors.primary,
+              onClick: (context) {
+                onAction?.call(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

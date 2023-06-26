@@ -11,6 +11,7 @@ import 'package:wakelock/wakelock.dart';
 
 import 'index.dart';
 
+late BuildContext rootContext;
 
 //ios bug fixed
 Future<void> main() async {
@@ -191,6 +192,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
+    rootContext = context;
     return WithForegroundTask(
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

@@ -56,6 +56,7 @@ class _HomeFragmentState extends State<HomeFragment> {
         onScheduleMeet: onScheduleMeet,
         onJoin: onJoin,
         onLogout: onLogout,
+        onDeleteAccount: onDeleteAccount,
         onCopyOrShare: onCopyOrShare,
       ),
       desktop: HomeFragmentDesktop(
@@ -67,6 +68,7 @@ class _HomeFragmentState extends State<HomeFragment> {
         onScheduleMeet: onScheduleMeet,
         onJoin: onJoin,
         onLogout: onLogout,
+        onDeleteAccount: onDeleteAccount,
         onCopyOrShare: onCopyOrShare,
       ),
     );
@@ -103,6 +105,10 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   void onLogout(BuildContext context) => controller.signOut();
+
+  void onDeleteAccount(BuildContext context) async{
+    await controller.deleteAccount();
+  }
 
   void onCopyOrShare(dynamic value) async {
     if (value is String && value.isNotEmpty) {

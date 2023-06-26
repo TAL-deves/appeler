@@ -10,7 +10,8 @@ class HomeFragmentMobile extends StatefulWidget {
       onJoinMeet,
       onScheduleMeet,
       onJoin,
-      onLogout;
+      onLogout,
+      onDeleteAccount;
   final OnViewChangeListener onCopyOrShare;
   final ButtonController joinButton;
 
@@ -23,6 +24,7 @@ class HomeFragmentMobile extends StatefulWidget {
     required this.onScheduleMeet,
     required this.onJoin,
     required this.onLogout,
+    required this.onDeleteAccount,
     required this.onCopyOrShare,
     required this.joinButton,
   }) : super(key: key);
@@ -67,6 +69,7 @@ class _HomeFragmentMobileState extends State<HomeFragmentMobile> {
           onJoin: widget.onJoin,
           onCopyOrShare: widget.onCopyOrShare,
           onLogout: widget.onLogout,
+          onDeleteAccount: widget.onDeleteAccount,
         ),
       ],
     );

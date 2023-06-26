@@ -52,7 +52,12 @@ class AppRouter {
           GoRoute(
             path: HomeActivity.route,
             builder: (context, state) {
-              return const HomeActivity();
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => locator<HomeController>()),
+                ],
+                child: const HomeActivity(),
+              );
             },
             routes: <RouteBase>[
               GoRoute(
@@ -79,7 +84,7 @@ class AppRouter {
                 builder: (context, state) {
                   var data = state.extra;
                   var controller =
-                  data.getValue<MeetingController>("MeetingController");
+                      data.getValue<MeetingController>("MeetingController");
                   var id = data.getValue<String>("meeting_id");
                   if (controller != null) {
                     return BlocProvider.value(

@@ -6,7 +6,12 @@ import '../../../../index.dart';
 class HomeFragmentDesktop extends StatefulWidget {
   final HomeController controller;
   final TextEditingController codeController;
-  final OnViewClickListener onCreateMeet, onJoinMeet, onScheduleMeet, onJoin, onLogout;
+  final OnViewClickListener onCreateMeet,
+      onJoinMeet,
+      onScheduleMeet,
+      onJoin,
+      onLogout,
+      onDeleteAccount;
   final OnViewChangeListener onCopyOrShare;
   final ButtonController joinButton;
 
@@ -20,6 +25,7 @@ class HomeFragmentDesktop extends StatefulWidget {
     required this.onJoin,
     required this.onCopyOrShare,
     required this.onLogout,
+    required this.onDeleteAccount,
     required this.joinButton,
   }) : super(key: key);
 
@@ -64,6 +70,7 @@ class _HomeFragmentDesktopState extends State<HomeFragmentDesktop> {
           onJoin: widget.onJoin,
           onCopyOrShare: widget.onCopyOrShare,
           onLogout: widget.onLogout,
+          onDeleteAccount: widget.onDeleteAccount,
         ),
       ],
     );
