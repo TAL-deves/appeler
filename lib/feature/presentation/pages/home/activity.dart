@@ -15,19 +15,11 @@ class HomeActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeController, AuthResponse<AuthInfo>>(
       listener: (context, state) async {
-        if (state.isMessage) {
-          toast(state.message, AppColors.primary.withAlpha(200));
-        }
-        if (state.isError) {
-          toast(state.error, Colors.redAccent.withAlpha(200));
-        }
         if (state.isUnauthenticated) {
-          Future.delayed(const Duration(seconds: 5)).then((value) {
-            AppNavigator.of(context).goHome(
-              AuthActivity.route,
-              pathParams: {"name": "sign_in"},
-            );
-          });
+          AppNavigator.of(context).goHome(
+            AuthActivity.route,
+            pathParams: {"name": "sign_in"},
+          );
         }
       },
       builder: (context, state) {
@@ -40,12 +32,4 @@ class HomeActivity extends StatelessWidget {
     );
   }
 
-  void toast(String message, Color? color) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: color,
-      textColor: Colors.white,
-      toastLength: Toast.LENGTH_LONG,
-    );
-  }
 }

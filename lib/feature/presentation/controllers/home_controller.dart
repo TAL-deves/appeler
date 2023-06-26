@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../index.dart';
 
@@ -30,9 +32,14 @@ class HomeController extends DefaultAuthController {
         await user.delete();
         await userHandler.delete(createUid?.call(user.uid) ?? user.uid);
         await signOut();
-        emit(AuthResponse.unauthenticated(
-          "Account has been deleted successfully!",
-        ));
+        Fluttertoast.showToast(
+          msg: "Account has been deleted successfully!",
+          backgroundColor: AppColors.primary,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 5,
+        );
+        emit(AuthResponse.unauthenticated());
       } else {
         emit(AuthResponse.failure("User not valid!"));
       }
