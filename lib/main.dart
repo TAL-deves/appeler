@@ -14,6 +14,9 @@ import 'index.dart';
 late BuildContext rootContext;
 
 //ios bug fixed
+
+//Firebase hosting: https://www.youtube.com/watch?v=h6TKgzW9KHY
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Wakelock.enable();
