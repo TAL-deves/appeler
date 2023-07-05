@@ -48,15 +48,22 @@ class MeetingFragmentState extends State<MeetingFragment> {
   final _streamConfig = <String, dynamic>{
     'audio': true,
     //'video': Platform.isIOS ? {'deviceId': 'broadcast'} : true
-    'video': kIsWeb
-        ? {'facingMode': 'user'}
-        : {
-            'width': '320',
-            'height': '240',
-            'frameRate': '30',
-            'facingMode': 'user',
-            'optional': [],
-          }
+    // 'video': kIsWeb
+    //     ? {'facingMode': 'user'}
+    //     : {
+    //         'width': 320,
+    //         'height': 240,
+    //         'frameRate': 30,
+    //         'facingMode': 'user',
+    //         'optional': [],
+    //       },
+    'video': {
+      'width': 320,
+      'height': 240,
+      'frameRate': 30,
+      'facingMode': 'user',
+      //'optional': [],
+    }
   };
 
   void _replaceVideoStreamOnRemotes(MediaStream stream) {

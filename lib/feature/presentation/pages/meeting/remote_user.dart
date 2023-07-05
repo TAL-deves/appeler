@@ -108,11 +108,16 @@ class RemoteContributorState extends State<RemoteContributor> {
       //"sdpSemantics": "plan-b",
       //"sdpSemantics": "unified-plan",
       'iceServers': [
+        // {
+        //   "urls": "turn:34.143.165.178:3478?transport=udp",
+        //   "username": "test",
+        //   "credential": "test123",
+        // },
         {
-          "urls": "turn:34.143.165.178:3478?transport=udp",
-          "username": "test",
-          "credential": "test123",
-        },
+          "urls": "turn:165.22.218.141:3478",
+          "username": "tal",
+          "credential": "tal123"
+        }
       ]
     };
 
