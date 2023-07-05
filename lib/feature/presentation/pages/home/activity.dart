@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../index.dart';
 
@@ -31,5 +30,4 @@ class HomeActivity extends StatelessWidget {
       },
     );
   }
-
 }

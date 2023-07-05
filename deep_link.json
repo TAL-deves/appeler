@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "bd.tal.calling.appeler",
+      "sha256_cert_fingerprints": [
+        "1C:2B:41:EC:54:C3:3A:D2:0C:35:93:79:E7:3E:56:F6:03:2C:02:5D:DD:FF:8B:5B:92:F0:B8:49:05:F0:D4:15"
+      ]
+    }
+  }
+]

@@ -46,6 +46,7 @@ dependencies:
   google_sign_in: ^6.1.4
   url_strategy: ^0.2.0
   package_info_plus: ^3.1.2
+  uni_links: ^0.5.1
 
 #flutter_tools:
 #  web-server:

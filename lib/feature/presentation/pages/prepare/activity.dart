@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andomie/core.dart';
+import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../index.dart';
 
@@ -25,47 +27,76 @@ class PrepareActivity extends StatefulWidget {
 }
 
 class _PrepareActivityState extends State<PrepareActivity> {
+  late TextEditingController code;
+  late ButtonController joinButton;
+  late TextViewController errorController;
   late String? meetingId = widget.meetingId;
   late bool isSilent = false;
   late bool isFrontCamera = true;
   var joined = false;
 
   @override
+  void initState() {
+    code = TextEditingController();
+    joinButton = ButtonController();
+    errorController = TextViewController();
+    _verifyId(meetingId);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     if (!joined && widget.meetingId != null) {
       locator<MeetingHandler>().removeStatus(widget.meetingId!);
     }
+    code.dispose();
     super.dispose();
+  }
+
+  void _verifyId(String? id) {
+    joinButton.setEnabled(false);
+    if (id.isValid) {
+      FirebaseFirestore.instance
+          .collection("group-chat-rooms")
+          .doc(id)
+          .get()
+          .then((value) {
+        if (value.exists){
+          joinButton.setEnabled(true);
+          errorController.setVisibility(ViewVisibility.gone);
+        } else {
+          joinButton.setEnabled(false);
+          errorController.setVisibility(ViewVisibility.visible);
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        widget.homeController != null
-            ? BlocProvider.value(value: widget.homeController!)
-            : BlocProvider(create: (context) => locator<HomeController>())
-      ],
-      child: AppScreen(
-        title: kIsWeb ? null : widget.meetingId,
-        titleCenter: true,
-        body: PrepareFragment(
-          info: MeetingInfo(
-            id: meetingId ?? "",
-            isSilent: isSilent,
-            cameraType: isFrontCamera ? CameraType.front : CameraType.back,
-          ),
-          onPrepare: (context, info) async {
-            joined = true;
-            AppNavigator.of(context).goHome(
-              MeetingActivity.route.withSlash,
-              extra: {
-                "data": info,
-                "HomeController": context.read<HomeController>(),
-              },
-            );
-          },
+    return AppScreen(
+      title: kIsWeb ? null : widget.meetingId,
+      titleCenter: true,
+      body: PrepareFragment(
+        errorController: errorController,
+        buttonController: joinButton,
+        codeController: code,
+        isValidId: false,
+        info: MeetingInfo(
+          id: meetingId ?? "",
+          isSilent: isSilent,
+          cameraType: isFrontCamera ? CameraType.front : CameraType.back,
         ),
+        onPrepare: (context, info) async {
+          joined = true;
+          AppNavigator.of(context).goHome(
+            MeetingActivity.route.withSlash,
+            extra: {
+              "data": info,
+              "HomeController": context.read<HomeController>(),
+            },
+          );
+        },
       ),
     );
   }

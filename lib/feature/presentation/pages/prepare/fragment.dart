@@ -5,13 +5,21 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../index.dart';
 
 class PrepareFragment extends StatefulWidget {
+  final bool isValidId;
   final MeetingInfo info;
   final OnPrepare onPrepare;
+  final ButtonController buttonController;
+  final TextViewController errorController;
+  final TextEditingController codeController;
 
   const PrepareFragment({
     Key? key,
+    required this.isValidId,
     required this.info,
     required this.onPrepare,
+    required this.buttonController,
+    required this.errorController,
+    required this.codeController,
   }) : super(key: key);
 
   @override
@@ -19,10 +27,11 @@ class PrepareFragment extends StatefulWidget {
 }
 
 class _PrepareFragmentState extends State<PrepareFragment> {
+  late bool isValidId = widget.isValidId;
   late bool isCameraOn = widget.info.isCameraOn;
   late bool isMuted = widget.info.isMuted;
   bool shareScreenEnabled = false;
-  late TextEditingController code = TextEditingController();
+  late TextEditingController code = widget.codeController;
 
   @override
   void initState() {
@@ -71,6 +80,7 @@ class _PrepareFragmentState extends State<PrepareFragment> {
           layoutGravity: LayoutGravity.center,
           children: [
             MeetingIdField(
+              enabled: false,
               controller: code,
               icon: Icons.share_outlined,
               onCopyOrShare: (value) => Share.share(
@@ -78,7 +88,20 @@ class _PrepareFragmentState extends State<PrepareFragment> {
                 subject: "Let's go to meeting ... ",
               ),
             ),
+            TextView(
+              paddingHorizontal: 8,
+              paddingTop: 12,
+              width: double.infinity,
+              gravity: Alignment.centerRight,
+              textAlign: TextAlign.end,
+              visibility: ViewVisibility.gone,
+              controller: widget.errorController,
+              text: "Meeting ID isn't valid!",
+              textColor: Colors.redAccent.shade400,
+              textSize: 12,
+            ),
             Button(
+              controller: widget.buttonController,
               width: 150,
               borderRadius: 50,
               text: "Join",
@@ -89,10 +112,9 @@ class _PrepareFragmentState extends State<PrepareFragment> {
               onClick: (context) => widget.onPrepare(
                 context,
                 widget.info.attach(
-                  isCameraOn: isCameraOn,
-                  isMuted: isMuted,
-                  isShareScreen: shareScreenEnabled
-                ),
+                    isCameraOn: isCameraOn,
+                    isMuted: isMuted,
+                    isShareScreen: shareScreenEnabled),
               ),
             ),
           ],

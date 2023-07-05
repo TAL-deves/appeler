@@ -1,10 +1,15 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:appeler/feature/presentation/pages/home/fragment_desktop.dart';
 import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uni_links/uni_links.dart';
 
 import '../../../../index.dart';
 
@@ -27,6 +32,10 @@ class _HomeFragmentState extends State<HomeFragment> {
   late int index = 0;
   String? oldRoomId;
 
+  StreamSubscription? _sub;
+
+  bool _initialUriIsHandled = false;
+
   @override
   void initState() {
     controller = widget.controller;
@@ -35,13 +44,59 @@ class _HomeFragmentState extends State<HomeFragment> {
     code.addListener(() {
       joinButton.setEnabled(code.text.isValid);
     });
+    _handleIncomingLinks();
+    _handleInitialUri();
     super.initState();
   }
 
   @override
   void dispose() {
     code.dispose();
+    _sub?.cancel();
     super.dispose();
+  }
+
+  Future<void> _handleInitialUri() async {
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      try {
+        final uri = await getInitialUri();
+        if (uri != null) {
+          setState(() {
+            _routeByLink(uri);
+          });
+          log('Initial uri : $uri');
+        }
+      } catch (_) {
+        log('Initial error : $_');
+      }
+    }
+  }
+
+  void _handleIncomingLinks() {
+    if (!kIsWeb) {
+      _sub = uriLinkStream.listen((uri) {
+        if (uri != null) {
+          setState(() {
+            _routeByLink(uri);
+          });
+          log("Incoming link : $uri");
+        }
+      }, onError: (error) {
+        log("Incoming error : $error");
+      });
+    }
+  }
+
+  void _routeByLink(Uri? uri) {
+    if (uri != null) {
+      final params = uri.queryParameters.entries.first;
+      var key = params.key;
+      var value = params.value;
+      if (key == "meeting_id" && value.isNotEmpty) {
+        code.text = value;
+      }
+    }
   }
 
   @override
@@ -84,11 +139,7 @@ class _HomeFragmentState extends State<HomeFragment> {
     }
   }
 
-  void onJoinMeet(BuildContext context) {
-    AppNavigator.of(context).go(
-      MeetingParticipantActivity.route.withSlash,
-    );
-  }
+  void onJoinMeet(BuildContext context) {}
 
   void onScheduleMeet(BuildContext context) {}
 
@@ -106,7 +157,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onLogout(BuildContext context) => controller.signOut();
 
-  void onDeleteAccount(BuildContext context) async{
+  void onDeleteAccount(BuildContext context) async {
     await controller.deleteAccount();
   }
 

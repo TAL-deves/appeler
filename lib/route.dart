@@ -13,6 +13,19 @@ class AppRouter {
   GoRouter get router => GoRouter(
         initialLocation: SplashActivity.route,
         errorBuilder: (context, state) => const ErrorScreen(),
+        redirect: (context, state) async {
+          // final bool loggedIn = await locator<AuthController>().isLoggedIn();
+          // final bool loggingIn = state.matchedLocation == '/login';
+          // if (!loggedIn) {
+          //   return AuthActivity.route;
+          // }
+          //
+          // if (loggingIn) {
+          //   return '/';
+          // }
+
+          return null;
+        },
         routes: <RouteBase>[
           GoRoute(
             path: SplashActivity.route,
@@ -103,9 +116,20 @@ class AppRouter {
                 path: PrepareActivity.route,
                 builder: (context, state) {
                   var data = state.extra;
-                  return PrepareActivity(
-                    meetingId: data.getValue("meeting_id"),
-                    homeController: data.getValue("HomeController"),
+                  var id = data.getValue("meeting_id");
+                  var controller = data.getValue("HomeController");
+                  return MultiBlocProvider(
+                    providers: [
+                      controller != null && controller is HomeController
+                          ? BlocProvider.value(value: controller)
+                          : BlocProvider(
+                              create: (context) => locator<HomeController>(),
+                            )
+                    ],
+                    child: PrepareActivity(
+                      meetingId: id,
+                      homeController: controller,
+                    ),
                   );
                 },
               ),

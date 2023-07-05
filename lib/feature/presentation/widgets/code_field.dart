@@ -7,17 +7,25 @@ import '../../../index.dart';
 class MeetingIdField extends StatefulWidget {
   final String? initialValue;
   final String hint;
+  final String? helperText;
+  final Color? helperColor;
+  final double? helperSize;
   final dynamic icon;
   final bool iconVisible;
+  final bool enabled;
   final Function(String)? onCopyOrShare;
   final TextEditingController controller;
 
   const MeetingIdField({
     Key? key,
     this.hint = "Meeting ID",
+    this.helperText,
+    this.helperColor,
+    this.helperSize,
     this.initialValue,
     this.icon,
     this.iconVisible = true,
+    this.enabled = true,
     this.onCopyOrShare,
     required this.controller,
   }) : super(key: key);
@@ -52,6 +60,7 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
       alignment: Alignment.center,
       children: [
         TextField(
+          enabled: widget.enabled,
           controller: widget.controller,
           decoration: InputDecoration(
             alignLabelWithHint: true,
@@ -65,6 +74,13 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
               borderSide: BorderSide(
                 color: AppColors.primary.withAlpha(50),
                 width: 1,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: AppColors.primary.withAlpha(50),
+                width: 1.5,
               ),
             ),
             focusColor: AppColors.primary.withAlpha(50),
@@ -81,6 +97,11 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
             floatingLabelStyle: TextStyle(
               color: AppColors.primary,
             ),
+            helperText: widget.helperText,
+            helperStyle: TextStyle(
+              color: widget.helperColor,
+              fontSize: widget.helperSize,
+            ),
             label: RawTextView(
               text: "Meet ID",
               textColor: AppColors.secondary,
@@ -88,7 +109,8 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
               textSize: 16,
             ),
           ),
-          style: const TextStyle(
+          style: TextStyle(
+            color: AppColors.primary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -96,7 +118,8 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
           controller: icon,
           visibility: widget.icon != null &&
                   widget.iconVisible &&
-                  widget.controller.text.isNotEmpty
+                  widget.controller.text.isNotEmpty &&
+                  widget.enabled
               ? ViewVisibility.visible
               : ViewVisibility.gone,
           padding: 8,
