@@ -101,6 +101,7 @@ class _PrepareFragmentState extends State<PrepareFragment> {
               textSize: 12,
             ),
             Button(
+              enabled: false,
               controller: widget.buttonController,
               width: 150,
               borderRadius: 50,
