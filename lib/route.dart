@@ -77,13 +77,12 @@ class AppRouter {
             path: HomeActivity.route,
             builder: (context, state) {
               var data = state.extra;
+              var id = data.getValue<String>("meeting_id");
               return MultiBlocProvider(
                 providers: [
                   BlocProvider(create: (context) => locator<HomeController>()),
                 ],
-                child: HomeActivity(
-                  id: data.getValue<String>("meeting_id"),
-                ),
+                child: HomeActivity(id: id),
               );
             },
             routes: <RouteBase>[

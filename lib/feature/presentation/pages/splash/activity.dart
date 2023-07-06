@@ -36,10 +36,7 @@ class SplashActivity extends StatelessWidget {
         onRoute: (context) {
           locator<AuthHandler>().isSignIn().then((value) {
             if (value) {
-              AppNavigator.of(context).goHome(
-                HomeActivity.route,
-                extra: AuthHelper.uid,
-              );
+              AppNavigator.of(context).goHome(HomeActivity.route);
             } else {
               AppNavigator.of(context).goHome(
                 WelcomeActivity.route,
