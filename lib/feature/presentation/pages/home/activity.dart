@@ -7,8 +7,12 @@ import '../../../../index.dart';
 class HomeActivity extends StatelessWidget {
   static const String route = "/";
   static const String title = "Home";
+  final String? id;
 
-  const HomeActivity({Key? key}) : super(key: key);
+  const HomeActivity({
+    Key? key,
+    this.id,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +26,9 @@ class HomeActivity extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return const AppScreen(
+        return AppScreen(
           body: HomeFragmentBuilder(
+            id: id,
             type: HomeBodyType.initial,
           ),
         );

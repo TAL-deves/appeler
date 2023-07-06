@@ -14,10 +14,12 @@ import 'package:uni_links/uni_links.dart';
 import '../../../../index.dart';
 
 class HomeFragment extends StatefulWidget {
+  final String? id;
   final HomeController controller;
 
   const HomeFragment({
     Key? key,
+    this.id,
     required this.controller,
   }) : super(key: key);
 
@@ -40,6 +42,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   void initState() {
     controller = widget.controller;
     code = TextEditingController();
+    code.text = widget.id ?? "";
     joinButton = ButtonController();
     code.addListener(() {
       joinButton.setEnabled(code.text.isValid);

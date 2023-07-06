@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,24 +7,31 @@ import 'package:go_router/go_router.dart';
 import 'index.dart';
 
 class AppRouter {
-  const AppRouter._();
+  AppRouter._();
 
-  static AppRouter get I => const AppRouter._();
+  static AppRouter get I => AppRouter._();
+
+  List<String> ignoreRedirections = [
+    AboutActivity.route,
+    '${AuthActivity.route}/:name',
+    SplashActivity.route,
+    WelcomeActivity.route,
+  ];
+
+  bool isRedirection(String? path) {
+    return !ignoreRedirections.contains(path);
+  }
 
   GoRouter get router => GoRouter(
         initialLocation: SplashActivity.route,
         errorBuilder: (context, state) => const ErrorScreen(),
         redirect: (context, state) async {
-          // final bool loggedIn = await locator<AuthController>().isLoggedIn();
-          // final bool loggingIn = state.matchedLocation == '/login';
-          // if (!loggedIn) {
-          //   return AuthActivity.route;
-          // }
-          //
-          // if (loggingIn) {
-          //   return '/';
-          // }
-
+          if (kIsWeb && isRedirection(state.fullPath)) {
+            final bool loggedIn = await locator<AuthHandler>().isSignIn();
+            if (!loggedIn) {
+              return '${AuthActivity.route}/sign_in';
+            }
+          }
           return null;
         },
         routes: <RouteBase>[
@@ -39,11 +47,14 @@ class AppRouter {
             builder: (context, state) {
               var type = state.pathParameters.getValue<String>("name");
               var back = state.queryParameters.getValue<String>("back");
-              return AuthActivity(
-                isFromWelcome: back.equals("true"),
-                type: type.equals("sign_up")
-                    ? AuthFragmentType.signUp
-                    : AuthFragmentType.signIn,
+              return BlocProvider(
+                create: (context) => locator<AuthController>(),
+                child: AuthActivity(
+                  isFromWelcome: back.equals("true"),
+                  type: type.equals("sign_up")
+                      ? AuthFragmentType.signUp
+                      : AuthFragmentType.signIn,
+                ),
               );
             },
           ),
@@ -65,11 +76,14 @@ class AppRouter {
           GoRoute(
             path: HomeActivity.route,
             builder: (context, state) {
+              var data = state.extra;
               return MultiBlocProvider(
                 providers: [
                   BlocProvider(create: (context) => locator<HomeController>()),
                 ],
-                child: const HomeActivity(),
+                child: HomeActivity(
+                  id: data.getValue<String>("meeting_id"),
+                ),
               );
             },
             routes: <RouteBase>[
