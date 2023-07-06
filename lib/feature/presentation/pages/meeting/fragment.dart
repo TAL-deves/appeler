@@ -251,7 +251,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
       Fluttertoast.showToast(msg: "Web not supported!");
     } else {
       AppNavigator.of(context).go(
-        MeetingParticipantActivity.route.withSlash,
+        MeetingParticipantActivity.route.withParent("app"),
         extra: {
           "MeetingController": controller,
           "meeting_id": widget.info.id,

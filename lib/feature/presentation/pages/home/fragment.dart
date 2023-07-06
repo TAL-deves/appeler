@@ -148,7 +148,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onJoin(BuildContext context) {
     AppNavigator.of(context).go(
-      PrepareActivity.route.withSlash,
+      PrepareActivity.route.withParent("app"),
       extra: {
         "meeting_id": code.text,
         "HomeController": widget.controller,

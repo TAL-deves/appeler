@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../index.dart';
 
 class HomeActivity extends StatelessWidget {
-  static const String route = "/";
+  static const String route = "/app";
   static const String title = "Home";
   final String? id;
 

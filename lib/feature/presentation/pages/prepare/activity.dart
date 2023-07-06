@@ -90,7 +90,7 @@ class _PrepareActivityState extends State<PrepareActivity> {
         onPrepare: (context, info) async {
           joined = true;
           AppNavigator.of(context).goHome(
-            MeetingActivity.route.withSlash,
+            MeetingActivity.route.withParent("app"),
             extra: {
               "data": info,
               "HomeController": context.read<HomeController>(),

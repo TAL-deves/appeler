@@ -155,6 +155,10 @@ class AppRouter {
 
 extension AppRouterPathExtension on String {
   String get withSlash => "/$this";
+
+  String withParent(String parent) {
+    return "/$parent/$this";
+  }
 }
 
 class ErrorScreen extends StatelessWidget {
