@@ -6,8 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import 'index.dart';
 
-bool isRunning = false;
-
 class AppRouter {
   AppRouter._();
 

@@ -51,7 +51,6 @@
 
                 <data
                     android:host="appeler.techanalyticaltd.com"
-                    android:pathPrefix="/app"
                     android:scheme="https" />
 
             </intent-filter>
