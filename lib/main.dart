@@ -280,7 +280,7 @@ class MyTaskHandler extends TaskHandler {
 // final GoRouter _router = GoRouter(
 //   routes: <RouteBase>[
 //     GoRoute(
-//       path: '/',
+//       path: '/app',
 //       builder: (BuildContext context, GoRouterState state) {
 //         return const HomeScreen();
 //       },
@@ -333,13 +333,14 @@ class MyTaskHandler extends TaskHandler {
 //           children: <Widget>[
 //             ElevatedButton(
 //               //onPressed: () => context.go('/details'),
-//               onPressed: () => context.go('/details'),
+//               onPressed: () => context.go('/app/details'),
 //               child: const Text('Go to the Details screen'),
 //             ),
 //             const SizedBox(height: 20,),
 //             ElevatedButton(
 //               //onPressed: () => context.go('/details'),
 //               onPressed: () => context.goNamed("settings", pathParameters: {"name": "codemagic"}, queryParameters: {'pagol': 'chagol'}),
+//               //onPressed: () => context.goNamed("settings"),
 //               child: const Text('Go to the settings screen'),
 //             ),
 //           ],
@@ -362,7 +363,7 @@ class MyTaskHandler extends TaskHandler {
 //           mainAxisAlignment: MainAxisAlignment.center,
 //           children: <ElevatedButton>[
 //             ElevatedButton(
-//               onPressed: () => context.go('/'),
+//               onPressed: () => context.go('/app'),
 //               child: const Text('Go back to the Home screen'),
 //             ),
 //           ],
