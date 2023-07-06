@@ -19,31 +19,28 @@ class AuthActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
-      body: BlocProvider(
-        create: (context) => locator<AuthController>(),
-        child: BlocConsumer<AuthController, AuthResponse<AuthInfo>>(
-          listener: (context, state) {
-            if (state.isError || state.isMessage) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.isMessage ? state.message : state.error),
-                ),
-              );
-            }
-            if (state.isAuthenticated) {
-              AppNavigator.of(context).goHome(
-                HomeActivity.route,
-                extra: state.data,
-              );
-            }
-          },
-          builder: (context, state) {
-            return AuthFragment(
-              isFromWelcome: isFromWelcome ?? false,
-              type: type ?? AuthFragmentType.signIn,
+      body: BlocConsumer<AuthController, AuthResponse<AuthInfo>>(
+        listener: (context, state) {
+          if (state.isError || state.isMessage) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.isMessage ? state.message : state.error),
+              ),
             );
-          },
-        ),
+          }
+          if (state.isAuthenticated) {
+            AppNavigator.of(context).goHome(
+              HomeActivity.route,
+              extra: state.data,
+            );
+          }
+        },
+        builder: (context, state) {
+          return AuthFragment(
+            isFromWelcome: isFromWelcome ?? false,
+            type: type ?? AuthFragmentType.signIn,
+          );
+        },
       ),
     );
   }

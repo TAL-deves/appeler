@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../index.dart';
 
 class HomeFragmentBuilder extends StatefulWidget {
+  final String? id;
   final HomeBodyType type;
 
   const HomeFragmentBuilder({
     Key? key,
     required this.type,
+    this.id,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,10 @@ class _HomeFragmentBuilderState extends State<HomeFragmentBuilder> {
   Widget build(BuildContext context) {
     switch (widget.type) {
       case HomeBodyType.initial:
-        return HomeFragment(controller: controller);
+        return HomeFragment(
+          controller: controller,
+          id: widget.id,
+        );
     }
   }
 }
