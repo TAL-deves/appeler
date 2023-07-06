@@ -21,7 +21,7 @@ class HomeActivity extends StatelessWidget {
         if (state.isUnauthenticated) {
           AppNavigator.of(context).goHome(
             AuthActivity.route,
-            pathParams: {"name": "sign_in"},
+            path: AuthSignInFragment.route,
           );
         }
       },

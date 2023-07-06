@@ -12,22 +12,22 @@ class AppNavigator {
   void go(
     String route, {
     Object? extra,
-    Map<String, String> pathParams = const <String, String>{},
+    String path = "",
     Map<String, dynamic> queryParams = const <String, dynamic>{},
   }) {
-    if (pathParams.isNotEmpty || queryParams.isNotEmpty) {
+    if (path.isNotEmpty || queryParams.isNotEmpty) {
       if (kIsWeb) {
         context.goNamed(
           route,
           extra: extra,
-          pathParameters: pathParams,
+          pathParameters: {"name": path},
           queryParameters: queryParams,
         );
       } else {
         context.pushNamed(
           route,
           extra: extra,
-          pathParameters: pathParams,
+          pathParameters: {"name": path},
           queryParameters: queryParams,
         );
       }
@@ -42,17 +42,17 @@ class AppNavigator {
 
   void goHome(
     String route, {
+    String path = "",
     Object? extra,
-    Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
   }) {
-    if (pathParams.isNotEmpty || queryParams.isNotEmpty) {
+    if (path.isNotEmpty || queryParams.isNotEmpty) {
       if (kIsWeb) {
         Router.neglect(context, () {
           context.goNamed(
             route,
             extra: extra,
-            pathParameters: pathParams,
+            pathParameters: {"name": path},
             queryParameters: queryParams,
           );
         });
@@ -60,7 +60,7 @@ class AppNavigator {
         context.pushReplacementNamed(
           route,
           extra: extra,
-          pathParameters: pathParams,
+          pathParameters: {"name": path},
           queryParameters: queryParams,
         );
       }

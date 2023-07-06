@@ -23,11 +23,11 @@ class WelcomeActivity extends StatelessWidget {
           child: WelcomeFragment(
             onSignIn: (context) => AppNavigator.of(context).go(
               AuthActivity.route,
-              pathParams: {"name": "sign_in"},
+              path: AuthSignInFragment.route,
             ),
             onSignUp: (context) => AppNavigator.of(context).go(
               AuthActivity.route,
-              pathParams: {"name": "sign_up"},
+              path: AuthSignUpFragment.route,
               queryParams: {"back": "true"},
             ),
             onJoinMeeting: (context) => AppNavigator.of(context).go(

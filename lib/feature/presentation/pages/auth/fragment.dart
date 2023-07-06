@@ -44,11 +44,11 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignInWithFacebook: controller.signInWithFacebook,
           onCreateAccount: (data) => AppNavigator.of(context).go(
             AuthActivity.route,
-            pathParams: {"name": "sign_up"},
+            path: AuthSignUpFragment.route,
           ),
           onForgetPassword: (data) => AppNavigator.of(context).go(
             AuthActivity.route,
-            pathParams: {"name": "forgot_password"},
+            path: AuthForgotPasswordFragment.route,
           ),
         );
       case AuthFragmentType.signUp:
@@ -60,7 +60,7 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignIn: (data) {
             AppNavigator.of(context).go(
               AuthActivity.route,
-              pathParams: {"name": "sign_in"},
+              path: AuthSignInFragment.route,
             );
           },
         );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../index.dart';
 
 class AuthSignInFragment extends StatelessWidget {
+  static String route = "sign_in";
   final AuthSignInHandler onSignIn;
   final AuthSignInHandler onSignInWithApple;
   final AuthSignInHandler onSignInWithGoogle;

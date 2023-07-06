@@ -4,6 +4,7 @@ import '../../../../../index.dart';
 import '../../../widgets/responsive_layout.dart';
 
 class AuthSignUpFragment extends StatelessWidget {
+  static String route = "sign_up";
   final AuthSignInHandler onSignIn;
   final AuthSignInHandler onSignInWithApple;
   final AuthSignInHandler onSignInWithGoogle;

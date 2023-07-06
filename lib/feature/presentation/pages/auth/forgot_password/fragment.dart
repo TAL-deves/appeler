@@ -5,6 +5,7 @@ import 'package:flutter_androssy/widgets.dart';
 import '../../../../../index.dart';
 
 class AuthForgotPasswordFragment extends StatefulWidget {
+  static String route = "forgot_password";
   final AuthForgotHandler onForgot;
 
   const AuthForgotPasswordFragment({
