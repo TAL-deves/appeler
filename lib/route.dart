@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 
 import 'index.dart';
 
+bool isRunning = false;
+
 class AppRouter {
   AppRouter._();
 
@@ -29,7 +31,7 @@ class AppRouter {
           if (kIsWeb && isRedirection(state.fullPath)) {
             final bool loggedIn = await locator<AuthHandler>().isSignIn();
             if (!loggedIn) {
-              return '${AuthActivity.route}/sign_in';
+              return WelcomeActivity.route;
             }
           }
           return null;
