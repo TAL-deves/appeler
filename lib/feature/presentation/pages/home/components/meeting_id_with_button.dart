@@ -39,7 +39,7 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
       children: [
         MeetingIdField(
           controller: widget.codeController,
-          icon: Icons.copy_all,
+          icon: Icons.share_rounded,
           iconVisible: index == 0,
           onCopyOrShare: widget.onCopyOrShare,
         ),
