@@ -242,7 +242,10 @@ class MeetingFragmentState extends State<MeetingFragment> {
 
   void onCodeShare(BuildContext context) async {
     if (widget.info.id.isValid) {
-      await Share.share(widget.info.id, subject: "Let's go to meeting ... ");
+      await Share.share(
+        "https://appeler.techanalyticaltd.com/app?meeting_id=${widget.info.id}",
+        subject: "Let's go to meeting ... ",
+      );
     }
   }
 

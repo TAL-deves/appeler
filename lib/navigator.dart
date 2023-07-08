@@ -47,31 +47,18 @@ class AppNavigator {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
   }) {
     if (path.isNotEmpty || queryParams.isNotEmpty) {
-      if (kIsWeb) {
-        Router.neglect(context, () {
-          context.goNamed(
-            route,
-            extra: extra,
-            pathParameters: {"name": path},
-            queryParameters: queryParams,
-          );
-        });
-      } else {
-        context.pushReplacementNamed(
+      Router.neglect(context, () {
+        context.goNamed(
           route,
           extra: extra,
           pathParameters: {"name": path},
           queryParameters: queryParams,
         );
-      }
+      });
     } else {
-      if (kIsWeb) {
-        Router.neglect(context, () {
-          context.go(route, extra: extra);
-        });
-      } else {
-        context.pushReplacement(route, extra: extra);
-      }
+      Router.neglect(context, () {
+        context.go(route, extra: extra);
+      });
     }
   }
 

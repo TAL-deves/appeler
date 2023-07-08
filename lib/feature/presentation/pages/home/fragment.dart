@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -167,10 +166,6 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onCopyOrShare(dynamic value) async {
     if (value is String && value.isNotEmpty) {
-      // await ClipboardHelper.setText(
-      //   value,
-      // );
-      // Fluttertoast.showToast(msg: "Copied code");
       await Share.share(
         "https://appeler.techanalyticaltd.com/app?meeting_id=$value",
         subject: "Let's go to meeting ... ",

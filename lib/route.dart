@@ -25,6 +25,7 @@ class AppRouter {
   GoRouter get router => GoRouter(
         initialLocation: SplashActivity.route,
         errorBuilder: (context, state) => const ErrorScreen(),
+        //routerNeglect: true,
         redirect: (context, state) async {
           if (kIsWeb && isRedirection(state.fullPath)) {
             final bool loggedIn = await locator<AuthHandler>().isSignIn();
