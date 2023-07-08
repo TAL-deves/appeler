@@ -114,9 +114,9 @@ class RemoteContributorState extends State<RemoteContributor> {
         //   "credential": "test123",
         // },
         {
-          "urls": "turn:165.22.218.141:3478",
+          "urls": "turn:147.182.180.252:3478",
           "username": "tal",
-          "credential": "tal123"
+          "credential": "t0a3l2"
         }
       ]
     };
