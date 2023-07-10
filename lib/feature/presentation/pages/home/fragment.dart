@@ -13,6 +13,17 @@ import 'package:uni_links/uni_links.dart';
 
 import '../../../../index.dart';
 
+void onCopyOrShare(dynamic value, BuildContext context)  {
+  if (value is String && value.isNotEmpty) {
+    final box = context.findRenderObject() as RenderBox?;
+    Share.share(
+      "https://appeler.techanalyticaltd.com/app?meeting_id=$value",
+      subject: "Let's go to meeting ... ",
+      sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+    );
+  }
+}
+
 class HomeFragment extends StatefulWidget {
   final String? id;
   final HomeController controller;
@@ -115,7 +126,7 @@ class _HomeFragmentState extends State<HomeFragment> {
         onJoin: onJoin,
         onLogout: onLogout,
         onDeleteAccount: onDeleteAccount,
-        onCopyOrShare: onCopyOrShare,
+        onCopyOrShare: (value) => onCopyOrShare(value, context),
       ),
       desktop: HomeFragmentDesktop(
         controller: widget.controller,
@@ -127,7 +138,7 @@ class _HomeFragmentState extends State<HomeFragment> {
         onJoin: onJoin,
         onLogout: onLogout,
         onDeleteAccount: onDeleteAccount,
-        onCopyOrShare: onCopyOrShare,
+        onCopyOrShare: (value) => onCopyOrShare(value, context),
       ),
     );
   }
@@ -162,14 +173,5 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void onDeleteAccount(BuildContext context) async {
     await controller.deleteAccount();
-  }
-
-  void onCopyOrShare(dynamic value) async {
-    if (value is String && value.isNotEmpty) {
-      await Share.share(
-        "https://appeler.techanalyticaltd.com/app?meeting_id=$value",
-        subject: "Let's go to meeting ... ",
-      );
-    }
   }
 }

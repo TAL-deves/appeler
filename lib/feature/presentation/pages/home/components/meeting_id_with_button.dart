@@ -63,7 +63,9 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
         TextView(
           text: "Logout",
           borderRadius: 25,
-          marginTop: 24,
+          marginTop: 12,
+          paddingVertical: 12,
+          paddingHorizontal: 24,
           onClick: (context) => onAlertDialog(
             context: context,
             title: "Logout",
@@ -74,7 +76,8 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
         TextView(
           text: "Delete Account",
           borderRadius: 25,
-          marginTop: 24,
+          paddingVertical: 12,
+          paddingHorizontal: 24,
           textColor: Colors.redAccent,
           onClick: (context) => onAlertDialog(
             context: context,

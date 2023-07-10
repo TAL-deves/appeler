@@ -9,8 +9,6 @@ import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:share_plus/share_plus.dart';
-
 import '../../../../index.dart';
 
 class MeetingFragment extends StatefulWidget {
@@ -199,7 +197,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
               text: "Code share",
               icon: Icons.share,
               onClick: (context) {
-                onCodeShare(context);
+                onCopyOrShare(widget.info.id, context);
                 //Navigator.pop(context);
               },
             ),
@@ -235,17 +233,9 @@ class MeetingFragmentState extends State<MeetingFragment> {
 
   void onCodeCopy(BuildContext context) async {
     if (widget.info.id.isValid) {
-      await ClipboardHelper.setText(widget.info.id);
-      Fluttertoast.showToast(msg: "Copied the ${widget.info.id}!");
-    }
-  }
-
-  void onCodeShare(BuildContext context) async {
-    if (widget.info.id.isValid) {
-      await Share.share(
-        "https://appeler.techanalyticaltd.com/app?meeting_id=${widget.info.id}",
-        subject: "Let's go to meeting ... ",
-      );
+      final curValue = "https://appeler.techanalyticaltd.com/app?meeting_id=${widget.info.id}";
+      await ClipboardHelper.setText(curValue);
+      Fluttertoast.showToast(msg: curValue);
     }
   }
 
