@@ -1,8 +1,9 @@
-import 'package:flutter_andomie/core.dart';
+import 'package:data_management/core.dart';
 
-class UserRepository extends DataRepositoryImpl<AuthInfo> {
+import '../../index.dart';
+
+class UserRepository extends RemoteDataRepositoryImpl<AuthInfo> {
   UserRepository({
-    required super.remote,
-    required super.local,
+    required super.source,
   });
 }

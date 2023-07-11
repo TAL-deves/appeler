@@ -1,5 +1,5 @@
+import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../index.dart';
@@ -16,10 +16,10 @@ class HomeActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeController, AuthResponse<AuthInfo>>(
+    return BlocConsumer<HomeController, AuthResponse>(
       listener: (context, state) async {
         if (state.isUnauthenticated) {
-          AppNavigator.of(context).goHome(
+          AppCurrentNavigator.of(context).goHome(
             AuthActivity.route,
             path: AuthSignInFragment.route,
           );

@@ -71,7 +71,7 @@ class _JoinActivityState extends State<JoinActivity> {
                   onClick: (context) {
                     var roomId = codeController.text;
                     if (roomId.isNotEmpty) {
-                      AppNavigator.of(context).go(
+                      AppCurrentNavigator.of(context).go(
                         PrepareActivity.route.withParent("app"),
                         extra: {
                           "meeting_id": roomId,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../index.dart';
@@ -25,11 +24,11 @@ class AuthFragment extends StatefulWidget {
 }
 
 class _AuthFragmentState extends State<AuthFragment> {
-  late AuthController controller;
+  late CustomAuthController controller;
 
   @override
   void initState() {
-    controller = context.read<AuthController>();
+    controller = context.read<CustomAuthController>();
     super.initState();
   }
 
@@ -40,13 +39,14 @@ class _AuthFragmentState extends State<AuthFragment> {
         return AuthSignInFragment(
           onSignIn: controller.signIn,
           onSignInWithApple: controller.signInWithApple,
+          onSignInWithBiometric: controller.signInWithBiometric,
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
-          onCreateAccount: (data) => AppNavigator.of(context).go(
+          onCreateAccount: (data) => AppCurrentNavigator.of(context).go(
             AuthActivity.route,
             path: AuthSignUpFragment.route,
           ),
-          onForgetPassword: (data) => AppNavigator.of(context).go(
+          onForgetPassword: (data) => AppCurrentNavigator.of(context).go(
             AuthActivity.route,
             path: AuthForgotPasswordFragment.route,
           ),
@@ -58,7 +58,7 @@ class _AuthFragmentState extends State<AuthFragment> {
           onSignInWithGoogle: controller.signInWithGoogle,
           onSignInWithFacebook: controller.signInWithFacebook,
           onSignIn: (data) {
-            AppNavigator.of(context).go(
+            AppCurrentNavigator.of(context).go(
               AuthActivity.route,
               path: AuthSignInFragment.route,
             );

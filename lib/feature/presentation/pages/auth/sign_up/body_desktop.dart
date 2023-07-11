@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -121,7 +121,7 @@ class _AuthSignUpDesktopBodyState extends State<AuthSignUpDesktopBody> {
                     ),
                   ),
                 ),
-                BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
+                BlocBuilder<CustomAuthController, AuthResponse>(
                   builder: (context, state) {
                     return StackLayout(
                       width: double.infinity,

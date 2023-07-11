@@ -4,6 +4,7 @@ export 'app_common_button.dart';
 export 'app_logo.dart';
 export 'app_screen.dart';
 export 'app_text_button.dart';
+export 'biometric_button.dart';
 export 'button.dart';
 export 'camera_view.dart';
 export 'code_field.dart';

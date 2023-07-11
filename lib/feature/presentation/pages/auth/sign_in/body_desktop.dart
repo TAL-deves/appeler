@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
@@ -104,7 +105,7 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
                 //     password: password.text,
                 //   )),
                 // ),
-                BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
+                BlocBuilder<CustomAuthController, AuthResponse>(
                   builder: (context, state) {
                     return StackLayout(
                       width: double.infinity,

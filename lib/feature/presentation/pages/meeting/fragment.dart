@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auth_management/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../../../index.dart';
 
 class MeetingFragment extends StatefulWidget {
@@ -233,7 +235,8 @@ class MeetingFragmentState extends State<MeetingFragment> {
 
   void onCodeCopy(BuildContext context) async {
     if (widget.info.id.isValid) {
-      final curValue = "https://appeler.techanalyticaltd.com/app?meeting_id=${widget.info.id}";
+      final curValue =
+          "https://appeler.techanalyticaltd.com/app?meeting_id=${widget.info.id}";
       await ClipboardHelper.setText(curValue);
       Fluttertoast.showToast(msg: curValue);
     }
@@ -243,7 +246,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
     if (kIsWeb) {
       Fluttertoast.showToast(msg: "Web not supported!");
     } else {
-      AppNavigator.of(context).go(
+      AppCurrentNavigator.of(context).go(
         MeetingParticipantActivity.route.withParent("app"),
         extra: {
           "MeetingController": controller,
@@ -417,7 +420,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
               onRiseHand: onRiseHand,
               onSilent: onSilent,
               onSwitchCamera: onSwitchCamera,
-              onCancel: (context) => AppNavigator.of(context).goBack(),
+              onCancel: (context) => AppCurrentNavigator.of(context).goBack(),
               cancelProperty: const ButtonProperty(
                 tint: Colors.red,
                 background: Colors.transparent,

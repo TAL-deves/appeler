@@ -7,6 +7,7 @@ class AuthSignInFragment extends StatelessWidget {
   static String route = "sign_in";
   final AuthSignInHandler onSignIn;
   final AuthSignInHandler onSignInWithApple;
+  final AuthSignInHandler onSignInWithBiometric;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
   final AuthForgotHandler onForgetPassword;
@@ -16,6 +17,7 @@ class AuthSignInFragment extends StatelessWidget {
     Key? key,
     required this.onSignIn,
     required this.onSignInWithApple,
+    required this.onSignInWithBiometric,
     required this.onSignInWithGoogle,
     required this.onSignInWithFacebook,
     required this.onForgetPassword,
@@ -28,6 +30,7 @@ class AuthSignInFragment extends StatelessWidget {
       mobile: AuthSignInMobileBody(
         onSignIn: onSignIn,
         onSignInWithApple: onSignInWithApple,
+        onSignInWithBiometric: onSignInWithBiometric,
         onSignInWithGoogle: onSignInWithGoogle,
         onSignInWithFacebook: onSignInWithFacebook,
         onCreateAccount: onCreateAccount,

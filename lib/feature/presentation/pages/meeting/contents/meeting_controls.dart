@@ -100,7 +100,8 @@ class _MeetingControlsState extends State<MeetingControls> {
       children: [
         IconView(
           padding: 8,
-          icon: isMuted ? Icons.mic_off : Icons.mic,
+          borderRadius: 24,
+          icon: !isMuted ? Icons.mic_off : Icons.mic,
           tint: isMuted ? activeIC : inactiveIC,
           background: isMuted ? activeBG : inactiveBG,
           onClick: (context) {
@@ -110,6 +111,7 @@ class _MeetingControlsState extends State<MeetingControls> {
         ),
         IconView(
           padding: 8,
+          borderRadius: 24,
           icon: isCameraOn
               ? Icons.videocam_outlined
               : Icons.videocam_off_outlined,
@@ -121,6 +123,7 @@ class _MeetingControlsState extends State<MeetingControls> {
           },
         ),
         IconView(
+          borderRadius: 24,
           icon: widget.cancelProperty.icon,
           padding: widget.cancelProperty.padding,
           size: widget.cancelProperty.size,
@@ -131,6 +134,7 @@ class _MeetingControlsState extends State<MeetingControls> {
           pressedColor: widget.cancelProperty.splashColor,
         ),
         IconView(
+          borderRadius: 24,
           padding: 8,
           icon: isScreenShared
               ? Icons.screen_share_outlined
@@ -154,6 +158,7 @@ class _MeetingControlsState extends State<MeetingControls> {
         //   },
         // ),
         IconView(
+          borderRadius: 24,
           padding: 8,
           visibility: ViewVisibility.visible,
           icon: Icons.more_vert,

@@ -1,3 +1,4 @@
+import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
@@ -49,7 +50,7 @@ class AppRouter {
               var type = state.pathParameters.getValue<String>("name");
               var back = state.queryParameters.getValue<String>("back");
               return BlocProvider(
-                create: (context) => locator<AuthController>(),
+                create: (context) => locator<CustomAuthController>(),
                 child: AuthActivity(
                   isFromWelcome: back.equals("true"),
                   type: type.equals("sign_up")

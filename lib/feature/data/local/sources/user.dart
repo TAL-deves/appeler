@@ -1,9 +1,11 @@
-import 'package:flutter_andomie/core.dart';
+import 'package:data_management/core.dart';
+
+import '../../../../index.dart';
 
 class LocalUserDataSource extends LocalDataSourceImpl<AuthInfo> {
   LocalUserDataSource({
     super.path = "users",
-    required super.db,
+    super.database,
   });
 
   @override

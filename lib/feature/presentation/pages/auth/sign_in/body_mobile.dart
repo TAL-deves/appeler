@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -12,6 +12,7 @@ import '../../../../../index.dart';
 class AuthSignInMobileBody extends StatefulWidget {
   final AuthSignInHandler onSignIn;
   final AuthSignInHandler onSignInWithApple;
+  final AuthSignInHandler onSignInWithBiometric;
   final AuthSignInHandler onSignInWithGoogle;
   final AuthSignInHandler onSignInWithFacebook;
   final AuthForgotHandler onForgetPassword;
@@ -21,6 +22,7 @@ class AuthSignInMobileBody extends StatefulWidget {
     Key? key,
     required this.onSignIn,
     required this.onSignInWithApple,
+    required this.onSignInWithBiometric,
     required this.onSignInWithGoogle,
     required this.onSignInWithFacebook,
     required this.onForgetPassword,
@@ -85,7 +87,7 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
         //     password: password.text,
         //   )),
         // ),
-        BlocBuilder<AuthController, AuthResponse<AuthInfo>>(
+        BlocBuilder<CustomAuthController, AuthResponse>(
           builder: (context, state) {
             return StackLayout(
               width: double.infinity,
@@ -115,6 +117,14 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
           },
         ),
         const OrText(),
+        BiometricButton(
+          onLogin: (context) => widget.onSignInWithBiometric.call(
+            AuthInfo(
+              email: email.text,
+              password: password.text,
+            ),
+          ),
+        ),
         OAuthButton(
           text: "Login With Google",
           background: AppColors.primary,
@@ -171,7 +181,7 @@ class _AuthSignInMobileBodyState extends State<AuthSignInMobileBody> {
           textColor: Colors.grey,
           textSize: 12,
           text:
-          'Powered by Tech Analytica Limited || Version ${locator<PackageInfo>().version}',
+              'Powered by Tech Analytica Limited || Version ${locator<PackageInfo>().version}',
         ),
       ],
     );

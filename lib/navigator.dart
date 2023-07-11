@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
-class AppNavigator {
+class AppCurrentNavigator {
   final BuildContext context;
 
-  const AppNavigator._(this.context);
+  const AppCurrentNavigator._(this.context);
 
-  factory AppNavigator.of(BuildContext context) => AppNavigator._(context);
+  factory AppCurrentNavigator.of(BuildContext context) =>
+      AppCurrentNavigator._(context);
 
   void go(
     String route, {

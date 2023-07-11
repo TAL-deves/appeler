@@ -1,5 +1,5 @@
+import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../index.dart';
@@ -19,7 +19,7 @@ class AuthActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScreen(
-      body: BlocConsumer<AuthController, AuthResponse<AuthInfo>>(
+      body: BlocConsumer<CustomAuthController, AuthResponse>(
         listener: (context, state) {
           if (state.isError || state.isMessage) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -29,7 +29,7 @@ class AuthActivity extends StatelessWidget {
             );
           }
           if (state.isAuthenticated) {
-            AppNavigator.of(context).goHome(
+            AppCurrentNavigator.of(context).goHome(
               HomeActivity.route,
               extra: state.data,
             );

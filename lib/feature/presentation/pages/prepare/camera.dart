@@ -73,6 +73,7 @@ class _MeetingCameraState extends State<MeetingCamera> {
                 background: Colors.white24,
                 tint: Colors.white,
                 padding: 8,
+                borderRadius: 24,
                 onClick: (context) {
                   isCameraOn = !isCameraOn;
                   widget.onCameraStateChange.call(isCameraOn);
@@ -84,6 +85,7 @@ class _MeetingCameraState extends State<MeetingCamera> {
                 background: Colors.white24,
                 tint: Colors.white,
                 padding: 8,
+                borderRadius: 24,
                 onClick: (context) {
                   isMuted = !isMuted;
                   widget.onMicroStateChange.call(isMuted);

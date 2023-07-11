@@ -61,7 +61,7 @@ class _PrepareActivityState extends State<PrepareActivity> {
           .doc(id)
           .get()
           .then((value) {
-        if (value.exists){
+        if (value.exists) {
           joinButton.setEnabled(true);
           errorController.setVisibility(ViewVisibility.gone);
         } else {
@@ -89,7 +89,7 @@ class _PrepareActivityState extends State<PrepareActivity> {
         ),
         onPrepare: (context, info) async {
           joined = true;
-          AppNavigator.of(context).goHome(
+          AppCurrentNavigator.of(context).goHome(
             MeetingActivity.route.withParent("app"),
             extra: {
               "data": info,

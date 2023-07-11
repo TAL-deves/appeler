@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,6 +31,7 @@ class PasswordField extends StatefulWidget {
 class _PasswordFieldState extends State<PasswordField> {
   late PasswordEditingController controller;
   bool isChangedState = false;
+  bool eyeOn = false;
 
   @override
   void initState() {
@@ -42,27 +44,48 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return Container(
       margin: widget.margin ?? const EdgeInsets.only(bottom: 24),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: TextInputType.phone,
-        inputFormatters: controller.formatter(widget.digits),
-        maxLength: widget.maxCharacters,
-        buildCounter: counter,
-        obscureText: true,
-        onChanged: (value) {
-          isChangedState = true;
-        },
-        validator: (value) {
-          bool valid = widget.validator?.call(value ?? "") ?? false;
-          return !valid && isChangedState ? widget.error : null;
-        },
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          isDense: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+      child: Stack(
+        children: [
+          TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.phone,
+            inputFormatters: controller.formatter(widget.digits),
+            maxLength: widget.maxCharacters,
+            buildCounter: counter,
+            obscureText: !eyeOn,
+            onChanged: (value) {
+              isChangedState = true;
+            },
+            validator: (value) {
+              bool valid = widget.validator?.call(value ?? "") ?? false;
+              return !valid && isChangedState ? widget.error : null;
+            },
+            decoration: InputDecoration(
+              hintText: widget.hint,
+              isDense: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           ),
-        ),
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: IconButton(
+              splashRadius: 24,
+              onPressed: () {
+                setState(() {
+                  eyeOn = !eyeOn;
+                });
+              },
+              icon: Icon(
+                !eyeOn ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                color: Colors.grey.shade700,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

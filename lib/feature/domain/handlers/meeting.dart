@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:auth_management/core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_andomie/core.dart';
+import 'package:data_management/core.dart';
 
 import '../../../index.dart';
 
-class MeetingHandler extends DataHandlerImpl<Meeting> {
-  MeetingHandler({
-    required super.repository,
-  });
+class MeetingHandler extends RemoteDataHandlerImpl<Meeting> {
+  MeetingHandler(RemoteDataSource<Meeting> source)
+      : super.fromSource(source: source);
 
   CollectionReference get root {
     return FirebaseFirestore.instance.collection(ApiKeys.meetings);

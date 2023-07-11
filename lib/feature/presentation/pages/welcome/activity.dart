@@ -21,16 +21,16 @@ class WelcomeActivity extends StatelessWidget {
             maxWidth: 500,
           ),
           child: WelcomeFragment(
-            onSignIn: (context) => AppNavigator.of(context).go(
+            onSignIn: (context) => AppCurrentNavigator.of(context).go(
               AuthActivity.route,
               path: AuthSignInFragment.route,
             ),
-            onSignUp: (context) => AppNavigator.of(context).go(
+            onSignUp: (context) => AppCurrentNavigator.of(context).go(
               AuthActivity.route,
               path: AuthSignUpFragment.route,
               queryParams: {"back": "true"},
             ),
-            onJoinMeeting: (context) => AppNavigator.of(context).go(
+            onJoinMeeting: (context) => AppCurrentNavigator.of(context).go(
               JoinActivity.route,
             ),
           ),

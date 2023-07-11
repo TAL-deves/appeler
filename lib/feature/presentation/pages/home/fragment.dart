@@ -6,20 +6,20 @@ import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
 import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uni_links/uni_links.dart';
 
 import '../../../../index.dart';
 
-void onCopyOrShare(dynamic value, BuildContext context)  {
+void onCopyOrShare(dynamic value, BuildContext context) {
   if (value is String && value.isNotEmpty) {
     final box = context.findRenderObject() as RenderBox?;
     Share.share(
       "https://appeler.techanalyticaltd.com/app?meeting_id=$value",
       subject: "Let's go to meeting ... ",
-      sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+      sharePositionOrigin:
+          box != null ? box.localToGlobal(Offset.zero) & box.size : null,
     );
   }
 }
@@ -56,7 +56,7 @@ class _HomeFragmentState extends State<HomeFragment> {
     code.text = widget.id ?? "";
     joinButton = ButtonController();
     code.addListener(() {
-      joinButton.setEnabled(code.text.isValid);
+      joinButton.setEnabled(code.text.isNotEmpty);
     });
     _handleIncomingLinks();
     _handleInitialUri();
@@ -158,7 +158,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   void onScheduleMeet(BuildContext context) {}
 
   void onJoin(BuildContext context) {
-    AppNavigator.of(context).go(
+    AppCurrentNavigator.of(context).go(
       PrepareActivity.route.withParent("app"),
       extra: {
         "meeting_id": code.text,
@@ -166,7 +166,7 @@ class _HomeFragmentState extends State<HomeFragment> {
       },
     );
     code.text = "";
-    joinButton.setEnabled(code.text.isValid);
+    joinButton.setEnabled(code.text.isNotEmpty);
   }
 
   void onLogout(BuildContext context) => controller.signOut();

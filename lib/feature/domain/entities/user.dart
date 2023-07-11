@@ -1,13 +1,7 @@
 import 'package:auth_management/core.dart';
 import 'package:data_management/core.dart';
-import 'package:get_it/get_it.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
-import 'index.dart';
-
-GetIt locator = GetIt.instance;
-
-class User extends Data {
+class AuthInfo extends Data {
   final String? email;
   final String? name;
   final String? password;
@@ -20,7 +14,7 @@ class User extends Data {
 
   AuthProvider get provider => AuthProvider.from(_provider);
 
-  User({
+  AuthInfo({
     super.id,
     super.timeMills,
     this.email,
@@ -32,7 +26,7 @@ class User extends Data {
     this.username,
   }) : _provider = provider;
 
-  User copy({
+  AuthInfo copy({
     String? id,
     int? timeMills,
     String? email,
@@ -43,7 +37,7 @@ class User extends Data {
     String? provider,
     String? username,
   }) {
-    return User(
+    return AuthInfo(
       id: id ?? this.id,
       timeMills: timeMills ?? this.timeMills,
       email: email ?? this.email,
@@ -56,8 +50,8 @@ class User extends Data {
     );
   }
 
-  factory User.from(Object? source) {
-    return User(
+  factory AuthInfo.from(Object? source) {
+    return AuthInfo(
       id: Data.autoId(source),
       timeMills: Data.autoTimeMills(source),
       email: Data.value<String>("email", source),
@@ -70,8 +64,8 @@ class User extends Data {
     );
   }
 
-  factory User.fromAuth(Auth user) {
-    return User(
+  factory AuthInfo.fromAuth(Auth user) {
+    return AuthInfo(
       id: user.id,
       timeMills: user.timeMills,
       email: user.email,
@@ -98,65 +92,4 @@ class User extends Data {
       "username": username,
     };
   }
-}
-
-class UserBackupSource extends BackupSourceImpl {
-  final RemoteDataHandler<User> handler;
-
-  UserBackupSource(this.handler);
-
-  @override
-  Future<void> onCreated(Auth data) => handler.insert(User.fromAuth(data));
-
-  @override
-  Future<void> onDeleted(String id) => handler.delete(id);
-}
-
-Future<void> diInit() async {
-  locator.registerSingletonAsync<PackageInfo>(
-      () async => await PackageInfo.fromPlatform());
-  _handlers();
-  _controllers();
-  await locator.allReady();
-}
-
-void _handlers() {
-  locator.registerLazySingleton<AuthHandler>(() {
-    return AuthHandlerImpl(source: AuthDataSourceImpl());
-  });
-
-  locator.registerLazySingleton<BackupHandler>(() {
-    return BackupHandlerImpl(
-      source: UserBackupSource(locator<RemoteDataHandler<User>>()),
-    );
-  });
-
-  locator.registerLazySingleton<RemoteDataHandler<User>>(() {
-    return RemoteDataHandlerImpl<User>.fromSource(
-      source: RemoteUserDataSource(),
-    );
-  });
-
-  locator.registerLazySingleton<MeetingHandler>(() {
-    return MeetingHandler(RemoteMeetingDataSource());
-  });
-}
-
-void _controllers() {
-  locator.registerFactory<CustomAuthController>(() {
-    return CustomAuthController(
-      backupHandler: locator<BackupHandler>(),
-    );
-  });
-
-  locator.registerFactory<MeetingController>(() {
-    return MeetingController(handler: locator<MeetingHandler>());
-  });
-
-  locator.registerFactory<HomeController>(() {
-    return HomeController(
-      backupHandler: locator<BackupHandler>(),
-      roomHandler: locator<MeetingHandler>(),
-    );
-  });
 }

@@ -1,16 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../index.dart';
 
-class HomeController extends DefaultAuthController {
+class HomeController extends CustomAuthController {
   final MeetingHandler roomHandler;
 
   HomeController({
-    required super.handler,
-    required super.userHandler,
+    super.backupHandler,
     required this.roomHandler,
   });
 
@@ -27,10 +25,9 @@ class HomeController extends DefaultAuthController {
   Future deleteAccount() async {
     emit(AuthResponse.loading());
     try {
-      var user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await user.delete();
-        await userHandler.delete(createUid?.call(user.uid) ?? user.uid);
+        await user?.delete();
+        await super.backupHandler.onDeleted(user?.uid ?? "");
         await signOut();
         Fluttertoast.showToast(
           msg: "User account successfully deleted!",

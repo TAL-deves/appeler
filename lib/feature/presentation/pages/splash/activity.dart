@@ -1,5 +1,5 @@
+import 'package:auth_management/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -36,9 +36,9 @@ class SplashActivity extends StatelessWidget {
         onRoute: (context) {
           locator<AuthHandler>().isSignIn().then((value) {
             if (value) {
-              AppNavigator.of(context).goHome(HomeActivity.route);
+              AppCurrentNavigator.of(context).goHome(HomeActivity.route);
             } else {
-              AppNavigator.of(context).goHome(
+              AppCurrentNavigator.of(context).goHome(
                 WelcomeActivity.route,
                 extra: AuthHelper.uid,
               );

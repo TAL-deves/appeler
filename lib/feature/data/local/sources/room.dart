@@ -1,11 +1,11 @@
-import 'package:flutter_andomie/core.dart';
+import 'package:data_management/core.dart';
 
 import '../../../../index.dart';
 
 class LocalMeetingDataSource extends LocalDataSourceImpl<Meeting> {
   LocalMeetingDataSource({
     super.path = ApiKeys.meetings,
-    required super.db,
+    super.database,
   });
 
   @override
