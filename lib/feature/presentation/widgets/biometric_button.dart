@@ -27,7 +27,7 @@ class BiometricButton extends StatelessWidget {
         ? IconView(
             marginTop: 24,
             padding: 8,
-            icon: Icons.fingerprint,
+            icon: Platform.isIOS ? AppIcons.faceId : Icons.fingerprint,
             tint: AppColors.primary,
             size: 50,
             onClick: onLogin,

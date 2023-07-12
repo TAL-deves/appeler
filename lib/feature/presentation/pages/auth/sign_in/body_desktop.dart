@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -196,7 +195,7 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
           crossGravity: CrossAxisAlignment.center,
           mainGravity: MainAxisAlignment.center,
           gravity: Alignment.center,
-          children:  [
+          children: [
             const AppLogo(),
             TextView(
               marginTop: 24,
@@ -205,7 +204,7 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
               textColor: Colors.grey,
               textSize: 12,
               text:
-              'Powered by Tech Analytica Limited || Version ${locator<PackageInfo>().version}',
+                  'Powered by Tech Analytica Limited || Version ${locator<PackageInfo>().version}',
             ),
           ],
         ),

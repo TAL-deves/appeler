@@ -9,9 +9,3 @@ extension DataExtension on Object? {
     return null;
   }
 }
-
-extension MapExtension on Map<String, dynamic>? {
-  T? getValue<T>(String key) {
-    return this?[key];
-  }
-}

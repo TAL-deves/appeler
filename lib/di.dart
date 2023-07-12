@@ -146,6 +146,12 @@ void _controllers() {
   locator.registerFactory<CustomAuthController>(() {
     return CustomAuthController(
       backupHandler: locator<BackupHandler>(),
+      messages: const AuthMessages(
+        signInWithBiometric: AuthMessage(
+          done: "Biometric login successful!",
+          failure: "No fingerprint data found!"
+        )
+      )
     );
   });
 

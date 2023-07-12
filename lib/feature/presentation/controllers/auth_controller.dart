@@ -6,14 +6,17 @@ import '../../../index.dart';
 class CustomAuthController extends AuthController {
   CustomAuthController({
     super.backupHandler,
-    AuthMessages? messages,
+    super.messages,
   });
 
   Future<bool> signIn(AuthInfo data) async {
-    await super.signInByEmail(EmailAuthenticator(
-      email: data.email.use,
-      password: data.password.use,
-    ));
+    await super.signInByEmail(
+      EmailAuthenticator(
+        email: data.email.use,
+        password: data.password.use,
+      ),
+      biometric: true,
+    );
     return true;
   }
 
@@ -42,10 +45,13 @@ class CustomAuthController extends AuthController {
   }
 
   Future<bool> signUp(AuthInfo data) async {
-    await super.signUpByEmail(EmailAuthenticator(
-      email: data.email.use,
-      password: data.password.use,
-    ));
+    await super.signUpByEmail(
+      EmailAuthenticator(
+        email: data.email.use,
+        password: data.password.use,
+      ),
+      biometric: true,
+    );
     return true;
   }
 
