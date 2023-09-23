@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 class ContributorView<T extends Contributor> extends StatelessWidget {

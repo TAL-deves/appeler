@@ -65,7 +65,7 @@ class _MeetingCameraState extends State<MeetingCamera> {
           LinearLayout(
             padding: 12,
             mainGravity: MainAxisAlignment.spaceBetween,
-            positionType: ViewPositionType.flexBottom,
+            positionType: ViewPositionType.bottomFlex,
             orientation: Axis.horizontal,
             children: [
               IconView(
@@ -73,6 +73,7 @@ class _MeetingCameraState extends State<MeetingCamera> {
                 background: Colors.white24,
                 tint: Colors.white,
                 padding: 8,
+                size: 40,
                 borderRadius: 24,
                 onClick: (context) {
                   isCameraOn = !isCameraOn;
@@ -85,6 +86,7 @@ class _MeetingCameraState extends State<MeetingCamera> {
                 background: Colors.white24,
                 tint: Colors.white,
                 padding: 8,
+                size: 40,
                 borderRadius: 24,
                 onClick: (context) {
                   isMuted = !isMuted;

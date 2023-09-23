@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 typedef OnControlClickListener = Function(bool);
@@ -93,13 +94,16 @@ class _MeetingControlsState extends State<MeetingControls> {
     var inactiveIC = widget.inactiveIconColor ?? primary;
 
     return LinearLayout(
+      width: double.infinity,
       orientation: Axis.horizontal,
       mainGravity: MainAxisAlignment.spaceBetween,
+      crossGravity: CrossAxisAlignment.center,
       paddingHorizontal: 24,
       paddingVertical: 12,
       children: [
         IconView(
           padding: 8,
+          size: 40,
           borderRadius: 24,
           icon: !isMuted ? Icons.mic_off : Icons.mic,
           tint: isMuted ? activeIC : inactiveIC,
@@ -111,6 +115,7 @@ class _MeetingControlsState extends State<MeetingControls> {
         ),
         IconView(
           padding: 8,
+          size: 40,
           borderRadius: 24,
           icon: isCameraOn
               ? Icons.videocam_outlined
@@ -130,12 +135,13 @@ class _MeetingControlsState extends State<MeetingControls> {
           tint: widget.cancelProperty.tint,
           background: widget.cancelProperty.background,
           onClick: widget.onCancel,
-          rippleColor: widget.cancelProperty.splashColor,
-          pressedColor: widget.cancelProperty.splashColor,
+          rippleColor: widget.cancelProperty.splashColor ?? Colors.transparent,
+          pressedColor: widget.cancelProperty.splashColor ?? Colors.transparent,
         ),
         IconView(
           borderRadius: 24,
           padding: 8,
+          size: 40,
           icon: isScreenShared
               ? Icons.screen_share_outlined
               : Icons.stop_screen_share_outlined,
@@ -160,7 +166,7 @@ class _MeetingControlsState extends State<MeetingControls> {
         IconView(
           borderRadius: 24,
           padding: 8,
-          visibility: ViewVisibility.visible,
+          size: 40,
           icon: Icons.more_vert,
           tint: inactiveIC,
           background: inactiveBG,

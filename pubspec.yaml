@@ -39,7 +39,8 @@ dependencies:
   auth_management: ^0.1.0
   data_management: ^0.0.9-alpha2
   flutter_andomie: ^0.4.9
-  flutter_androssy: ^0.1.2
+  flutter_androssy: ^0.2.8-alpha2
+  firebase_auth: ^4.10.0
 
 #flutter_tools:
 #  web-server:

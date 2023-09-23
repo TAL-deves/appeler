@@ -72,7 +72,7 @@ class _AuthSignInDesktopBodyState extends State<AuthSignInDesktopBody> {
                   text: "Welcome back",
                   textColor: Colors.black,
                   textSize: 24,
-                  fontWeight: FontWeight.w500,
+                  textFontWeight: FontWeight.w500,
                 ),
                 const TextView(
                   marginTop: 16,

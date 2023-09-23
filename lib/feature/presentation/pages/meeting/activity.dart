@@ -68,11 +68,12 @@ class _MeetingActivityState extends State<MeetingActivity> {
                 children: [
                   IconView(
                     padding: 8,
-                    positionType: ViewPositionType.centerStart,
+                    size: 40,
+                    positionType: ViewPositionType.leftFlex,
                     icon: Icons.message_outlined,
                     tint: AppColors.primary,
                     background: Colors.transparent,
-                    visibility: kIsWeb ? ViewVisibility.gone : null,
+                    visibility: kIsWeb,
                   ),
                   LinearLayout(
                     positionType: ViewPositionType.center,
@@ -90,13 +91,14 @@ class _MeetingActivityState extends State<MeetingActivity> {
                     ],
                   ),
                   LinearLayout(
-                    visibility: kIsWeb ? ViewVisibility.gone : null,
-                    positionType: ViewPositionType.centerEnd,
+                    visibility: kIsWeb,
+                    positionType: ViewPositionType.rightFlex,
                     orientation: Axis.horizontal,
                     crossGravity: CrossAxisAlignment.center,
                     children: [
                       IconView(
                         padding: 8,
+                        size: 40,
                         icon: isSilent
                             ? Icons.volume_off_outlined
                             : Icons.volume_up_outlined,
@@ -108,6 +110,7 @@ class _MeetingActivityState extends State<MeetingActivity> {
                       ),
                       IconView(
                         padding: 8,
+                        size: 40,
                         icon: isFrontCamera
                             ? Icons.camera_front_outlined
                             : Icons.camera_rear_outlined,

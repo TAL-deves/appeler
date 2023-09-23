@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 import '../../../index.dart';
@@ -90,14 +91,14 @@ class AppScreen extends StatelessWidget {
               children: [
                 const ImageView(
                   image: AppContents.backgroundCover1,
-                  positionType: ViewPositionType.topStart,
+                  positionType: ViewPositionType.topLeft,
                   width: 120,
                   scaleType: BoxFit.fill,
                   height: 120,
                 ),
                 const ImageView(
                   image: AppContents.backgroundCover2,
-                  positionType: ViewPositionType.bottomEnd,
+                  positionType: ViewPositionType.bottomRight,
                   width: 120,
                   scaleType: BoxFit.fill,
                   height: 120,

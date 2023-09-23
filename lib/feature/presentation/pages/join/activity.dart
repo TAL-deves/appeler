@@ -66,7 +66,7 @@ class _JoinActivityState extends State<JoinActivity> {
                   padding: 12,
                   text: "Join",
                   textColor: AppColors.secondary,
-                  fontWeight: FontWeight.bold,
+                  textFontWeight: FontWeight.bold,
                   onClick: (context) {
                     var roomId = codeController.text;
                     if (roomId.isNotEmpty) {

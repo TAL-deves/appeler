@@ -44,11 +44,7 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
     }
     widget.controller.addListener(() {
       setState(() {
-        icon.setVisibility(
-          widget.controller.text.isValid
-              ? ViewVisibility.visible
-              : ViewVisibility.gone,
-        );
+        icon.setVisibility(widget.controller.text.isValid);
       });
     });
     super.initState();
@@ -105,7 +101,7 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
             label: RawTextView(
               text: "Meet ID",
               textColor: AppColors.secondary,
-              fontWeight: FontWeight.bold,
+              textFontWeight: FontWeight.bold,
               textSize: 16,
             ),
           ),
@@ -117,12 +113,11 @@ class _MeetingIdFieldState extends State<MeetingIdField> {
         IconView(
           controller: icon,
           visibility: widget.icon != null &&
-                  widget.iconVisible &&
-                  widget.controller.text.isNotEmpty &&
-                  widget.enabled
-              ? ViewVisibility.visible
-              : ViewVisibility.gone,
+              widget.iconVisible &&
+              widget.controller.text.isNotEmpty &&
+              widget.enabled,
           padding: 8,
+          size: 40,
           background: Colors.transparent,
           borderRadius: 8,
           position: const ViewPosition(right: 4),

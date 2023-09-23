@@ -63,10 +63,10 @@ class _PrepareActivityState extends State<PrepareActivity> {
           .then((value) {
         if (value.exists) {
           joinButton.setEnabled(true);
-          errorController.setVisibility(ViewVisibility.gone);
+          errorController.setVisibility(false);
         } else {
           joinButton.setEnabled(false);
-          errorController.setVisibility(ViewVisibility.visible);
+          errorController.setVisibility(true);
         }
       });
     }

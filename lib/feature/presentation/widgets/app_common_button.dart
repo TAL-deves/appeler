@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 class AppCommonButton extends StatelessWidget {
@@ -43,12 +44,11 @@ class AppCommonButton extends StatelessWidget {
       borderRadiusBR: tweenCornerMode ? borderRadiusBR : null,
       borderRadiusTL: tweenCornerMode ? borderRadiusTL : null,
       gravity: Alignment.center,
-      ripple: rippleMode ? 10 : 0,
       rippleColor: Colors.black.withAlpha(100),
       text: text,
       textColor: textColor,
       textSize: textSize,
-      fontWeight: FontWeight.w500,
+      textFontWeight: FontWeight.w500,
       onClick: onClick,
     );
   }

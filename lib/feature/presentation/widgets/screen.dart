@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_androssy/widgets.dart';
+import 'package:flutter_androssy/services.dart';
 
 class ScreenView extends StatelessWidget {
   final bool authShowLeading;

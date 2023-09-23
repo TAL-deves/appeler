@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../../index.dart';
@@ -22,7 +23,7 @@ class HomeSlider extends StatelessWidget {
       children: [
         LinearLayout(
           width: double.infinity,
-          positionType: ViewPositionType.flexHorizontal,
+          positionType: ViewPositionType.centerFlexX,
           background: AppColors.secondary,
           gravity: Alignment.center,
           borderRadiusTL: 25,
@@ -90,7 +91,7 @@ class HomeSlider extends StatelessWidget {
               textColor: Colors.white,
               textAlign: TextAlign.center,
               textSize: 18,
-              fontWeight: FontWeight.bold,
+              textFontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 8),
             RawIconView(

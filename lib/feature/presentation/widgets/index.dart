@@ -15,5 +15,6 @@ export 'oauth_button.dart';
 export 'or_text.dart';
 export 'password_field.dart';
 export 'phone_field.dart';
+export 'responsive_layout.dart';
 export 'screen.dart';
 export 'tile_button.dart';

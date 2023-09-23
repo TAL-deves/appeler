@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 class OAuthButton extends StatelessWidget {
@@ -31,9 +32,9 @@ class OAuthButton extends StatelessWidget {
       text: text,
       textSize: 16,
       textColor: Colors.white,
-      fontWeight: FontWeight.w500,
+      textFontWeight: FontWeight.w500,
       icon: icon,
-      ripple: 10,
+      rippleColor: Colors.black12,
       centerText: true,
       iconColorEnabled: false,
       iconAlignment: IconAlignment.start,

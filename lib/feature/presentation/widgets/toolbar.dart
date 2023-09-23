@@ -29,7 +29,7 @@ class ToolbarView extends YMRView<ToolbarController> {
       width: double.infinity,
       children: [
         YMRView(
-          positionType: ViewPositionType.centerStart,
+          position: const ViewPosition(top: 0, left: 0, bottom: 0),
           child: leading,
         ),
         YMRView(
@@ -37,7 +37,7 @@ class ToolbarView extends YMRView<ToolbarController> {
           child: title,
         ),
         YMRView(
-          positionType: ViewPositionType.centerEnd,
+          position: const ViewPosition(top: 0, right: 0, bottom: 0),
           child: action,
         ),
       ],
@@ -46,7 +46,6 @@ class ToolbarView extends YMRView<ToolbarController> {
 }
 
 class ToolbarController extends ViewController {
-
   ToolbarController fromToolbar(
     YMRView<ViewController> view,
   ) {

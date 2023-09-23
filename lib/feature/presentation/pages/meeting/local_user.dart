@@ -62,7 +62,7 @@ class _ContributorCardState extends State<ContributorCard> {
               textOverflow: TextOverflow.ellipsis,
               textSize: 14,
               textColor: Colors.black.withOpacity(0.8),
-              fontWeight: FontWeight.bold,
+              textFontWeight: FontWeight.bold,
               marginTop: 8,
               textAlign: TextAlign.center,
             ),

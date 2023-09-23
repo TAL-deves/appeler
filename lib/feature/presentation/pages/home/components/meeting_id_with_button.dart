@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../../index.dart';
@@ -45,10 +46,10 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
         ),
         Button(
           controller: widget.joinButton,
-          ripple: 10,
+          rippleColor: Colors.black12,
           width: double.infinity,
           text: buttonName,
-          fontWeight: FontWeight.bold,
+          textFontWeight: FontWeight.bold,
           borderRadius: 25,
           marginTop: 24,
           enabled: widget.codeController.text.isValid,
@@ -109,7 +110,7 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
             TextView(
               widthMin: 80,
               textAlign: TextAlign.center,
-              ripple: 5,
+              rippleColor: Colors.black.withOpacity(0.05),
               text: "Cancel",
               paddingHorizontal: 16,
               paddingVertical: 8,
@@ -121,7 +122,7 @@ class _MeetingIdWithButtonsState extends State<MeetingIdWithButtons> {
             TextView(
               textAlign: TextAlign.center,
               widthMin: 80,
-              ripple: 5,
+              rippleColor: Colors.black.withOpacity(0.05),
               text: "OK",
               textColor: Colors.white,
               paddingHorizontal: 16,

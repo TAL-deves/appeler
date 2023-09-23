@@ -48,7 +48,7 @@ class _AuthForgotPasswordFragmentState
             text: "Forgot password",
             textAlign: TextAlign.start,
             textColor: Colors.black,
-            fontWeight: FontWeight.bold,
+            textFontWeight: FontWeight.bold,
             textSize: 24,
             marginVertical: 24,
           ),

@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:appeler/feature/presentation/pages/home/fragment_desktop.dart';
-import 'package:appeler/feature/presentation/pages/home/fragment_mobile.dart';
-import 'package:appeler/feature/presentation/widgets/responsive_layout.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_androssy/widgets.dart';

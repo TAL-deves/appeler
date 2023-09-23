@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auth_management/core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_andomie/core.dart';
@@ -63,9 +64,13 @@ class RemoteContributorState extends State<RemoteContributor> {
       for (final element in value) {
         if (element.track?.kind == 'video') {
           element.replaceTrack(foreignStream.getVideoTracks()[0]).then((value) {
-            print('Track replaced !');
+            if (kDebugMode) {
+              print('Track replaced !');
+            }
           }).catchError((error) {
-            print(error);
+            if (kDebugMode) {
+              print(error);
+            }
           });
         }
       }
@@ -222,7 +227,9 @@ class RemoteContributorState extends State<RemoteContributor> {
   void initState() {
     _initRendererOfferAnswer();
     Future.delayed(const Duration(seconds: 10)).then((value) {
-      print('total candidate is: $totalCandidate');
+      if (kDebugMode) {
+        print('total candidate is: $totalCandidate');
+      }
     });
     super.initState();
   }
@@ -233,7 +240,9 @@ class RemoteContributorState extends State<RemoteContributor> {
     _disposeRemoteRenderer();
     _cancelSubscriptions();
     _clearPeerConnection();
-    print("Item dispose : ${widget.uid}");
+    if (kDebugMode) {
+      print("Item dispose : ${widget.uid}");
+    }
     super.dispose();
   }
 
@@ -273,7 +282,7 @@ class RemoteContributorState extends State<RemoteContributor> {
               textOverflow: TextOverflow.ellipsis,
               textSize: 14,
               textColor: Colors.black.withOpacity(0.8),
-              fontWeight: FontWeight.bold,
+              textFontWeight: FontWeight.bold,
               marginTop: 8,
               textAlign: TextAlign.center,
             ),

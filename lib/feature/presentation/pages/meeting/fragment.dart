@@ -165,7 +165,8 @@ class MeetingFragmentState extends State<MeetingFragment> {
           paddingVertical: 24,
           children: [
             LinearLayout(
-              paddingHorizontal: 24,
+              paddingStart: 24,
+              paddingEnd: 16,
               orientation: Axis.horizontal,
               mainGravity: MainAxisAlignment.center,
               paddingBottom: 8,
@@ -179,6 +180,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
                 ),
                 IconView(
                   padding: 4,
+                  size: 40,
                   icon: Icons.clear,
                   onClick: (context) => Navigator.pop(context),
                 ),
@@ -205,7 +207,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
             ),
             TileButton(
               icon: Icons.arrow_forward_ios_sharp,
-              iconSize: 18,
+              iconSize: 24,
               tint: Colors.grey,
               text: "Show participants",
               onClick: (context) {
@@ -434,11 +436,9 @@ class MeetingFragmentState extends State<MeetingFragment> {
         ),
         TextView(
           text: 'Screen sharing!!! pIFPeVD97u5PcN9iGLpg',
-          visibility: _shareStream != null
-              ? ViewVisibility.visible
-              : ViewVisibility.gone,
+          visibility: _shareStream != null,
           textColor: Colors.red,
-          positionType: ViewPositionType.topEnd,
+          positionType: ViewPositionType.topRight,
         ),
       ],
     );

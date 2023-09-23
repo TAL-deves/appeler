@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 class TileButton extends StatelessWidget {
@@ -23,7 +24,7 @@ class TileButton extends StatelessWidget {
     return LinearLayout(
       orientation: Axis.horizontal,
       onClick: onClick,
-      ripple: 5,
+      rippleColor: Colors.black.withOpacity(0.05),
       height: 50,
       paddingHorizontal: 24,
       layoutGravity: LayoutGravity.center,
@@ -34,13 +35,11 @@ class TileButton extends StatelessWidget {
           textColor: Colors.black,
           flex: 1,
           text: text,
-          visibility:
-              text.isValid ? ViewVisibility.visible : ViewVisibility.gone,
+          visibility: text.isValid,
         ),
         if (icon != null)
           IconView(
             icon: icon,
-            padding: 4,
             borderRadius: 0,
             size: iconSize,
             tint: tint,

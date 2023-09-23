@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
 import '../../../../index.dart';
@@ -50,7 +51,7 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
           items: SlideItem.items,
         ),
         TextView(
-          visibility: ViewVisibility.gone,
+          visibility: false,
           text: "Join a Meeting",
           background: AppColors.primary,
           textColor: Colors.white,
@@ -60,7 +61,7 @@ class _WelcomeFragmentState extends State<WelcomeFragment> {
           margin: 24,
           height: 40,
           marginBottom: 60,
-          ripple: 10,
+          rippleColor: Colors.black12,
           onClick: widget.onJoinMeeting,
         ),
       ],
@@ -185,7 +186,7 @@ class _SlideViewItem extends StatelessWidget {
           textColor: AppColors.secondary,
           textSize: 14,
           textAlign: TextAlign.center,
-          fontWeight: FontWeight.w500,
+          textFontWeight: FontWeight.w500,
           lineSpacingExtra: 8,
         ),
         ImageView(
@@ -200,7 +201,7 @@ class _SlideViewItem extends StatelessWidget {
           textColor: AppColors.secondary,
           textSize: 16,
           textAlign: TextAlign.center,
-          fontWeight: FontWeight.w500,
+          textFontWeight: FontWeight.w500,
           lineSpacingExtra: 8,
         ),
       ],

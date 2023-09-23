@@ -1,7 +1,8 @@
-import 'package:appeler/feature/domain/entities/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
+
+import '../../../../index.dart';
 
 class MeetingParticipantFragment extends StatelessWidget {
   final List<MeetingContributor> items;
@@ -69,9 +70,7 @@ class MeetingParticipant extends StatelessWidget {
               maxLines: 2,
             ),
             TextView(
-              visibility: item.email.isValid
-                  ? ViewVisibility.visible
-                  : ViewVisibility.gone,
+              visibility: item.email.isValid,
               marginTop: 4,
               text: item.email,
               textColor: Colors.grey,
@@ -81,17 +80,19 @@ class MeetingParticipant extends StatelessWidget {
           ],
         ),
         IconView(
-          paddingHorizontal: 8,
-          visibility:
-              item.isRiseHand ? ViewVisibility.visible : ViewVisibility.gone,
+          padding: 8,
+          size: 40,
+          visibility: item.isRiseHand,
           icon: Icons.front_hand_outlined,
         ),
         IconView(
-          paddingHorizontal: 8,
+          padding: 8,
+          size: 40,
           icon: item.isMuted ? Icons.mic_none : Icons.mic_off_outlined,
         ),
         IconView(
-          paddingHorizontal: 8,
+          padding: 8,
+          size: 40,
           icon: item.isCameraOn
               ? Icons.videocam_outlined
               : Icons.videocam_off_outlined,

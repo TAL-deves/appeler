@@ -94,7 +94,7 @@ class _PrepareFragmentState extends State<PrepareFragment> {
               width: double.infinity,
               gravity: Alignment.centerRight,
               textAlign: TextAlign.end,
-              visibility: ViewVisibility.gone,
+              visibility: false,
               controller: widget.errorController,
               text: "Meeting ID isn't valid!",
               textColor: Colors.redAccent.shade400,
@@ -108,7 +108,7 @@ class _PrepareFragmentState extends State<PrepareFragment> {
               text: "Join",
               textSize: 16,
               marginTop: 40,
-              ripple: 10,
+              rippleColor: Colors.black12,
               iconAlignment: IconAlignment.start,
               onClick: (context) => widget.onPrepare(
                 context,

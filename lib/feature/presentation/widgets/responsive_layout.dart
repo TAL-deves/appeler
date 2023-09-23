@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andomie/core.dart';
-import 'package:flutter_androssy/widgets.dart';
+import 'package:flutter_androssy/services.dart';
 
 class ResponsiveLayout extends StatelessWidget {
   final DeviceConfig config;
