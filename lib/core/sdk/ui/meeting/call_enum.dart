@@ -1,0 +1,4 @@
+enum ARTCContributorType{
+  outgoing,
+  incoming
+}

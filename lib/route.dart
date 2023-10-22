@@ -1,3 +1,4 @@
+import 'package:appeler/core/sdk/ui/meeting/activity.dart';
 import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -88,13 +89,22 @@ class AppRouter {
               );
             },
             routes: <RouteBase>[
+              // GoRoute(
+              //   path: MeetingActivity.route,
+              //   builder: (context, state) {
+              //     var data = state.extra;
+              //     return MeetingActivity(
+              //       data: data.getValue("data"),
+              //       homeController: data.getValue("HomeController"),
+              //     );
+              //   },
+              // ),
               GoRoute(
-                path: MeetingActivity.route,
+                path: ARTCMeetingPage.route,
                 builder: (context, state) {
                   var data = state.extra;
-                  return MeetingActivity(
+                  return ARTCMeetingPage(
                     data: data.getValue("data"),
-                    homeController: data.getValue("HomeController"),
                   );
                 },
               ),

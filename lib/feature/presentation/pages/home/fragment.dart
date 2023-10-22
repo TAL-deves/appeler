@@ -141,13 +141,12 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   void onCreateMeetingId(BuildContext context) {
-    final roomId = controller.generateRoom(oldRoomId);
-    oldRoomId = roomId;
-    if (roomId != null) {
+    controller.generateRoom(oldRoomId).then((value) {
+      oldRoomId = value;
       setState(() {
-        code.text = roomId;
+        code.text = oldRoomId ?? value;
       });
-    }
+    });
   }
 
   void onJoinMeet(BuildContext context) {}

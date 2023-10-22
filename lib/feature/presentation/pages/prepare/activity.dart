@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:appeler/core/sdk/ui/meeting/activity.dart';
+import 'package:appeler/core/sdk/ui/meeting/index.dart';
+import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,21 +56,15 @@ class _PrepareActivityState extends State<PrepareActivity> {
 
   void _verifyId(String? id) {
     joinButton.setEnabled(false);
-    if (id.isValid) {
-      FirebaseFirestore.instance
-          .collection("group-chat-rooms")
-          .doc(id)
-          .get()
-          .then((value) {
-        if (value.exists) {
-          joinButton.setEnabled(true);
-          errorController.setVisibility(false);
-        } else {
-          joinButton.setEnabled(false);
-          errorController.setVisibility(true);
-        }
-      });
-    }
+    widget.homeController?.verifyId(id).then((value) {
+      if (value) {
+        joinButton.setEnabled(true);
+        errorController.setVisibility(false);
+      } else {
+        joinButton.setEnabled(false);
+        errorController.setVisibility(true);
+      }
+    });
   }
 
   @override
@@ -89,10 +84,29 @@ class _PrepareActivityState extends State<PrepareActivity> {
         ),
         onPrepare: (context, info) async {
           joined = true;
+          // AppCurrentNavigator.of(context).goHome(
+          //   MeetingActivity.route.withParent("app"),
+          //   extra: {
+          //     "data": info,
+          //     "HomeController": context.read<HomeController>(),
+          //   },
+          // );
           AppCurrentNavigator.of(context).goHome(
-            MeetingActivity.route.withParent("app"),
+            ARTCMeetingPage.route.withParent("app"),
             extra: {
-              "data": info,
+              "data": ARTCMeetingInfo(
+                roomId: info.id,
+                currentUid: AuthHelper.uid,
+                isCameraOn: info.isCameraOn,
+                isMuted: info.isMuted,
+                isShareScreen: info.isShareScreen,
+                isSilent: info.isSilent,
+                cameraType: info.cameraType,
+                email: AuthHelper.defaultUser?.email,
+                name: AuthHelper.defaultUser?.displayName,
+                phone: AuthHelper.defaultUser?.phoneNumber,
+                photo: AuthHelper.defaultUser?.photoURL,
+              ),
               "HomeController": context.read<HomeController>(),
             },
           );

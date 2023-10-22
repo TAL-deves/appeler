@@ -1,4 +1,5 @@
 import 'package:auth_management/core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -12,7 +13,14 @@ class HomeController extends CustomAuthController {
     required this.roomHandler,
   });
 
-  String? generateRoom(String? oldRoomId) {
+  Future<String> generateRoom(String? oldRoomId, {int minutes = 10}) {
+    return AnalyticaRTC.roomWork.autoCreateRoomId(
+      roomId: oldRoomId,
+      minutes: minutes,
+    );
+  }
+
+  String? generateRoomWithFirebase(String? oldRoomId) {
     if (oldRoomId != null) {
       roomHandler.root.doc(oldRoomId).delete();
     }
@@ -20,6 +28,24 @@ class HomeController extends CustomAuthController {
     newDoc.set(<String, dynamic>{});
     var roomId = newDoc.id;
     return roomId;
+  }
+
+  Future<bool> verifyId(String? id) async {
+    return AnalyticaRTC.repository.read(path: id??"").then((value) {
+      if (value.isNotEmpty){
+        var data = value["data"];
+        return data != null;
+      }
+      return false;
+    });
+  }
+
+  Future<bool> verifyIdWithFirebase(String? id) {
+    return FirebaseFirestore.instance
+        .collection("group-chat-rooms")
+        .doc(id)
+        .get()
+        .then((value) => value.exists);
   }
 
   Future deleteAccount() async {

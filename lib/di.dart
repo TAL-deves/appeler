@@ -1,5 +1,6 @@
 import 'package:auth_management/core.dart';
 import 'package:data_management/core.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -113,11 +114,20 @@ class UserBackupSource extends BackupSourceImpl {
 }
 
 Future<void> diInit() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _initSdk();
   locator.registerSingletonAsync<PackageInfo>(
       () async => await PackageInfo.fromPlatform());
   _handlers();
   _controllers();
   await locator.allReady();
+}
+
+void _initSdk() {
+  AnalyticaRTC.init(
+    appId: 'ANALYTICA-ce51808b6c1b4aa59b87-SDK',
+    token: 'TK-ff6b49fe49da429a8739',
+  );
 }
 
 void _handlers() {
@@ -145,14 +155,11 @@ void _handlers() {
 void _controllers() {
   locator.registerFactory<CustomAuthController>(() {
     return CustomAuthController(
-      backupHandler: locator<BackupHandler>(),
-      messages: const AuthMessages(
-        signInWithBiometric: AuthMessage(
-          done: "Biometric login successful!",
-          failure: "No fingerprint data found!"
-        )
-      )
-    );
+        backupHandler: locator<BackupHandler>(),
+        messages: const AuthMessages(
+            signInWithBiometric: AuthMessage(
+                done: "Biometric login successful!",
+                failure: "No fingerprint data found!")));
   });
 
   locator.registerFactory<MeetingController>(() {
