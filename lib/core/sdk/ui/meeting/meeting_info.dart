@@ -8,7 +8,7 @@ class ARTCMeetingInfo {
   String? phone;
   String? photo;
   bool isCameraOn;
-  bool isMuted;
+  bool isMicrophoneOn;
   bool isSilent;
   bool isShareScreen;
   CameraType cameraType;
@@ -19,7 +19,7 @@ class ARTCMeetingInfo {
     required this.roomId,
     required this.currentUid,
     this.isCameraOn = true,
-    this.isMuted = false,
+    this.isMicrophoneOn = false,
     this.isSilent = false,
     this.cameraType = CameraType.front,
     this.isShareScreen = false,
@@ -37,7 +37,7 @@ class ARTCMeetingInfo {
     String? phone,
     String? photo,
     bool? isCameraOn,
-    bool? isMuted,
+    bool? isMicrophoneOn,
     bool? isSilent,
     bool? isShareScreen,
     CameraType? cameraType,
@@ -50,7 +50,7 @@ class ARTCMeetingInfo {
       phone: phone ?? this.phone,
       photo: photo ?? this.photo,
       isCameraOn: isCameraOn ?? this.isCameraOn,
-      isMuted: isMuted ?? this.isMuted,
+      isMicrophoneOn: isMicrophoneOn ?? this.isMicrophoneOn,
       isSilent: isSilent ?? this.isSilent,
       cameraType: cameraType ?? this.cameraType,
       isShareScreen: isShareScreen ?? this.isShareScreen,
@@ -59,6 +59,6 @@ class ARTCMeetingInfo {
 
   @override
   String toString() {
-    return "MeetingInfo (roomId: $roomId, currentUid: $currentUid, email: $email, name: $name, phone: $phone, photo: $photo, isCameraOn: $isCameraOn, isMuted: $isMuted, isSilent: $isSilent, cameraType: $cameraType, isShareScreen: $isShareScreen)";
+    return "MeetingInfo (roomId: $roomId, currentUid: $currentUid, email: $email, name: $name, phone: $phone, photo: $photo, isCameraOn: $isCameraOn, isMicrophoneOn: $isMicrophoneOn, isSilent: $isSilent, cameraType: $cameraType, isShareScreen: $isShareScreen)";
   }
 }

@@ -11,7 +11,6 @@ import 'package:flutter_androssy/extensions.dart';
 import 'package:flutter_androssy/widgets.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:whiteboard/whiteboard.dart';
 
 import '../../analytica_rtc.dart';
 import '../../socket_connection.dart';
@@ -185,10 +184,10 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
       data: {
         widget.info.currentUid: {
           'isMirror': !_screenShareIsOn,
-          'isMute': isMute,
+          'isMicrophoneOn': _isMicrophoneOn,
           'isCameraOn': isCameraOn,
           'isFrontCamera': isFrontCamera,
-          'handUp': isRiseHand,
+          'isRiseHand': isRiseHand,
           'meetingId': widget.info.roomId,
           'uid': widget.info.currentUid,
           'email': widget.info.email,
@@ -236,12 +235,13 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
         uid: widget.info.currentUid,
         mirror: true,
         contributor: ARTCContributor(
-          cameraOn: isCameraOn,
-          muted: isMute,
-          riseHand: isRiseHand,
-          shareScreen: _screenShareIsOn,
+          isCameraOn: isCameraOn,
+          isMicrophoneOn: _isMicrophoneOn,
+          isRiseHand: isRiseHand,
+          isShareScreen: _screenShareIsOn,
         ),
       );
+      onMicrophoneEnable(_isMicrophoneOn);
     });
     _changeStatus();
     _offerAnswerHostUser();
@@ -253,9 +253,11 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
         final curValue = item.value;
         (_keyMap[item.key]?.currentState as ARTCRemoteContributorState?)
             ?.flagsUpdate(
-                isCameraOn: curValue['isCameraOn'],
-                isMicOn: curValue['isMute'],
-                isMirror: curValue['isMirror']);
+          isCameraOn: curValue['isCameraOn'],
+          isMicrophoneOn: curValue['isMicrophoneOn'],
+          isRiseHand: curValue['isRiseHand'],
+          isMirror: curValue['isMirror'],
+        );
       }
     }
   }
@@ -290,8 +292,9 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
                 remoteUid: curItem,
                 localStream: _shareStream ?? _localStream!,
                 meetingId: widget.info.roomId,
-                cameraOn: item.value['isCameraOn'],
-                micOn: item.value['isMute'],
+                isCameraOn: item.value['isCameraOn'],
+                isMicrophoneOn: item.value['isMicrophoneOn'],
+                isRiseHand: item.value['isRiseHand'],
                 isMirror: isMirror,
                 onZoom: (renderer, isMirroring) async {
                   showAdaptiveDialog(
@@ -392,7 +395,7 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
   }
 
   late bool isCameraOn = widget.info.isCameraOn;
-  late bool isMute = widget.info.isMuted;
+  late bool _isMicrophoneOn = widget.info.isMicrophoneOn;
   late bool isFrontCamera = widget.info.isFrontCamera;
   late bool isShareScreen = widget.info.isShareScreen;
   late SizeConfig config = SizeConfig.of(context, size: Size.zero);
@@ -420,13 +423,14 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
       _localStream?.getVideoTracks()[0].enabled = isCameraOn;
       _changeStatus(key: 'isCameraOn');
     }
+    setState(() {});
   }
 
-  void onMute(bool value) {
-    isMute = value;
+  void onMicrophoneEnable(bool value) {
+    _isMicrophoneOn = value;
     if (_localStream != null && _localStream!.getAudioTracks().isNotEmpty) {
-      _localStream?.getAudioTracks()[0].enabled = !isMute;
-      _changeStatus(key: 'isMute');
+      _localStream?.getAudioTracks()[0].enabled = _isMicrophoneOn;
+      _changeStatus(key: 'isMicrophoneOn');
     }
   }
 
@@ -471,6 +475,14 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
               height: 12,
             ),
             TileButton(
+              text: isRiseHand ? "Hands down" : "Hands up",
+              icon: Icons.back_hand_outlined,
+              onClick: (context) {
+                onRiseHand(!isRiseHand);
+                Navigator.pop(context);
+              },
+            ),
+            TileButton(
               text: "Make Whiteboard",
               icon: Icons.draw,
               onClick: (context) {
@@ -512,7 +524,8 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
 
   void onRiseHand(bool value) {
     isRiseHand = value;
-    _changeStatus(key: 'handUp');
+    _changeStatus(key: 'isRiseHand');
+    setState(() {});
   }
 
   void onScreenShare(bool value) {
@@ -629,21 +642,25 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
             ),
           ),
         ),
-        if (_whiteBoardIsOn) /// for host
+        if (_whiteBoardIsOn)
           ARTCDrawingBoard(
             key: _whiteKey,
             writeMode: true,
             roomId: widget.info.roomId,
             userId: widget.info.currentUid,
-            onCloseWhiteBoard: () => setState(() => _whiteBoardIsOn = false),
-          ),
-        if (!_whiteBoardIsOn) /// for user
+            onCloseWhiteBoard: () {
+              setState(() => _whiteBoardIsOn = false);
+            },
+          )
+        else
           ARTCDrawingBoard(
             key: _whiteKey2,
             writeMode: false,
             roomId: widget.info.roomId,
             userId: widget.info.currentUid,
-            onCloseWhiteBoard: () => setState(() => _whiteBoardIsOn = false),
+            onCloseWhiteBoard: () {
+              setState(() => _whiteBoardIsOn = false);
+            },
           ),
         ARTCMeetingControls(
           activeColor: context.primaryColor,
@@ -652,12 +669,12 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
           inactiveIconColor: context.primaryColor,
           isCameraOn: isCameraOn,
           isFrontCamera: widget.info.isFrontCamera,
-          isMuted: isMute,
+          isMicrophoneEnabled: _isMicrophoneOn,
           isRiseHand: isRiseHand,
           isSilent: widget.info.isSilent,
           isScreenShared: _screenShareIsOn,
           onCameraOn: onCameraOn,
-          onMute: onMute,
+          onMicrophone: onMicrophoneEnable,
           onMore: onMore,
           onScreenShare: onScreenShare,
           onRiseHand: onRiseHand,

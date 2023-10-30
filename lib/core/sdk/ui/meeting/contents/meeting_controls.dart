@@ -11,13 +11,13 @@ class ARTCMeetingControls extends StatefulWidget {
 
   final bool isCameraOn;
   final bool isFrontCamera;
-  final bool isMuted;
+  final bool isMicrophoneEnabled;
   final bool isScreenShared;
   final bool isRiseHand;
   final bool isSilent;
 
   final OnControlClickListener? onCameraOn;
-  final OnControlClickListener? onMute;
+  final OnControlClickListener? onMicrophone;
   final OnControlClickListener? onRiseHand;
   final OnControlClickListener? onScreenShare;
   final OnControlClickListener? onSilent;
@@ -33,13 +33,13 @@ class ARTCMeetingControls extends StatefulWidget {
     this.inactiveIconColor,
     this.isCameraOn = false,
     this.isFrontCamera = true,
-    this.isMuted = false,
+    this.isMicrophoneEnabled = false,
     this.isRiseHand = false,
     this.isScreenShared = false,
     this.isSilent = false,
     this.onCameraOn,
     this.onMore,
-    this.onMute,
+    this.onMicrophone,
     this.onRiseHand,
     this.onScreenShare,
     this.onSilent,
@@ -55,7 +55,7 @@ class ARTCMeetingControls extends StatefulWidget {
 class _ARTCMeetingControlsState extends State<ARTCMeetingControls> {
   late bool isCameraOn = widget.isCameraOn;
   late bool isFrontCamera = widget.isFrontCamera;
-  late bool isMuted = widget.isMuted;
+  late bool isMicrophoneEnabled = widget.isMicrophoneEnabled;
   late bool isRiseHand = widget.isRiseHand;
   late bool isSilent = widget.isSilent;
   late bool isScreenShared = widget.isScreenShared;
@@ -64,7 +64,7 @@ class _ARTCMeetingControlsState extends State<ARTCMeetingControls> {
   void didUpdateWidget(covariant ARTCMeetingControls oldWidget) {
     isCameraOn = widget.isCameraOn;
     isFrontCamera = widget.isFrontCamera;
-    isMuted = widget.isMuted;
+    isMicrophoneEnabled = widget.isMicrophoneEnabled;
     isRiseHand = widget.isRiseHand;
     isSilent = widget.isSilent;
     isScreenShared = widget.isScreenShared;
@@ -73,7 +73,7 @@ class _ARTCMeetingControlsState extends State<ARTCMeetingControls> {
 
   void onCameraOn() => widget.onCameraOn?.call(isCameraOn);
 
-  void onMute() => widget.onMute?.call(isMuted);
+  void onMicrophoneEnable() => widget.onMicrophone?.call(isMicrophoneEnabled);
 
   void onRiseHand() => widget.onRiseHand?.call(isRiseHand);
 
@@ -105,12 +105,12 @@ class _ARTCMeetingControlsState extends State<ARTCMeetingControls> {
           padding: 8,
           size: 40,
           borderRadius: 24,
-          icon: !isMuted ? Icons.mic_off : Icons.mic,
-          tint: isMuted ? activeIC : inactiveIC,
-          background: isMuted ? activeBG : inactiveBG,
+          icon: isMicrophoneEnabled ? Icons.mic : Icons.mic_off,
+          tint: isMicrophoneEnabled ? activeIC : inactiveIC,
+          background: isMicrophoneEnabled ? activeBG : inactiveBG,
           onClick: (context) {
-            isMuted = !isMuted;
-            setState(onMute);
+            isMicrophoneEnabled = !isMicrophoneEnabled;
+            setState(onMicrophoneEnable);
           },
         ),
         IconView(

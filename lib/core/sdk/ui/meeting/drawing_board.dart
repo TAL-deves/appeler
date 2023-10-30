@@ -174,6 +174,7 @@ class ARTCDrawingBoardState extends State<ARTCDrawingBoard> {
   void dispose() {
     _timerCancel();
     _readRemoteData?.dispose();
+    _clearData();
     super.dispose();
   }
 
@@ -272,6 +273,13 @@ class ARTCDrawingBoardState extends State<ARTCDrawingBoard> {
     _dataList.add(mp);
   }
 
+  void _clearData(){
+    AnalyticaRTC.repository.set(path: _dataPath, data: {'curData': []});
+    _strokes.clear();
+    _oldList.clear();
+    _bufferList.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.writeMode || _remoteData != null) {
@@ -308,17 +316,7 @@ class ARTCDrawingBoardState extends State<ARTCDrawingBoard> {
                       ),
                       if (widget.writeMode)
                         ElevatedButton(
-                          onPressed: () async {
-                            await AnalyticaRTC.repository.set(
-                              path: _dataPath,
-                              data: {'curData': []},
-                            );
-                            setState(() {
-                              _strokes.clear();
-                              _oldList.clear();
-                              _bufferList.clear();
-                            });
-                          },
+                          onPressed: ()  => setState(_clearData),
                           child: const Icon(
                             Icons.brush,
                             color: Colors.white,
@@ -326,7 +324,10 @@ class ARTCDrawingBoardState extends State<ARTCDrawingBoard> {
                         ),
                       if (widget.writeMode) const SizedBox(width: 16),
                       ElevatedButton(
-                        onPressed: widget.onCloseWhiteBoard,
+                        onPressed: () {
+                          _remoteData = null;
+                          widget.onCloseWhiteBoard?.call();
+                        },
                         child: const Icon(
                           Icons.clear,
                           color: Colors.white,

@@ -43,7 +43,7 @@ class ARTCRemoteContributor extends StatefulWidget {
   final ARTCContributorType type;
   final MediaStream? shareStream;
 
-  final bool micOn, cameraOn, isMirror;
+  final bool isMicrophoneOn, isCameraOn, isMirror, isRiseHand;
 
   const ARTCRemoteContributor({
     super.key,
@@ -54,8 +54,9 @@ class ARTCRemoteContributor extends StatefulWidget {
     required this.localStream,
     required this.type,
     this.shareStream,
-    this.cameraOn = false,
-    this.micOn = false,
+    this.isRiseHand = false,
+    this.isCameraOn = false,
+    this.isMicrophoneOn = false,
     this.isMirror = false,
   });
 
@@ -86,8 +87,9 @@ class ARTCRemoteContributorState extends State<ARTCRemoteContributor> {
   final _addedCandidate = <String>{};
   var _candidateId = 0;
 
-  late var _innerMicOn = widget.micOn;
-  late var _innerCameraOn = widget.cameraOn;
+  late var _isRiseHand = widget.isRiseHand;
+  late var _isMicrophoneOn = widget.isMicrophoneOn;
+  late var _isCameraOn = widget.isCameraOn;
   late var _isMirror = widget.isMirror;
 
   void replaceVideoStream(MediaStream foreignStream) {
@@ -262,12 +264,14 @@ class ARTCRemoteContributorState extends State<ARTCRemoteContributor> {
 
   void flagsUpdate({
     required bool isCameraOn,
-    required bool isMicOn,
+    required bool isMicrophoneOn,
+    required bool isRiseHand,
     required bool isMirror,
   }) {
     setState(() {
-      _innerMicOn = isMicOn;
-      _innerCameraOn = isCameraOn;
+      _isMicrophoneOn = isMicrophoneOn;
+      _isCameraOn = isCameraOn;
+      _isRiseHand = isRiseHand;
       _isMirror = isMirror;
     });
   }
@@ -292,7 +296,10 @@ class ARTCRemoteContributorState extends State<ARTCRemoteContributor> {
 
   @override
   Widget build(BuildContext context) {
-    return ARTCContributorView(
+    return ARTContributorView(
+      handButtonStyle: const ARTContributorButtonProperties(
+        color: Colors.yellow,
+      ),
       renderView: GestureDetector(
         onTap: () => widget.onZoom?.call(_remoteRenderer, _isMirror),
         child: AbsorbPointer(
@@ -308,8 +315,9 @@ class ARTCRemoteContributorState extends State<ARTCRemoteContributor> {
         ),
       ),
       item: ARTCContributor(
-        cameraOn: _innerCameraOn,
-        muted: !_innerMicOn,
+        isCameraOn: _isCameraOn,
+        isMicrophoneOn: _isMicrophoneOn,
+        isRiseHand: _isRiseHand,
       ),
       userView: (context, item) {
         var photo = item?.photo ??

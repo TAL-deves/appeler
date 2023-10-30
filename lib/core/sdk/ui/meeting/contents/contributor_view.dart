@@ -3,15 +3,18 @@ import 'package:flutter_andomie/core.dart';
 import 'package:flutter_androssy/services.dart';
 import 'package:flutter_androssy/widgets.dart';
 
-class ARTCContributorView<T extends ARTCContributor> extends StatelessWidget {
+class ARTContributorView<T extends ARTCContributor> extends StatelessWidget {
   final double borderRadius;
   final double margin;
   final Color? background;
   final Widget renderView;
   final T item;
+  final ARTContributorButtonProperties handButtonStyle;
+  final ARTContributorButtonProperties microphoneButtonStyle;
+  final ARTContributorButtonProperties moreButtonStyle;
   final OnViewBuilder<T>? userView;
 
-  const ARTCContributorView({
+  const ARTContributorView({
     Key? key,
     this.background,
     this.borderRadius = 0,
@@ -19,6 +22,9 @@ class ARTCContributorView<T extends ARTCContributor> extends StatelessWidget {
     required this.renderView,
     this.userView,
     required this.item,
+    this.handButtonStyle = const ARTContributorButtonProperties(),
+    this.microphoneButtonStyle = const ARTContributorButtonProperties(),
+    this.moreButtonStyle = const ARTContributorButtonProperties(),
   }) : super(key: key);
 
   @override
@@ -50,10 +56,10 @@ class ARTCContributorView<T extends ARTCContributor> extends StatelessWidget {
                     color: Colors.white24,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.back_hand_outlined,
-                    size: 18,
-                    color: Colors.white,
+                    size: handButtonStyle.size ?? 18,
+                    color: handButtonStyle.color ?? Colors.white,
                   ),
                 ),
               ),
@@ -68,9 +74,9 @@ class ARTCContributorView<T extends ARTCContributor> extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  item.isMuted ? Icons.mic_off : Icons.mic,
-                  size: 18,
-                  color: Colors.white,
+                  item.isMicrophoneOn ? Icons.mic : Icons.mic_off,
+                  size: microphoneButtonStyle.size ?? 18,
+                  color: microphoneButtonStyle.color ?? Colors.white,
                 ),
               ),
             ),
@@ -84,10 +90,10 @@ class ARTCContributorView<T extends ARTCContributor> extends StatelessWidget {
                   color: Colors.white24,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.more_vert,
-                  size: 18,
-                  color: Colors.white,
+                  size: moreButtonStyle.size ?? 18,
+                  color: moreButtonStyle.color ?? Colors.white,
                 ),
               ),
             ),
@@ -99,10 +105,10 @@ class ARTCContributorView<T extends ARTCContributor> extends StatelessWidget {
 }
 
 class ARTCContributor extends Entity {
-  final bool? cameraOn;
-  final bool? muted;
-  final bool? riseHand;
-  final bool? shareScreen;
+  final bool isCameraOn;
+  final bool isMicrophoneOn;
+  final bool isRiseHand;
+  final bool isShareScreen;
   final String? email;
   final String? name;
   final String? photo;
@@ -111,19 +117,28 @@ class ARTCContributor extends Entity {
   ARTCContributor({
     super.id,
     super.timeMills,
-    this.cameraOn,
-    this.muted,
-    this.riseHand,
-    this.shareScreen,
     this.email,
     this.name,
     this.photo,
     this.phone,
+    bool? isCameraOn,
+    bool? isMicrophoneOn,
+    bool? isRiseHand,
+    bool? isShareScreen,
+  })  : isCameraOn = isCameraOn ?? false,
+        isMicrophoneOn = isMicrophoneOn ?? false,
+        isRiseHand = isRiseHand ?? false,
+        isShareScreen = isShareScreen ?? false;
+}
+
+class ARTContributorButtonProperties {
+  final Color? color;
+  final double? size;
+  final Widget? view;
+
+  const ARTContributorButtonProperties({
+    this.color,
+    this.size,
+    this.view,
   });
-
-  bool get isCameraOn => cameraOn ?? false;
-
-  bool get isMuted => muted ?? false;
-
-  bool get isRiseHand => riseHand ?? false;
 }

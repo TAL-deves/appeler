@@ -1,4 +1,3 @@
-import 'package:appeler/core/sdk/ui/meeting/activity.dart';
 import 'package:appeler/core/sdk/ui/meeting/index.dart';
 import 'package:auth_management/core.dart';
 import 'package:flutter/foundation.dart';
@@ -98,7 +97,7 @@ class _PrepareActivityState extends State<PrepareActivity> {
                 roomId: info.id,
                 currentUid: AuthHelper.uid,
                 isCameraOn: info.isCameraOn,
-                isMuted: info.isMuted,
+                isMicrophoneOn: !info.isMuted,
                 isShareScreen: info.isShareScreen,
                 isSilent: info.isSilent,
                 cameraType: info.cameraType,

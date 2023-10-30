@@ -23,7 +23,7 @@ class ARTCContributorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ARTCContributorView(
+    return ARTContributorView(
       renderView: RTCVideoView(
         renderer,
         key: UniqueKey(),
