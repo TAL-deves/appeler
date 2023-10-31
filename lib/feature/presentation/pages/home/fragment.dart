@@ -141,10 +141,17 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   void onCreateMeetingId(BuildContext context) {
+    setState(() {
+      code.text = 'Generating... Please wait!!!';
+    });
     controller.generateRoom(oldRoomId).then((value) {
       oldRoomId = value;
       setState(() {
         code.text = oldRoomId ?? value;
+      });
+    }).onError((error, stackTrace){
+      setState(() {
+        code.text = error.toString();
       });
     });
   }
@@ -162,7 +169,7 @@ class _HomeFragmentState extends State<HomeFragment> {
       },
     );
     code.text = "";
-    joinButton.setEnabled(code.text.isNotEmpty);
+    joinButton.setEnabled(code.text.isEmpty);
   }
 
   void onLogout(BuildContext context) => controller.signOut();
