@@ -45,7 +45,7 @@ class ARTContributorView<T extends ARTCContributor> extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            if (item.isRiseHand)
+            if (!item.isCurrentContributor && item.isRiseHand)
               Positioned(
                 left: 0,
                 top: 0,
@@ -63,40 +63,42 @@ class ARTContributorView<T extends ARTCContributor> extends StatelessWidget {
                   ),
                 ),
               ),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  color: Colors.white24,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  item.isMicrophoneOn ? Icons.mic : Icons.mic_off,
-                  size: microphoneButtonStyle.size ?? 18,
-                  color: microphoneButtonStyle.color ?? Colors.white,
-                ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  color: Colors.white24,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.more_vert,
-                  size: moreButtonStyle.size ?? 18,
-                  color: moreButtonStyle.color ?? Colors.white,
+            if (!item.isCurrentContributor)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.white24,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    item.isMicrophoneOn ? Icons.mic : Icons.mic_off,
+                    size: microphoneButtonStyle.size ?? 18,
+                    color: microphoneButtonStyle.color ?? Colors.white,
+                  ),
                 ),
               ),
-            ),
+            if (!item.isCurrentContributor)
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.white24,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.more_vert,
+                    size: moreButtonStyle.size ?? 18,
+                    color: moreButtonStyle.color ?? Colors.white,
+                  ),
+                ),
+              ),
           ],
         ),
       ],
@@ -105,6 +107,7 @@ class ARTContributorView<T extends ARTCContributor> extends StatelessWidget {
 }
 
 class ARTCContributor extends Entity {
+  final bool isCurrentContributor;
   final bool isCameraOn;
   final bool isMicrophoneOn;
   final bool isRiseHand;
@@ -121,6 +124,7 @@ class ARTCContributor extends Entity {
     this.name,
     this.photo,
     this.phone,
+    this.isCurrentContributor = false,
     bool? isCameraOn,
     bool? isMicrophoneOn,
     bool? isRiseHand,

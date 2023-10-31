@@ -39,11 +39,11 @@ class ARTCRemoteContributor extends StatefulWidget {
   final String uid;
   final String remoteUid;
   final String meetingId;
+  final bool isMirror;
+  final ARTCContributor contributor;
   final MediaStream localStream;
   final ARTCContributorType type;
   final MediaStream? shareStream;
-
-  final bool isMicrophoneOn, isCameraOn, isMirror, isRiseHand;
 
   const ARTCRemoteContributor({
     super.key,
@@ -54,10 +54,8 @@ class ARTCRemoteContributor extends StatefulWidget {
     required this.localStream,
     required this.type,
     this.shareStream,
-    this.isRiseHand = false,
-    this.isCameraOn = false,
-    this.isMicrophoneOn = false,
     this.isMirror = false,
+    required this.contributor,
   });
 
   @override
@@ -87,9 +85,9 @@ class ARTCRemoteContributorState extends State<ARTCRemoteContributor> {
   final _addedCandidate = <String>{};
   var _candidateId = 0;
 
-  late var _isRiseHand = widget.isRiseHand;
-  late var _isMicrophoneOn = widget.isMicrophoneOn;
-  late var _isCameraOn = widget.isCameraOn;
+  late var _isRiseHand = widget.contributor.isRiseHand;
+  late var _isMicrophoneOn = widget.contributor.isMicrophoneOn;
+  late var _isCameraOn = widget.contributor.isCameraOn;
   late var _isMirror = widget.isMirror;
 
   void replaceVideoStream(MediaStream foreignStream) {
@@ -318,6 +316,10 @@ class ARTCRemoteContributorState extends State<ARTCRemoteContributor> {
         isCameraOn: _isCameraOn,
         isMicrophoneOn: _isMicrophoneOn,
         isRiseHand: _isRiseHand,
+        email: widget.contributor.email,
+        name: widget.contributor.name,
+        photo: widget.contributor.photo,
+        phone: widget.contributor.phone,
       ),
       userView: (context, item) {
         var photo = item?.photo ??

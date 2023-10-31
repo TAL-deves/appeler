@@ -198,6 +198,7 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
         },
       },
     );
+    setState(() {});
   }
 
   void _removeCurrentRoom() {
@@ -224,27 +225,37 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
   void _initLocalRenderer() async {
     await _localRenderer.initialize();
     _localStream = await _getUserMediaStream;
+    _setLocalRenderer();
+    _changeStatus();
+    _offerAnswerHostUser();
+  }
+
+  void _setLocalRenderer() {
     setState(() {
       _localRenderer.srcObject = _localStream;
       final newKey = GlobalKey();
       _keyMap['local'] = newKey;
-      _widgetMap['local'] = ARTCContributorCard(
+      _widgetMap['local'] = ARTContributorCard(
         key: newKey,
         renderer: _localRenderer,
         meetingId: widget.info.roomId,
         uid: widget.info.currentUid,
         mirror: true,
         contributor: ARTCContributor(
+          isCurrentContributor: true,
           isCameraOn: isCameraOn,
           isMicrophoneOn: _isMicrophoneOn,
           isRiseHand: isRiseHand,
           isShareScreen: _screenShareIsOn,
+          id: widget.info.currentUid,
+          name: widget.info.name,
+          email: widget.info.email,
+          photo: widget.info.photo,
+          phone: widget.info.phone,
         ),
       );
       onMicrophoneEnable(_isMicrophoneOn);
     });
-    _changeStatus();
-    _offerAnswerHostUser();
   }
 
   void _flagStateUpdate(Map<String, dynamic>? mp) {
@@ -289,12 +300,21 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
                     ? ARTCContributorType.outgoing
                     : ARTCContributorType.incoming,
                 uid: widget.info.currentUid,
+                contributor: ARTCContributor(
+                  id: item.value['id'],
+                  isCameraOn: item.value['isCameraOn'],
+                  isMicrophoneOn: item.value['isMicrophoneOn'],
+                  isRiseHand: item.value['isRiseHand'],
+                  isShareScreen: item.value['isShareScreen'],
+                  timeMills: item.value['timeMills'],
+                  email: item.value['email'],
+                  name: item.value['name'],
+                  phone: item.value['phone'],
+                  photo: item.value['photo'],
+                ),
                 remoteUid: curItem,
                 localStream: _shareStream ?? _localStream!,
                 meetingId: widget.info.roomId,
-                isCameraOn: item.value['isCameraOn'],
-                isMicrophoneOn: item.value['isMicrophoneOn'],
-                isRiseHand: item.value['isRiseHand'],
                 isMirror: isMirror,
                 onZoom: (renderer, isMirroring) async {
                   showAdaptiveDialog(
@@ -423,7 +443,7 @@ class ARTCMeetingSegmentState extends State<ARTCMeetingSegment> {
       _localStream?.getVideoTracks()[0].enabled = isCameraOn;
       _changeStatus(key: 'isCameraOn');
     }
-    setState(() {});
+    _setLocalRenderer();
   }
 
   void onMicrophoneEnable(bool value) {

@@ -5,14 +5,14 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'contents/contributor_view.dart';
 
-class ARTCContributorCard extends StatelessWidget {
+class ARTContributorCard extends StatelessWidget {
   final RTCVideoRenderer renderer;
   final String meetingId;
   final String uid;
   final bool mirror;
   final ARTCContributor contributor;
 
-  const ARTCContributorCard({
+  const ARTContributorCard({
     Key? key,
     required this.renderer,
     required this.meetingId,
