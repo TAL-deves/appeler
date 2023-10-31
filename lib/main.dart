@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:socket_io_client/socket_io_client.dart' as sic;
 
 import 'index.dart';
 
@@ -48,6 +49,31 @@ class Application extends StatefulWidget {
 
 class _ApplicationState extends State<Application> with WidgetsBindingObserver{
   ReceivePort? _receivePort;
+  sic.Socket socket = sic.io(
+    'http://192.168.68.112:5000', <String, dynamic>{
+    "transports": ["websocket"],
+    "autoConnect": false,
+    'extraHeaders': {'username': 'aluuu'},
+  },
+  );
+
+  void _socketTest(){
+
+    socket.connect();
+    socket.onConnect((_) {
+      print('connected!!!');
+      socket.emit('ddd', 'test');
+    });
+
+    //socket.emit('activity', 'test');
+
+    socket.onDisconnect((data) => print('disconnected'));
+    socket.onError((data) => print('error occurred   $data'));
+
+    socket.on('ddd', (data) => print('from ddd: $data'));
+
+    socket.on('fromServer', (_) => print('fromServer: $_'));
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -169,6 +195,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver{
   @override
   void initState() {
     super.initState();
+    //_socketTest();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!kIsWeb && Platform.isAndroid) {
@@ -190,6 +217,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver{
     //_stopForegroundTask();
     //_closeReceivePort();
     WidgetsBinding.instance.removeObserver(this);
+    socket.dispose();
     super.dispose();
   }
 
