@@ -13,7 +13,7 @@ class HomeController extends CustomAuthController {
     required this.roomHandler,
   });
 
-  Future<String> generateRoom(String? oldRoomId, {int minutes = 10}) {
+  Future<String> generateRoom(String? oldRoomId, {int minutes = 60}) {
     return AnalyticaRTC.roomWork.autoCreateRoomId(
       //roomId: oldRoomId,
       minutes: minutes,
