@@ -74,6 +74,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
   }
 
   void _setScreenShareStream() async {
+    isCameraOn = true;
     try {
       _shareStream = await _getShareStream;
       setState(() {
@@ -85,6 +86,7 @@ class MeetingFragmentState extends State<MeetingFragment> {
   }
 
   void _recoverCameraStream() async {
+    isCameraOn = true;
     setState(() {
       _replaceVideoStreamOnRemotes(_localStream!);
       _shareStream?.getTracks().forEach((element) {
